@@ -8,12 +8,13 @@
                 :type="type"
                 :id="id"
                 :value="modelValue"
-                @input="$emit('update:modelValue', $event.target.value)"
+                @input="emit('update:modelValue', $event.target.value)"
                 class="w-full px-3 py-2 text-white placeholder-white placeholder-opacity-50 bg-transparent border-b-2 border-gray-300 shadow outline-none appearance-none focus:placeholder-opacity-100"
             />
             <div
+                v-if="icon"
                 class="absolute top-0 right-0 h-full pr-2 cursor-pointer"
-                @click="emitIconClick"
+                @click="emitHandleToggleIcon"
             >
                 <img :src="icon" alt="Icon" />
             </div>
@@ -45,9 +46,9 @@ const props = defineProps({
     },
 });
 
-defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "toggleIcon"]);
 
-const emitIconClick = () => {
-    emit("icon-click");
+const emitHandleToggleIcon = () => {
+    emit("toggleIcon");
 };
 </script>

@@ -46,7 +46,7 @@
                         :type="showPassword ? 'text' : 'password'"
                         v-model="password"
                         :icon="showPassword ? eyeIcon : eyeSlashIcon"
-                        @icon-click="togglePasswordVisibility"
+                        @toggleIcon="togglePasswordVisibility"
                     />
                     <UIButton variant="login">
                         <span class="description">LOGIN</span>
