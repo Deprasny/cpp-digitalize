@@ -11,7 +11,7 @@
                 @input="$emit('update:modelValue', $event.target.value)"
                 class="w-full px-3 py-2 text-white placeholder-white placeholder-opacity-50 bg-transparent border-b-2 border-gray-300 shadow outline-none appearance-none focus:placeholder-opacity-100"
             />
-            <div class="absolute top-0 right-0 h-full pr-2 pointer-events-none">
+            <div class="absolute top-0 right-0 h-full pr-2 cursor-pointer">
                 <img :src="icon" alt="Icon" />
             </div>
         </div>
@@ -19,8 +19,6 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
-
 const props = defineProps({
     id: {
         type: String,

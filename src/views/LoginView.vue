@@ -43,9 +43,10 @@
                     <form-input
                         id="password"
                         label="Password"
-                        type="text"
+                        :type="showPassword ? 'text' : 'password'"
                         v-model="password"
-                        :icon="eyeIcon"
+                        :icon="showPassword ? eyeIcon : eyeSlashIcon"
+                        @click="togglePasswordVisibility"
                     />
                     <UIButton variant="login">
                         <span class="description">LOGIN</span>
@@ -70,11 +71,17 @@ import UIButton from "@/components/ui/UIButton.vue";
 
 //icon
 import mailIcon from "@/assets/icons/mail.svg";
-import eyeIcon from "@/assets/icons/eye-slash.svg";
+import eyeSlashIcon from "@/assets/icons/eye-slash.svg";
+import eyeIcon from "@/assets/icons/eye.svg";
 import googleIcon from "@/assets/icons/google.svg";
 
 const email = ref("");
 const password = ref("");
+const showPassword = ref(false);
+
+const togglePasswordVisibility = () => {
+    showPassword.value = !showPassword.value;
+};
 
 const login = () => {
     alert("Login", email.value, password.value);
