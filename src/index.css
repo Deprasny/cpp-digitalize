@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .description {
+        @apply text-base font-light leading-5 text-white;
+    }
+    .heading {
+        @apply text-5xl font-normal leading-[60px] text-white;
+    }
+}
