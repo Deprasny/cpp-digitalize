@@ -24,7 +24,7 @@ const buttonClasses = computed(() => {
             props.variant === "primary",
         "px-4 py-2 font-semibold text-white bg-red-500 rounded hover:bg-red-600":
             props.variant === "danger",
-        "w-full px-4 py-4 font-bold text-white border rounded-lg bg-buttonLogin opacity-90 hover:opacity-100 border-white-500":
+        "w-full px-4 py-4 font-bold text-white border rounded-lg bg-buttonLogin opacity-90 hover:opacity-100 border-white":
             props.variant === "login",
         "w-full px-4 py-4 font-bold text-black border rounded-lg bg-white opacity-90 hover:opacity-100 border-white-500 text-base font-light leading-5":
             props.variant === "loginGoogle",
