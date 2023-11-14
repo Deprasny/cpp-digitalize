@@ -26,7 +26,7 @@ const routes = [
             },
             {
                 path: "/pensiun",
-                componentn: Pensiun,
+                component: Pensiun,
                 name: "pensiun",
             },
         ],
