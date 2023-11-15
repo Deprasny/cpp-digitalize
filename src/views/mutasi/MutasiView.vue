@@ -2,7 +2,7 @@
     <div class="flex flex-col items-center justify-center">
         <div class="flex items-center justify-between w-full my-5">
             <UIButton :icon="IconChevronLeft" :variant="'secondary'"
-                >Back
+                >Mutasi
             </UIButton>
             <router-link to="/mutasi/create">
                 <UIButton :icon="IconPlus">Buat form mutasi baru </UIButton>
