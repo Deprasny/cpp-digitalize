@@ -11,9 +11,10 @@ import Pensiun from "../views/PensiunView.vue";
 const routes = [
     {
         path: "/",
+        redirect: "/auth/login",
         component: MainLayout,
         children: [
-            { path: "/dashboard", component: Home, name: "home" },
+            { path: "/dashboard", component: Home, name: "dashboard" },
             {
                 path: "/mutasi",
                 component: Mutasi,

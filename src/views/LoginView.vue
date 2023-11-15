@@ -49,7 +49,9 @@
                         @toggleIcon="togglePasswordVisibility"
                     />
                     <UIButton variant="login">
-                        <span class="description">LOGIN</span>
+                        <span class="description">
+                            {{ isLoading ? "Logging In..." : "LOGIN" }}
+                        </span>
                     </UIButton>
                     <p class="description">atau</p>
                     <UIButton variant="loginGoogle">
@@ -66,6 +68,7 @@
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import FormInput from "@/components/FormInput.vue";
 import UIButton from "@/components/ui/UIButton.vue";
 
@@ -75,16 +78,27 @@ import eyeSlashIcon from "@/assets/icons/eye-slash.svg";
 import eyeIcon from "@/assets/icons/eye.svg";
 import googleIcon from "@/assets/icons/google.svg";
 
+const router = useRouter();
+
 const email = ref("");
 const password = ref("");
 const showPassword = ref(false);
+const isLoading = ref(false);
 
 const togglePasswordVisibility = () => {
     showPassword.value = !showPassword.value;
 };
 
-const login = () => {
-    alert("Login", email.value, password.value);
+const login = async () => {
+    isLoading.value = true;
+    try {
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        router.push({ name: "dashboard" });
+    } catch (err) {
+        console.error("Login error:", err.message);
+    } finally {
+        isLoading.value = false;
+    }
 };
 </script>
 
