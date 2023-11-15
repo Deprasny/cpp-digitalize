@@ -15,5 +15,5 @@
 
 <script setup>
 import Header from "@/components/layouts/Header.vue";
-import Sidebar from "@/components/layouts/Sidebar.vue";
+import Sidebar from "@/components/layouts/SideBar.vue";
 </script>
