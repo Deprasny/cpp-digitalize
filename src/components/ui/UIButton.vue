@@ -30,8 +30,6 @@ const props = defineProps({
     },
 });
 
-const { emit } = defineEmits();
-
 const buttonClasses = computed(() => {
     return {
         "px-4 py-4 rounded-xl break-words text-xs text-white bg-button":
@@ -42,9 +40,9 @@ const buttonClasses = computed(() => {
             props.variant === "login",
         "w-full px-4 py-4 font-bold text-black border rounded-lg bg-white opacity-90 hover:opacity-100 border-white-500 text-base font-light leading-5":
             props.variant === "loginGoogle",
+        "py-6 px-6 border-2 rounded-md w-[220px] border-[#0A70A9]":
+            props.variant === "tab",
         "my-5": true,
     };
 });
-
-const onClick = () => emit("click");
 </script>
