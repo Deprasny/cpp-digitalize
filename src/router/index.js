@@ -2,11 +2,16 @@ import { createRouter, createWebHistory } from "vue-router";
 import MainLayout from "@/components/layouts/MainLayout.vue";
 import AuthLayout from "@/components/layouts/AuthLayout.vue";
 
-import LoginView from "../views/LoginView.vue";
-import Home from "../views/HomeView.vue";
-import Mutasi from "../views/MutasiView.vue";
-import Evaluasi from "../views/EvaluasiView.vue";
-import Pensiun from "../views/PensiunView.vue";
+import LoginView from "../views/auth/LoginView.vue";
+import Home from "../views/DashboardView.vue";
+import Mutasi from "../views/mutasi/MutasiView.vue";
+import Evaluasi from "../views/evaluasi/EvaluasiView.vue";
+import Pensiun from "../views/pensiun/PensiunView.vue";
+
+//Mutasi
+import MutasiCreate from "../views/mutasi/MutasiCreateView.vue";
+import MutasiCreateIndividu from "../views/mutasi/MutasiCreateIndividuView.vue";
+import MutasiCreateGroup from "../views/mutasi/MutasiCreateGroupView.vue";
 
 const routes = [
     {
@@ -19,6 +24,23 @@ const routes = [
                 path: "/mutasi",
                 component: Mutasi,
                 name: "mutasi",
+            },
+            {
+                path: "/mutasi/create",
+                component: MutasiCreate,
+                name: "mutasi-create",
+                children: [
+                    {
+                        path: "/mutasi/create/individu",
+                        component: MutasiCreateIndividu,
+                        name: "mutasi-create-individu",
+                    },
+                    {
+                        path: "/mutasi/create/group",
+                        component: MutasiCreateGroup,
+                        name: "mutasi-create-group",
+                    },
+                ],
             },
             {
                 path: "/evaluasi",
