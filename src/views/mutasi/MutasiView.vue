@@ -8,7 +8,7 @@
                 <UIButton :icon="IconPlus">Buat form mutasi baru </UIButton>
             </router-link>
         </div>
-        <Table :columns="columns" :data="data" />
+        <Table @onCellClick="handleDetail" :columns="columns" :data="data" />
     </div>
 </template>
 
@@ -19,6 +19,9 @@ import { createColumnHelper } from "@tanstack/table-core";
 import UIButton from "@/components/ui/UIButton.vue";
 import IconPlus from "@/components/icons/IconPlus.vue";
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const makeData = (count) => {
     const data = [];
@@ -69,4 +72,8 @@ const columns = [
         header: () => "Date",
     }),
 ];
+
+const handleDetail = (cell) => {
+    router.push({ name: "mutasi-detail", params: { id: cell.row.id } });
+};
 </script>

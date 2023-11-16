@@ -12,6 +12,7 @@ import Pensiun from "../views/pensiun/PensiunView.vue";
 import MutasiCreate from "../views/mutasi/MutasiCreateView.vue";
 import MutasiCreateIndividu from "../views/mutasi/MutasiCreateIndividuView.vue";
 import MutasiCreateGroup from "../views/mutasi/MutasiCreateGroupView.vue";
+import MutasiDetail from "../views/mutasi/MutasiDetailView.vue";
 
 const routes = [
     {
@@ -41,6 +42,11 @@ const routes = [
                         name: "mutasi-create-group",
                     },
                 ],
+            },
+            {
+                path: "/mutasi/detail/:id",
+                component: MutasiDetail,
+                name: "mutasi-detail",
             },
             {
                 path: "/evaluasi",

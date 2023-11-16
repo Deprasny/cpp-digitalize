@@ -18,6 +18,8 @@ const table = useVueTable({
     data: props.data,
     getCoreRowModel: getCoreRowModel(),
 });
+
+const emit = defineEmits(["onCellClick"]);
 </script>
 
 <template>
@@ -46,6 +48,7 @@ const table = useVueTable({
                     class="py-8 pl-5 text-base font-light leading-4 text-black break-words"
                     v-for="cell in row.getVisibleCells()"
                     :key="cell.id"
+                    @click="emit('onCellClick', cell)"
                 >
                     <FlexRender
                         :render="cell.column.columnDef.cell"
