@@ -2,8 +2,10 @@
     <div class="mt-28">
         <BasicCard title="FORM MUTASI">
             <BasicForm class="px-10 py-5">
+                <!-- form basic -->
                 <div class="w-[900px]">
                     <FormInputBasic label="Nama & NIK" :icon="IconMagnifier" />
+
                     <div class="flex gap-x-7">
                         <FormInputBasic label="Tanggal Masuk" type="date" />
                         <FormInputBasic label="Home Base" />
@@ -28,9 +30,9 @@
                         <div
                             v-for="list in listInfo"
                             :key="list"
-                            class="py-4 font-semibold"
+                            class="w-full py-4 font-semibold"
                         >
-                            {{ list }}
+                            <LabelForm :label="list" />
                         </div>
                     </div>
                     <div class="flex flex-col items-center flex-1 text-center">
@@ -40,7 +42,7 @@
                         <div
                             v-for="status in statusLama"
                             :key="status"
-                            class="w-full py-4 border border-black"
+                            class="w-full py-4 border border-l-0 border-black"
                         >
                             {{ status }}
                         </div>
@@ -50,7 +52,7 @@
                             <div
                                 v-for="header in headerTunjangan"
                                 :key="header"
-                                class="w-full py-1 font-semibold border-r border-black"
+                                class="w-full py-1 font-semibold border-black border-x"
                             >
                                 {{ header }}
                             </div>
@@ -85,7 +87,7 @@
                         <div
                             v-for="status in statusBaru"
                             :key="status"
-                            class="w-full py-4 border border-black"
+                            class="w-full py-4 border border-l-0 border-black last:border-b-[2px]"
                         >
                             {{ status }}
                         </div>
@@ -96,7 +98,7 @@
                             <div
                                 v-for="header in headerTunjangan"
                                 :key="header"
-                                class="w-full py-1 font-semibold text-white border-r border-black"
+                                class="w-full py-1 font-semibold text-white border-black border-x"
                             >
                                 {{ header }}
                             </div>
@@ -229,15 +231,16 @@ import FormInputBasic from "../../components/FormInputBasic.vue";
 import IconMagnifier from "../../components/icons/IconMagnifying.vue";
 import UIDivider from "../../components/ui/UIDivider.vue";
 import UIButton from "../../components/ui/UIButton.vue";
+import LabelForm from "../../components/LabelForm.vue";
 
 const listInfo = ref([
-    "Perusahaan :",
-    "Jabatan :",
-    "Kelas Jabatan :",
-    "Divisi / Departemen :",
-    "Cost Center :",
-    "Lokasi Kerja :",
-    "Melapor Ke :",
+    "Perusahaan ",
+    "Jabatan ",
+    "Kelas Jabatan ",
+    "Divisi / Departemen ",
+    "Cost Center ",
+    "Lokasi Kerja ",
+    "Melapor Ke ",
 ]);
 
 const statusLama = ref([
