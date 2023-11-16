@@ -39,6 +39,7 @@
                         type="text"
                         v-model="email"
                         :icon="mailIcon"
+                        variant="auth"
                     />
                     <form-input
                         id="password"
@@ -47,6 +48,7 @@
                         v-model="password"
                         :icon="showPassword ? eyeIcon : eyeSlashIcon"
                         @toggleIcon="togglePasswordVisibility"
+                        variant="auth"
                     />
                     <UIButton variant="login">
                         <span class="description">
