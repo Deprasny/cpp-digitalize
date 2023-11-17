@@ -46,7 +46,7 @@
                         <div
                             v-for="list in listInfo"
                             :key="list"
-                            class="w-full py-4 font-semibold"
+                            class="w-full py-[17px] font-semibold"
                         >
                             <LabelForm :label="list" />
                         </div>
@@ -142,6 +142,7 @@ const listInfo = ref([
     "Cost Center ",
     "Lokasi Kerja ",
     "Melapor Ke ",
+    "Immediate Manager",
 ]);
 
 const statusLama = ref([
@@ -152,6 +153,7 @@ const statusLama = ref([
     "1450 145766 HR Corporate",
     "DKI Jakarta_SCBD",
     "Panca Dias Purnomo - 22000130",
+    "A.A Sagung Purnama Dewi Pata - 22200169",
 ]);
 
 const statusBaru = ref([
@@ -162,5 +164,6 @@ const statusBaru = ref([
     "-",
     "-",
     "22200169 - A.A Sagung Purnama Dewi Pata",
+    "22000130 - Panca Dias Purnomo",
 ]);
 </script>
