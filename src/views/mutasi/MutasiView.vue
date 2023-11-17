@@ -37,7 +37,7 @@ const makeData = (count) => {
     }
     return data;
 };
-const data = ref(makeData(4));
+const data = ref(makeData(20));
 
 const columnHelper = createColumnHelper();
 const columns = [
