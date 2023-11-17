@@ -9,7 +9,7 @@
             </router-link>
         </div>
         <div
-            class="flex justify-start w-full -mb-7 gap-x-4 text-[#0A70A9] text-xl"
+            class="flex justify-start w-full -mb-7 gap-x-4 text-[#0A70A9] text-xl ml-10"
         >
             <UIButton :variant="'tab'"
                 ><div class="flex gap-x-16">
