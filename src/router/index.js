@@ -4,15 +4,18 @@ import AuthLayout from "@/components/layouts/AuthLayout.vue";
 
 import LoginView from "../views/auth/LoginView.vue";
 import Home from "../views/DashboardView.vue";
-import Mutasi from "../views/mutasi/MutasiView.vue";
-import Evaluasi from "../views/evaluasi/EvaluasiView.vue";
 import Pensiun from "../views/pensiun/PensiunView.vue";
 
 //Mutasi
+import Mutasi from "../views/mutasi/MutasiView.vue";
 import MutasiCreate from "../views/mutasi/MutasiCreateView.vue";
 import MutasiCreateIndividu from "../views/mutasi/MutasiCreateIndividuView.vue";
 import MutasiCreateGroup from "../views/mutasi/MutasiCreateGroupView.vue";
 import MutasiDetail from "../views/mutasi/MutasiDetailView.vue";
+
+//Evaluasi
+import Evaluasi from "../views/evaluasi/EvaluasiView.vue";
+import EvaluasiCreate from "../views/evaluasi/EvaluasiCreateView.vue";
 
 const routes = [
     {
@@ -52,6 +55,11 @@ const routes = [
                 path: "/evaluasi",
                 component: Evaluasi,
                 name: "evaluasi",
+            },
+            {
+                path: "/evaluasi/create",
+                component: EvaluasiCreate,
+                name: "evaluasi-create",
             },
             {
                 path: "/pensiun",

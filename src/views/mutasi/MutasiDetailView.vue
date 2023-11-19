@@ -11,7 +11,7 @@
             <BasicCard
                 title="0001/MUTASI/INDIVIDU/X/2023"
                 variant="detail"
-                class="w-4/5"
+                class="w-[95%]"
             >
                 <div class="my-5">
                     <div class="flex w-full py-4 px-7 text-start">
@@ -255,7 +255,8 @@
                 </div>
             </BasicCard>
 
-            <div class="flex flex-col ml-5 w-[20%] gap-y-2">
+            <p class="mx-3 mt-1 font-semibold">Status:</p>
+            <div class="flex flex-col w-[20%] gap-y-2">
                 <div
                     v-for="(item, index) in listLog"
                     :key="index"
@@ -321,12 +322,12 @@ const statusLama = ref([
         {
             no: "1",
             tunjangan: "Transportasi",
-            total: "Rp. 1.000.000",
+            total: " 1.000.000",
         },
         {
             no: "2",
             tunjangan: "Transportasi",
-            total: "Rp. 1.000.000",
+            total: " 1.000.000",
         },
     ],
 ]);
@@ -344,12 +345,12 @@ const statusBaru = ref([
         {
             no: "1",
             tunjangan: "Transportasi",
-            total: "Rp. 1.000.000",
+            total: " 1.000.000",
         },
         {
             no: "2",
             tunjangan: "Transportasi",
-            total: "Rp. 1.000.000",
+            total: " 1.000.000",
         },
     ],
 ]);

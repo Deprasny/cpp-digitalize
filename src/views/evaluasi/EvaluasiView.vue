@@ -4,7 +4,7 @@
             <UIButton :icon="IconChevronLeft" :variant="'secondary'"
                 >Evaluasi
             </UIButton>
-            <router-link to="/mutasi/create">
+            <router-link to="/evaluasi/create">
                 <UIButton :icon="IconPlus">Buat form evaluasi baru </UIButton>
             </router-link>
         </div>
