@@ -24,7 +24,7 @@
                 </div></UIButton
             >
         </div>
-        <Table :columns="columns" :data="data" />
+        <Table @onCellClick="handleDetail" :columns="columns" :data="data" />
     </div>
 </template>
 
@@ -35,12 +35,15 @@ import { ref } from "vue";
 import UIButton from "@/components/ui/UIButton.vue";
 import IconPlus from "@/components/icons/IconPlus.vue";
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const makeData = (count) => {
     const data = [];
     for (let i = 0; i < count; i++) {
         data.push({
-            mutasi: `000${i}/MUTASI/INDIVIDU/X/2023`,
+            mutasi: `000${i}/Evaluasi/INDIVIDU/X/2023`,
             nama: `User ${i}`,
             tanggal: new Date().toISOString(),
             status: "Approved",
@@ -80,4 +83,8 @@ const columns = [
         header: () => "Due Date",
     }),
 ];
+
+const handleDetail = (cell) => {
+    router.push({ name: "evaluasi-detail", params: { id: cell.row.id } });
+};
 </script>

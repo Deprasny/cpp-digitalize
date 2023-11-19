@@ -222,12 +222,20 @@
                             </div>
                         </div>
                     </div>
+                    <div
+                        class="flex justify-end w-full mb-10 font-semibold gap-x-20"
+                    >
+                        <p>Total Score:</p>
+                        <p>-</p>
+                    </div>
 
                     <UIDivider />
 
                     <!-- form penilaian -->
 
-                    <div class="flex justify-between w-full my-10 text-start">
+                    <div
+                        class="flex justify-between w-full mt-10 mb-5 text-start"
+                    >
                         <div class="flex gap-x-3">
                             <p class="font-bold uppercase">
                                 PENILAIAN KOMPETENSI INTI
@@ -238,90 +246,31 @@
                             <p>download contoh</p>
                         </div>
                     </div>
+                    <p class="mb-10">Score diisi dengan angka 1-5</p>
 
                     <div class="flex justify-between w-full gap-x-5">
                         <div class="w-1/2">
                             <div
                                 class="flex p-3 font-semibold uppercase bg-accent-2"
                             >
-                                <div class="w-[20%]">No</div>
                                 <div class="w-full h-full text-center">
-                                    Target Utama
-                                </div>
-                                <div class="w-full h-full text-center">
-                                    Score Max
+                                    KOMPETENSI INTI
                                 </div>
                             </div>
 
-                            <div class="flex w-full">
+                            <div v-for="i in 5" class="flex w-full" :key="i">
                                 <div
-                                    class="w-[20%] text-center h-full py-4 border border-black"
+                                    class="items-start w-full p-4 border border-black h-[150px]"
                                 >
-                                    1
-                                </div>
-                                <div
-                                    class="w-full h-full p-4 border border-black"
-                                >
-                                    <input
-                                        placeholder="fill here"
-                                        type="text"
-                                    />
-                                </div>
-                                <div
-                                    class="w-full h-full p-4 border border-black"
-                                >
-                                    <input
-                                        placeholder="fill here"
-                                        type="text"
-                                    />
-                                </div>
-                            </div>
-
-                            <div class="flex w-full">
-                                <div
-                                    class="w-[20%] text-center h-full py-4 border border-black"
-                                >
-                                    2
-                                </div>
-                                <div
-                                    class="w-full h-full p-4 border border-black"
-                                >
-                                    <input
-                                        placeholder="fill here"
-                                        type="text"
-                                    />
-                                </div>
-                                <div
-                                    class="w-full h-full p-4 border border-black"
-                                >
-                                    <input
-                                        placeholder="fill here"
-                                        type="text"
-                                    />
-                                </div>
-                            </div>
-
-                            <div class="flex w-full mb-10">
-                                <div
-                                    class="w-[20%] text-center h-full py-4 border border-black"
-                                >
-                                    3
-                                </div>
-                                <div
-                                    class="w-full h-full p-4 border border-black"
-                                >
-                                    <input
-                                        placeholder="fill here"
-                                        type="text"
-                                    />
-                                </div>
-                                <div
-                                    class="w-full h-full p-4 border border-black"
-                                >
-                                    <input
-                                        placeholder="fill here"
-                                        type="text"
-                                    />
+                                    <p class="font-semibold">
+                                        Prioritize Customer /Prioritaskan
+                                        Pelanggan
+                                    </p>
+                                    <p class="font-light">
+                                        Always put customer satisfaction as
+                                        priority/Selalu mengutamakan kepuasan
+                                        pelanggan)
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -330,45 +279,17 @@
                             <div
                                 class="flex p-3 font-semibold text-white uppercase bg-accent-1"
                             >
-                                <div class="w-[20%]">No</div>
                                 <div class="w-full h-full text-center">
-                                    Target Utama
+                                    URAIAN HASIL PENILAIAN
                                 </div>
-                                <div class="w-full h-full text-center">
-                                    Score Max
-                                </div>
+                                <div class="text-end pr-5 w-[25%]">Score</div>
                             </div>
 
-                            <div class="flex w-full">
-                                <div
-                                    class="w-[20%] text-center h-full py-4 border border-black"
-                                >
-                                    1
-                                </div>
-                                <div
-                                    class="w-full h-full p-4 border border-black"
-                                >
-                                    <input
-                                        placeholder="fill here"
-                                        type="text"
-                                    />
-                                </div>
-                                <div
-                                    class="w-full h-full p-4 border border-black"
-                                >
-                                    <input
-                                        placeholder="fill here"
-                                        type="text"
-                                    />
-                                </div>
-                            </div>
-
-                            <div class="flex w-full">
-                                <div
-                                    class="w-[20%] text-center h-full py-4 border border-black"
-                                >
-                                    2
-                                </div>
+                            <div
+                                v-for="i in 5"
+                                class="flex w-full h-[150px]"
+                                :key="i"
+                            >
                                 <div
                                     class="w-full h-full p-4 border border-black"
                                 >
@@ -378,61 +299,87 @@
                                     />
                                 </div>
                                 <div
-                                    class="w-full h-full p-4 border border-black"
+                                    class="h-full p-4 border border-black w-[20%]"
                                 >
-                                    <input
-                                        placeholder="fill here"
-                                        type="text"
-                                    />
-                                </div>
-                            </div>
-
-                            <div class="flex w-full mb-10">
-                                <div
-                                    class="w-[20%] text-center h-full py-4 border border-black"
-                                >
-                                    3
-                                </div>
-                                <div
-                                    class="w-full h-full p-4 border border-black"
-                                >
-                                    <input
-                                        placeholder="fill here"
-                                        type="text"
-                                    />
-                                </div>
-                                <div
-                                    class="w-full h-full p-4 border border-black"
-                                >
-                                    <input
-                                        placeholder="fill here"
-                                        type="text"
-                                    />
+                                    <input class="w-full" type="text" />
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <div
+                        class="flex justify-end w-full my-10 font-semibold gap-x-20"
+                    >
+                        <p>Total Score:</p>
+                        <p>-</p>
+                    </div>
+
                     <UIDivider />
 
-                    <!-- form upload  -->
+                    <!-- form akhir  -->
                     <div
                         class="flex items-start justify-between max-w-[500px] my-10"
                     >
-                        <div class="flex flex-col items-start">
-                            <p class="font-semibold">Lampiran</p>
-                            <div class="flex items-center gap-x-5">
-                                <UIButton
-                                    variant="form"
-                                    class="w-[200px]"
-                                    type="file"
-                                >
-                                    Upload File
-                                </UIButton>
-                                <p class="text-xs">
-                                    Mohon melampirkan struktur organisasi
-                                    sebelum dan sesudah
+                        <div class="flex flex-col items-start gap-y-5">
+                            <div class="flex justify-between gap-x-5">
+                                <p class="font-semibold">
+                                    PENILAIAN AKHIR (GRAND TOTAL SCORE)
                                 </p>
+                                <button>-</button>
+                            </div>
+                            <div class="flex items-center gap-x-5">
+                                <p>
+                                    Berdasarkan penilaian diatas perkenankan
+                                    kami mengajukan karyawan tersebut untuk :
+                                </p>
+
+                                <!-- dropdown  -->
+
+                                <div
+                                    class="relative shadow-xl -top-8"
+                                    @click="toggleDropdown"
+                                >
+                                    <div
+                                        class="absolute w-[300px] mt-2 bg-white border border-gray-500 rounded-md shadow-xs dropdown-content z-10"
+                                    >
+                                        <a href="#" class="block px-2 py-2">
+                                            <span
+                                                class="flex items-center justify-between"
+                                            >
+                                                <span
+                                                    class="text-sm font-light text-gray-800"
+                                                    >{{
+                                                        selectedOption ||
+                                                        "Pilih Individu / Group"
+                                                    }}</span
+                                                >
+                                                <component
+                                                    :is="IconChevronLeft"
+                                                />
+                                            </span>
+                                        </a>
+
+                                        <div v-show="isDropdownOpen">
+                                            <div
+                                                v-for="(
+                                                    option, index
+                                                ) in dropdownOptions"
+                                                :key="index"
+                                            >
+                                                <div
+                                                    class="block px-4 py-4 text-gray-800 hover:bg-line-gradient hover:border-l-accent-1 hover:border-2 hover:py-6 hover:text-accent-1 hover:font-semibold"
+                                                    @click="
+                                                        handleDropdownItemClick(
+                                                            option
+                                                        )
+                                                    "
+                                                >
+                                                    {{ option }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -462,40 +409,18 @@ import FormInputBasic from "../../components/FormInputBasic.vue";
 import IconMagnifier from "../../components/icons/IconMagnifying.vue";
 import UIDivider from "../../components/ui/UIDivider.vue";
 import UIButton from "../../components/ui/UIButton.vue";
-import LabelForm from "../../components/LabelForm.vue";
 
-const listInfo = ref([
-    "Perusahaan ",
-    "Jabatan ",
-    "Kelas Jabatan ",
-    "Divisi / Departemen ",
-    "Cost Center ",
-    "Lokasi Kerja ",
-    "Melapor Ke ",
-    "Immediate Manager",
-]);
+const isDropdownOpen = ref(false);
+const selectedOption = ref(null);
+const dropdownOptions = ref(["Individu", "Group"]);
 
-const statusLama = ref([
-    "1450 CP Prima - Jakarta (HO)",
-    "Specialist Organization Development",
-    "4A",
-    "Organization Development",
-    "1450 145766 HR Corporate",
-    "DKI Jakarta_SCBD",
-    "Panca Dias Purnomo - 22000130",
-    "22001234 - Panca Dias Purnomo",
-]);
+const toggleDropdown = () => {
+    event.preventDefault();
+    isDropdownOpen.value = !isDropdownOpen.value;
+};
 
-const statusBaru = ref([
-    "1450 CP Prima - Jakarta 0401",
-    "-",
-    "4A",
-    "Center of Excellence",
-    "-",
-    "-",
-    "22200169 - A.A Sagung Purnama Dewi Pata",
-    "22001234 - Panca Dias Purnomo",
-]);
-
-const headerTunjangan = ref(["Nama Tunjangan", "Nilai Tunjangan", "Net"]);
+const handleDropdownItemClick = (option) => {
+    selectedOption.value = option;
+    isDropdownOpen.value = true;
+};
 </script>
