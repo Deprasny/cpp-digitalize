@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
+
+//layouts
 import MainLayout from "@/components/layouts/MainLayout.vue";
 import AuthLayout from "@/components/layouts/AuthLayout.vue";
 
 import LoginView from "../views/auth/LoginView.vue";
-import Home from "../views/DashboardView.vue";
-import Pensiun from "../views/pensiun/PensiunView.vue";
+import Dashboard from "../views/DashboardView.vue";
 
 //Mutasi
 import Mutasi from "../views/mutasi/MutasiView.vue";
@@ -18,13 +19,17 @@ import Evaluasi from "../views/evaluasi/EvaluasiView.vue";
 import EvaluasiCreate from "../views/evaluasi/EvaluasiCreateView.vue";
 import EvaluasiDetail from "../views/evaluasi/EvaluasiDetailView.vue";
 
+//Pensiun
+import Pensiun from "../views/pensiun/PensiunView.vue";
+import PensiunCreate from "../views/pensiun/PensiunCreateView.vue";
+
 const routes = [
     {
         path: "/",
         redirect: "/auth/login",
         component: MainLayout,
         children: [
-            { path: "/dashboard", component: Home, name: "dashboard" },
+            { path: "/dashboard", component: Dashboard, name: "dashboard" },
             {
                 path: "/mutasi",
                 component: Mutasi,
@@ -71,6 +76,11 @@ const routes = [
                 path: "/pensiun",
                 component: Pensiun,
                 name: "pensiun",
+            },
+            {
+                path: "/pensiun/create",
+                component: PensiunCreate,
+                name: "pensiun-create",
             },
         ],
     },

@@ -334,52 +334,17 @@
                                 </p>
 
                                 <!-- dropdown  -->
-
-                                <div
-                                    class="relative shadow-xl -top-8"
-                                    @click="toggleDropdown"
-                                >
-                                    <div
-                                        class="absolute w-[300px] mt-2 bg-white border border-gray-500 rounded-md shadow-xs dropdown-content z-10"
-                                    >
-                                        <a href="#" class="block px-2 py-2">
-                                            <span
-                                                class="flex items-center justify-between"
-                                            >
-                                                <span
-                                                    class="text-sm font-light text-gray-800"
-                                                    >{{
-                                                        selectedOption ||
-                                                        "Pilih Individu / Group"
-                                                    }}</span
-                                                >
-                                                <component
-                                                    :is="IconChevronLeft"
-                                                />
-                                            </span>
-                                        </a>
-
-                                        <div v-show="isDropdownOpen">
-                                            <div
-                                                v-for="(
-                                                    option, index
-                                                ) in dropdownOptions"
-                                                :key="index"
-                                            >
-                                                <div
-                                                    class="block px-4 py-4 text-gray-800 hover:bg-line-gradient hover:border-l-accent-1 hover:border-2 hover:py-6 hover:text-accent-1 hover:font-semibold"
-                                                    @click="
-                                                        handleDropdownItemClick(
-                                                            option
-                                                        )
-                                                    "
-                                                >
-                                                    {{ option }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <FormDropdown
+                                    :dropdownOptions="[
+                                        'Option 1',
+                                        'Option 2',
+                                        'Option 3',
+                                    ]"
+                                    :selectedOptionText="selectedOption"
+                                    @update:selectedOptionText="
+                                        handleSelectedOptionUpdate
+                                    "
+                                />
                             </div>
                         </div>
                     </div>
@@ -409,18 +374,11 @@ import FormInputBasic from "../../components/FormInputBasic.vue";
 import IconMagnifier from "../../components/icons/IconMagnifying.vue";
 import UIDivider from "../../components/ui/UIDivider.vue";
 import UIButton from "../../components/ui/UIButton.vue";
+import FormDropdown from "../../components/FormDropdown.vue";
 
-const isDropdownOpen = ref(false);
-const selectedOption = ref(null);
-const dropdownOptions = ref(["Individu", "Group"]);
+const selectedOption = ref("Pilih salah satu");
 
-const toggleDropdown = () => {
-    event.preventDefault();
-    isDropdownOpen.value = !isDropdownOpen.value;
-};
-
-const handleDropdownItemClick = (option) => {
-    selectedOption.value = option;
-    isDropdownOpen.value = true;
+const handleSelectedOptionUpdate = (newOption) => {
+    selectedOption.value = newOption;
 };
 </script>
