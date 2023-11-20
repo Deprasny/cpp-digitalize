@@ -10,7 +10,7 @@
 
         <div class="relative my-5 shadow-xl" @click="toggleDropdown">
             <div
-                class="absolute w-[350px] mt-2 bg-white border border-gray-200 rounded-md shadow-xs dropdown-content"
+                class="absolute w-[350px] mt-2 bg-white border border-gray-200 rounded-md shadow-xs dropdown-content z-10"
             >
                 <a href="#" class="block px-4 py-4">
                     <span class="flex items-center justify-between">

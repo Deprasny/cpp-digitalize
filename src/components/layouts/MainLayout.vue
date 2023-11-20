@@ -3,7 +3,7 @@
     <div>
         <div class="flex">
             <Sidebar />
-            <div class="flex flex-col bg-content w-[100%] h-[2000px] pl-72">
+            <div class="flex flex-col bg-content w-[100%] pl-72 pb-20">
                 <Header />
                 <main class="mx-7">
                     <router-view></router-view>
