@@ -24,4 +24,6 @@ import StatisticCard from "@/components/StatisticCard.vue";
 import ProfileCard from "@/components/ProfileCard.vue";
 import DashboardChart from "@/components/DashboardChart.vue";
 import Divider from "@/components/ui/UIDivider.vue";
+
+console.log({ api: import.meta });
 </script>

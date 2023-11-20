@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, watch } from "vue";
 import Table from "@/components/BasicTable.vue";
 import { createColumnHelper } from "@tanstack/table-core";
 import UIButton from "@/components/ui/UIButton.vue";
@@ -21,42 +21,44 @@ import IconPlus from "@/components/icons/IconPlus.vue";
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
 import { useRouter } from "vue-router";
 
+import { getMutationsTable } from "../../services/mutation.services";
+
 const router = useRouter();
 
-const makeData = (count) => {
-    const data = [];
-    for (let i = 0; i < count; i++) {
-        data.push({
-            mutasi: `000${i}/MUTASI/INDIVIDU/X/2023`,
-            nama: `User ${i}`,
-            tanggal: new Date().toISOString(),
-            status: "Approved",
-            jenis: "Individu",
-            date: new Date().toISOString(),
+const data = ref([]);
+
+onMounted(async () => {
+    try {
+        const res = await getMutationsTable({
+            page: 1,
+            limit: 10,
         });
+        data.value = res;
+    } catch (error) {
+        console.error("Error fetching data:", error);
     }
-    return data;
-};
-const data = ref(makeData(20));
+});
+
+console.log({ data: data?.value });
 
 const columnHelper = createColumnHelper();
 const columns = [
-    columnHelper.accessor((row) => row.mutasi, {
+    columnHelper.accessor((row) => row.mut_req_no, {
         id: "mutasi",
         cell: (info) => info.getValue(),
         header: () => "Mutasi no",
     }),
-    columnHelper.accessor((row) => row.nama, {
+    columnHelper.accessor((row) => row.employee_name, {
         id: "nama",
         cell: (info) => info.getValue(),
         header: () => "Nama Karyawan",
     }),
-    columnHelper.accessor((row) => row.tanggal, {
+    columnHelper.accessor((row) => row.mut_date, {
         id: "tanggal",
         cell: (info) => info.getValue(),
         header: () => "Tanggal Pengajuan",
     }),
-    columnHelper.accessor((row) => row.status, {
+    columnHelper.accessor((row) => row.step_status, {
         id: "status",
         cell: (info) => info.getValue(),
         header: () => "Status",
@@ -66,7 +68,7 @@ const columns = [
         cell: (info) => info.getValue(),
         header: () => "Jenis",
     }),
-    columnHelper.accessor((row) => row.date, {
+    columnHelper.accessor((row) => row.mut_date, {
         id: "date",
         cell: (info) => info.getValue(),
         header: () => "Date",
