@@ -8,12 +8,22 @@
                 <UIButton :icon="IconPlus">Buat form mutasi baru </UIButton>
             </router-link>
         </div>
-        <Table @onCellClick="handleDetail" :columns="columns" :data="data" />
+
+        <template v-if="data.length > 0">
+            <Table
+                @onCellClick="handleDetail"
+                :columns="columns"
+                :data="data"
+            />
+        </template>
+        <template v-else>
+            <p>Loading...</p>
+        </template>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, onBeforeMount } from "vue";
 import Table from "@/components/BasicTable.vue";
 import { createColumnHelper } from "@tanstack/table-core";
 import UIButton from "@/components/ui/UIButton.vue";
@@ -21,55 +31,54 @@ import IconPlus from "@/components/icons/IconPlus.vue";
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
 import { useRouter } from "vue-router";
 
+import useFetch from "../../hooks/useFetch";
 import { getMutationsTable } from "../../services/mutation.services";
 
 const router = useRouter();
 
 const data = ref([]);
 
-onMounted(async () => {
-    try {
-        const res = await getMutationsTable({
+onBeforeMount(async () => {
+    const { data: response } = await useFetch({
+        services: getMutationsTable,
+        options: {
             page: 1,
             limit: 10,
-        });
-        data.value = res;
-    } catch (error) {
-        console.error("Error fetching data:", error);
-    }
-});
+        },
+    });
 
-console.log({ data: data?.value });
+    data.value = response?.value;
+});
 
 const columnHelper = createColumnHelper();
 const columns = [
     columnHelper.accessor((row) => row.mut_req_no, {
-        id: "mutasi",
+        id: "mut_req_no",
         cell: (info) => info.getValue(),
         header: () => "Mutasi no",
     }),
     columnHelper.accessor((row) => row.employee_name, {
-        id: "nama",
+        id: "employee_name",
         cell: (info) => info.getValue(),
         header: () => "Nama Karyawan",
     }),
     columnHelper.accessor((row) => row.mut_date, {
-        id: "tanggal",
+        id: "mut_date",
         cell: (info) => info.getValue(),
         header: () => "Tanggal Pengajuan",
     }),
     columnHelper.accessor((row) => row.step_status, {
-        id: "status",
+        id: "step_status",
         cell: (info) => info.getValue(),
         header: () => "Status",
     }),
-    columnHelper.accessor((row) => row.jenis, {
-        id: "jenis",
+    columnHelper.accessor((row) => row.mut_type, {
+        id: "mut_type",
         cell: (info) => info.getValue(),
         header: () => "Jenis",
     }),
     columnHelper.accessor((row) => row.mut_date, {
-        id: "date",
+        id: "mut_date",
         cell: (info) => info.getValue(),
         header: () => "Date",
     }),
