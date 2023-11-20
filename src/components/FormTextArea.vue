@@ -1,28 +1,29 @@
 <template>
-    <div class="w-full mb-4 gap-y-10">
-        <label :for="id" class="text-base font-light leading-5">{{
-            label
+    <div class="relative w-1/2 mb-4 space-y-4">
+        <label :for="props.id" class="font-semibold leading-5 text-black">{{
+            props.label
         }}</label>
         <div class="relative flex items-center">
-            <input
-                :type="type"
-                :id="id"
+            <textarea
+                :id="props.id"
                 :value="modelValue"
-                @input="emit('update:modelValue', $event.target.value)"
-                class="w-full px-3 py-2 text-white placeholder-white placeholder-opacity-50 bg-transparent border-b-2 border-gray-300 shadow outline-none appearance-none focus:placeholder-opacity-100"
-            />
+                @input="$emit('update:modelValue', $event.target.value)"
+                class="w-full h-32 px-3 py-2 text-black placeholder-opacity-50 bg-transparent border border-gray-500 shadow outline-none appearance-none focus:placeholder-opacity-100 rounded-xl"
+            ></textarea>
             <div
-                v-if="icon"
+                v-if="props.icon"
                 class="absolute top-0 right-0 h-full pr-2 cursor-pointer"
                 @click="emitHandleToggleIcon"
             >
-                <img :src="icon" alt="Icon" />
+                <img :src="props.icon" alt="Icon" />
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
+import { defineProps, defineEmits } from "vue";
+
 const props = defineProps({
     id: {
         type: String,
@@ -32,18 +33,11 @@ const props = defineProps({
         type: String,
         required: true,
     },
-    type: {
-        type: String,
-        required: true,
-    },
     modelValue: {
         type: String,
         required: true,
     },
-    icon: {
-        type: String,
-        required: false,
-    },
+    icon: String,
 });
 
 const emit = defineEmits(["update:modelValue", "toggleIcon"]);
