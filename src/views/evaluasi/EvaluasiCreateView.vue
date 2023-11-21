@@ -2,7 +2,7 @@
     <div>
         <a @click="$router.back()">
             <UIButton :icon="IconChevronLeft" :variant="'secondary'">
-                Buat form mutasi baru
+                Buat form evaluasi baru
             </UIButton>
         </a>
 
