@@ -27,7 +27,7 @@ const props = defineProps({
 const cardClasses = computed(() => {
     return {
         " bg-accent-2": props.variant === "form",
-        "bg-accent-1": props.variant === "detail",
+        "bg-accent-1 text-white": props.variant === "detail",
     };
 });
 </script>
