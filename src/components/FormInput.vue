@@ -1,6 +1,6 @@
 <template>
     <div class="w-full mb-4 gap-y-10">
-        <label :for="id" class="text-base font-light leading-5">{{
+        <label :for="id" class="text-base font-light leading-5 text-white">{{
             label
         }}</label>
         <div class="relative flex items-center">
