@@ -22,6 +22,10 @@ import EvaluasiDetail from "../views/evaluasi/EvaluasiDetailView.vue";
 //Pensiun
 import Pensiun from "../views/pensiun/PensiunView.vue";
 import PensiunCreate from "../views/pensiun/PensiunCreateView.vue";
+import PensiunDetail from "../views/pensiun/PensiunDetailView.vue";
+
+//Approval
+import Approval from "../views/approval/ApprovalView.vue";
 
 const routes = [
     {
@@ -81,6 +85,16 @@ const routes = [
                 path: "/pensiun/create",
                 component: PensiunCreate,
                 name: "pensiun-create",
+            },
+            {
+                path: "/pensiun/detail/:id",
+                component: PensiunDetail,
+                name: "pensiun-detail",
+            },
+            {
+                path: "/approval",
+                component: Approval,
+                name: "approval",
             },
         ],
     },

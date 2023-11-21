@@ -59,6 +59,7 @@ import IconHome from "@/components/icons/IconHome.vue";
 import IconChange from "@/components/icons/IconChange.vue";
 import IconEvaluation from "@/components/icons/IconEvaluation.vue";
 import IconPensiun from "@/components/icons/IconPensiun.vue";
+import IconCheck from "../icons/IconCheck.vue";
 
 import IconLogo from "@/components/icons/IconLogo.vue";
 const isSidebarOpen = ref(true);
@@ -83,6 +84,11 @@ const menu = ref([
         name: "Pensiun",
         icon: IconPensiun,
         route: "/pensiun",
+    },
+    {
+        name: "Approval",
+        icon: IconCheck,
+        route: "/approval",
     },
 ]);
 const toggleSidebar = () => {
