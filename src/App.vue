@@ -1,7 +1,10 @@
-<script setup>
-import { RouterLink, RouterView } from "vue-router";
-</script>
-
+<!-- App.vue -->
 <template>
-  <RouterView />
+    <router-view></router-view>
 </template>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500&display=swap");
+* {
+    font-family: "Poppins", sans-serif;
+}
+</style>

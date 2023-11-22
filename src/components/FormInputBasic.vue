@@ -1,22 +1,24 @@
 <template>
-    <div class="w-full mb-4 gap-y-10">
-        <label :for="id" class="text-base font-light leading-5 text-white">{{
+    <div class="relative w-full mb-4">
+        <label :for="id" class="text-base font-semibold leading-5 text-black">{{
             label
         }}</label>
-        <div class="relative flex items-center">
+        <div class="relative flex items-center mt-3">
             <input
                 :type="type"
                 :id="id"
                 :value="modelValue"
                 @input="emit('update:modelValue', $event.target.value)"
-                class="w-full px-3 py-2 text-white placeholder-white placeholder-opacity-50 bg-transparent border-b-2 border-gray-300 shadow outline-none appearance-none focus:placeholder-opacity-100"
+                class="w-full px-3 py-3 text-black placeholder-black placeholder-opacity-50 bg-transparent border border-gray-500 rounded-lg shadow appearance-none focus:placeholder-opacity-100"
+                :placeholder="placeholder"
+                @change="emitHandleAddName"
             />
             <div
                 v-if="icon"
-                class="absolute top-0 right-0 h-full pr-2 cursor-pointer"
+                class="absolute h-full pr-2 text-lg cursor-pointer right-1 top-4"
                 @click="emitHandleToggleIcon"
             >
-                <img :src="icon" alt="Icon" />
+                <component :is="icon" />
             </div>
         </div>
     </div>
@@ -35,6 +37,7 @@ const props = defineProps({
     type: {
         type: String,
         required: true,
+        default: "text",
     },
     modelValue: {
         type: String,
@@ -44,11 +47,20 @@ const props = defineProps({
         type: String,
         required: false,
     },
+    placeholder: {
+        type: String,
+        default: "isi data",
+        required: false,
+    },
 });
 
-const emit = defineEmits(["update:modelValue", "toggleIcon"]);
+const emit = defineEmits(["update:modelValue", "toggleIcon", "addName"]);
 
 const emitHandleToggleIcon = () => {
     emit("toggleIcon");
+};
+
+const emitHandleAddName = () => {
+    emit("addName");
 };
 </script>
