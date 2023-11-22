@@ -4,28 +4,24 @@
     >
         <div class="flex flex-col justify-between">
             <div class="flex gap-x-4">
-                <img
-                    src="https://sb.kaleidousercontent.com/67418/1920x1545/c5f15ac173/samuel-raita-ridxdghg7pw-unsplash.jpg"
-                    alt=""
-                    class="object-cover w-12 h-12 rounded-full"
-                />
+                <img :src="photo" class="object-cover w-12 h-12 rounded-full" />
 
                 <div class="flex flex-col text-sm">
-                    <p class="font-semibold">Jhone Doe</p>
-                    <span>NIK : 123456</span>
-                    <span class="text-xs">Specialist Lorem Ipsum</span>
+                    <p class="font-semibold">{{ name }}</p>
+                    <span>NIK : {{ nik }}</span>
+                    <span class="text-xs">{{ potition }}</span>
                 </div>
             </div>
         </div>
         <div class="flex flex-col">
-            <p class="font-bold">Pensiun</p>
+            <p class="font-bold">{{ type }}</p>
         </div>
 
         <div
             class="flex items-center justify-center p-3 -m-5 bg-[#0A70A9] gap-x-5 text-white"
         >
             <component :is="IconCloak" class="text-md" />
-            <span class="text-xs">Menunggu approval</span>
+            <span class="text-xs">{{ status }}</span>
             <component :is="IconArrowRight" class="cursor-pointer text-md" />
         </div>
     </div>
@@ -34,4 +30,34 @@
 <script setup>
 import IconCloak from "@/components/icons/IconClock.vue";
 import IconArrowRight from "@/components/icons/IconArrowRight.vue";
+
+const props = defineProps({
+    name: {
+        type: String,
+        default: "Jhone Doe",
+    },
+    nik: {
+        type: String,
+        default: "123456",
+    },
+    potition: {
+        type: String,
+        default: "Specialist Lorem Ipsum",
+    },
+    photo: {
+        type: String,
+        default:
+            "https://sb.kaleidousercontent.com/67418/1920x1545/c5f15ac173/samuel-raita-ridxdghg7pw-unsplash.jpg",
+    },
+    status: {
+        type: String,
+        default: "Menunggu approval",
+    },
+    type: {
+        type: String,
+        default: "Pensiun",
+    },
+});
+
+const { name, nik, potition, photo, status, type } = props;
 </script>

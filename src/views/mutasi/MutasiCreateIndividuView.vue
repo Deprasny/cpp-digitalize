@@ -4,7 +4,11 @@
             <BasicForm class="px-10 py-5">
                 <!-- form basic -->
                 <div class="w-[900px]">
-                    <FormInputBasic label="Nama & NIK" :icon="IconMagnifier" />
+                    <FormInputBasic
+                        label="Nama & NIK"
+                        :icon="IconMagnifier"
+                        v-model="values.nik"
+                    />
 
                     <div class="flex gap-x-7">
                         <FormInputBasic label="Tanggal Masuk" type="date" />
@@ -19,7 +23,10 @@
                             label="Tanggal Efektif Mutasi"
                             type="date"
                         />
-                        <FormInputBasic label="Alasan Mutasi" />
+                        <FormInputBasic
+                            label="Alasan Mutasi"
+                            v-model="values.mut_reason"
+                        />
                     </div>
                 </div>
 
@@ -265,6 +272,14 @@ const statusBaru = ref([
     "22200169 - A.A Sagung Purnama Dewi Pata",
     "22001234 - Panca Dias Purnomo",
 ]);
+
+const values = ref({
+    nik: "",
+    mut_type: "Individu",
+    mut_reason: "",
+});
+
+console.log({ values: values.value });
 
 const headerTunjangan = ref(["Nama Tunjangan", "Nilai Tunjangan", "Net"]);
 </script>
