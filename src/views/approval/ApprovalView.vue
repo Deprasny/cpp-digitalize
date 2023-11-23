@@ -33,12 +33,25 @@ import { getFormattedDate } from "@/libs/util";
 
 const router = useRouter();
 
+const getRandomName = () => {
+    const names = [
+        "WANI MULYANI",
+        "PAULIN FARIDA",
+        "FEBI SURYATMI",
+        "KAJEN BUDIMAN",
+        "HANI UTAMI",
+    ];
+
+    const randomIndex = Math.floor(Math.random() * names.length);
+    return names[randomIndex];
+};
+
 const makeData = (count) => {
     const data = [];
     for (let i = 0; i < count; i++) {
         data.push({
             mutasi: `000${i}/MUTASI/INDIVIDU/X/2023`,
-            nama: `User ${i}`,
+            nama: getRandomName(),
             tanggal: getFormattedDate(new Date()),
             status: "Waiting",
             jenis: "Individu",

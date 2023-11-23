@@ -9,7 +9,7 @@
         <UIDivider />
         <div class="flex my-16">
             <BasicCard
-                title="0001/MUTASI/INDIVIDU/X/2023"
+                title="0001/MUTASI/X/2023"
                 variant="detail"
                 class="w-[95%]"
             >
