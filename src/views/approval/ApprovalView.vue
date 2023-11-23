@@ -50,7 +50,7 @@ const makeData = (count) => {
     const data = [];
     for (let i = 0; i < count; i++) {
         data.push({
-            mutasi: `000${i}/MUTASI/INDIVIDU/X/2023`,
+            mutasi: `000${i}/MUTASI/X/2023`,
             nama: getRandomName(),
             tanggal: getFormattedDate(new Date()),
             status: "Waiting",
