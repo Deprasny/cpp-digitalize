@@ -109,7 +109,7 @@
                 <UIDivider />
 
                 <div
-                    class="flex justify-between w-[40%] mx-5 items-baseline my-10"
+                    class="flex justify-between w-[45%] mx-5 items-baseline my-10"
                 >
                     <div class="flex flex-col">
                         <p class="text-xl font-semibold uppercase">keputusan</p>

@@ -1,24 +1,24 @@
 <template>
     <div
-        class="w-[232px] h-[194px] bg-white rounded-3xl p-5 flex flex-col justify-between shadow-xl overflow-hidden"
+        class="w-[252px] h-[194px] bg-white rounded-3xl p-5 flex flex-col justify-between shadow-xl overflow-hidden"
     >
-        <div class="flex flex-col justify-between">
+        <div class="flex flex-col justify-between h-[85px]">
             <div class="flex gap-x-4">
                 <img :src="photo" class="object-cover w-12 h-12 rounded-full" />
 
                 <div class="flex flex-col text-sm">
                     <p class="font-semibold">{{ name }}</p>
                     <span>NIK : {{ nik }}</span>
-                    <span class="text-xs">{{ potition }}</span>
+                    <span class="text-[10px]">{{ potition }}</span>
                 </div>
             </div>
         </div>
-        <div class="flex flex-col">
-            <p class="font-bold">{{ type }}</p>
+        <div class="overflow-hidden">
+            <p class="overflow-hidden font-bold">{{ type }}</p>
         </div>
 
         <div
-            class="flex items-center justify-center p-3 -m-5 bg-[#0A70A9] gap-x-5 text-white"
+            class="flex items-center justify-between p-3 -m-5 bg-[#0A70A9] gap-x-5 text-white px-5"
         >
             <component :is="IconCloak" class="text-md" />
             <span class="text-xs">{{ status }}</span>
