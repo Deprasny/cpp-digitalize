@@ -8,7 +8,7 @@
                 >Pensiun
             </UIButton>
             <router-link to="/pensiun/create">
-                <UIButton :icon="IconPlus">Buat form evaluasi baru </UIButton>
+                <UIButton :icon="IconPlus">Buat form pensiun baru </UIButton>
             </router-link>
         </div>
         <Table @onCellClick="handleDetail" :columns="columns" :data="data" />
