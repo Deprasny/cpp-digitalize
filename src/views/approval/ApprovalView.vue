@@ -78,7 +78,11 @@ const columns = [
 ];
 
 const handleDetail = (cell) => {
-    router.push({ name: "pensiun-detail", params: { id: cell.row.id } });
+    router.push({
+        name: "pensiun-detail",
+        params: { id: cell.row.id },
+        query: { type: "approval" },
+    });
 };
 
 const filter = ref([

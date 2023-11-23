@@ -48,9 +48,9 @@
                         <FormDropdown
                             class="w-[300px]"
                             :dropdownOptions="[
-                                'Option 1',
-                                'Option 2',
-                                'Option 3',
+                                'Pensiun, Diganti',
+                                'Pensiun, Tidak diganti',
+                                'Diperpanjang Kontrak',
                             ]"
                             :selectedOptionText="selectedOption"
                             @update:selectedOptionText="
@@ -94,7 +94,7 @@ import UIButton from "../../components/ui/UIButton.vue";
 import FormDropdown from "../../components/FormDropdown.vue";
 import FormTextArea from "../../components/FormTextArea.vue";
 
-const selectedOption = ref("Pilih 1");
+const selectedOption = ref("Pilih salah satu");
 
 const handleSelectedOptionUpdate = (value) => {
     selectedOption.value = value;

@@ -136,7 +136,14 @@
                     </div>
                 </div>
 
-                <div class="flex justify-end mx-10">
+                <div
+                    v-if="approvalButton === 'approval'"
+                    class="flex justify-end mx-10 gap-x-5"
+                >
+                    <UIButton variant="approve"> Approve </UIButton>
+                    <UIButton variant="danger"> Reject </UIButton>
+                </div>
+                <div v-else class="flex justify-end mx-10 gap-x-5">
                     <UIButton variant="form"> Kembali </UIButton>
                 </div>
             </BasicCard>
@@ -175,69 +182,17 @@ import UIDivider from "@/components/ui/UIDivider.vue";
 import BasicCard from "../../components/BasicCard.vue";
 import LabelForm from "../../components/LabelForm.vue";
 
+import { useRouter } from "vue-router";
+
+const route = useRouter();
+
+const approvalButton = route.currentRoute.value.query.type;
+
 const listLog = ref([
     { date: "7 Agustus 2023", description: "Approve by BU Head Penerima" },
     { date: "8 Agustus 2023", description: "Approve by HRD" },
     { date: "9 Agustus 2023", description: "Approve by HRD" },
     { date: "10 Agustus 2023", description: "Approve by HRD" },
     { date: "11 Agustus 2023", description: "Approve by HRD" },
-]);
-
-const listInfo = ref([
-    "Perusahaan ",
-    "Jabatan ",
-    "Kelas Jabatan ",
-    "Divisi / Departemen ",
-    "Cost Center ",
-    "Lokasi Kerja ",
-    "Melapor Ke ",
-    "Immediate Manager",
-    "Tunjangan",
-]);
-
-const statusLama = ref([
-    "1450 CP Prima - Jakarta (HO)",
-    "Specialist Organization Development",
-    "4A",
-    "Organization Development",
-    "1450 145766 HR Corporate",
-    "DKI Jakarta_SCBD",
-    "Panca Dias Purnomo - 22000130",
-    "Panca Dias Purnomo - 22000130",
-    [
-        {
-            no: "1",
-            tunjangan: "Transportasi",
-            total: " 1.000.000",
-        },
-        {
-            no: "2",
-            tunjangan: "Transportasi",
-            total: " 1.000.000",
-        },
-    ],
-]);
-
-const statusBaru = ref([
-    "1450 CP Prima - Jakarta 0401",
-    "-",
-    "4A",
-    "Center of Excellence",
-    "-",
-    "-",
-    "22200169 - A.A Sagung ",
-    "Panca Dias Purnomo - 22000131",
-    [
-        {
-            no: "1",
-            tunjangan: "Transportasi",
-            total: " 1.000.000",
-        },
-        {
-            no: "2",
-            tunjangan: "Transportasi",
-            total: " 1.000.000",
-        },
-    ],
 ]);
 </script>

@@ -336,9 +336,9 @@
                                 <!-- dropdown  -->
                                 <FormDropdown
                                     :dropdownOptions="[
-                                        'Option 1',
-                                        'Option 2',
-                                        'Option 3',
+                                        'Diangkat menjadi karyawan tetap',
+                                        'Diperpanjang masa kontraknya',
+                                        'Diakhiri hubungan kerjanya',
                                     ]"
                                     :selectedOptionText="selectedOption"
                                     @update:selectedOptionText="

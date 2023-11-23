@@ -18,23 +18,16 @@
                 <div class="flex flex-col justify-between h-[90%] mt-5">
                     <ul>
                         <div v-for="item in menu" :key="item.name">
-                            <router-link :to="item.route">
+                            <router-link :to="item.route" exact>
                                 <li
-                                    class="p-3 my-5 rounded-full hover:bg-accent-1 group hover:text-white hover:font-semibold"
+                                    class="p-3 my-5 rounded-full hover:bg-accent-1 hover:text-white hover:font-semibold"
                                     :class="{
                                         'bg-accent-1 text-white font-semibold':
-                                            $route.path === item.route,
+                                            $route.path.startsWith(item.route),
                                     }"
                                 >
                                     <div class="flex items-center gap-x-5">
-                                        <component
-                                            :is="item.icon"
-                                            class="group-hover:text-white"
-                                            :class="{
-                                                'text-white':
-                                                    $route.path === item.route,
-                                            }"
-                                        />
+                                        <component :is="item.icon" />
                                         {{ item.name }}
                                     </div>
                                 </li>

@@ -1,7 +1,10 @@
 <template>
     <div class="flex flex-col items-center justify-center">
         <div class="flex items-center justify-between w-full my-5">
-            <UIButton :icon="IconChevronLeft" :variant="'secondary'"
+            <UIButton
+                @click="$router.back()"
+                :icon="IconChevronLeft"
+                :variant="'secondary'"
                 >Evaluasi
             </UIButton>
             <router-link to="/evaluasi/create">
