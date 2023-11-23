@@ -301,7 +301,7 @@ const listInfo = ref([
     "Perusahaan ",
     "Jabatan ",
     "Kelas Jabatan ",
-    "Divisi / Departemen ",
+    "Business Units",
     "Cost Center ",
     "Lokasi Kerja ",
     "Melapor Ke ",
