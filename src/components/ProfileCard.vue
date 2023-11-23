@@ -14,7 +14,9 @@
             </div>
         </div>
         <div class="overflow-hidden">
-            <p class="overflow-hidden font-bold">{{ type }}</p>
+            <p class="overflow-hidden font-bold">
+                {{ type.match(/^(\w+)/)?.[0] || "" }}
+            </p>
         </div>
 
         <div
