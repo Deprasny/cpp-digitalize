@@ -29,6 +29,7 @@ import { ref } from "vue";
 import UIButton from "@/components/ui/UIButton.vue";
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
 import { useRouter } from "vue-router";
+import { getFormattedDate } from "@/libs/util";
 
 const router = useRouter();
 
@@ -38,8 +39,8 @@ const makeData = (count) => {
         data.push({
             mutasi: `000${i}/MUTASI/INDIVIDU/X/2023`,
             nama: `User ${i}`,
-            tanggal: new Date().toISOString(),
-            status: "Approved",
+            tanggal: getFormattedDate(new Date()),
+            status: "Waiting",
             jenis: "Individu",
             date: "New",
         });
