@@ -1,9 +1,9 @@
 <template>
     <div
-        class="w-[252px] h-[194px] bg-white rounded-3xl p-5 flex flex-col justify-between shadow-xl overflow-hidden"
+        class="w-[262px] h-[194px] bg-white rounded-3xl py-5 px-3 flex flex-col justify-between shadow-xl overflow-hidden"
     >
         <div class="flex flex-col justify-between h-[85px]">
-            <div class="flex gap-x-4">
+            <div class="flex gap-x-2">
                 <img :src="photo" class="object-cover w-12 h-12 rounded-full" />
 
                 <div class="flex flex-col text-sm">

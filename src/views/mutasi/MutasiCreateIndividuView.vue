@@ -64,19 +64,27 @@
                                 {{ header }}
                             </div>
                         </div>
-                        <div class="flex justify-between w-full">
-                            <div
-                                class="w-full py-1 font-semibold border border-black"
-                            >
-                                <input type="text" class="max-w-[150px]" />
+                        <div
+                            v-for="(_, index) in columns"
+                            :key="index"
+                            class="flex justify-between w-full"
+                        >
+                            <div class="relative">
+                                <div
+                                    v-if="index === columns - 1"
+                                    class="absolute top-1 -left-5"
+                                >
+                                    <button
+                                        v-if="columns > 1"
+                                        @click="removeColumn"
+                                    >
+                                        -
+                                    </button>
+                                </div>
                             </div>
                             <div
                                 class="w-full py-1 font-semibold border border-black"
-                            >
-                                <input type="text" class="max-w-[150px]" />
-                            </div>
-                            <div
-                                class="w-full py-1 font-semibold border border-black"
+                                v-for="i in 3"
                             >
                                 <input type="text" class="max-w-[150px]" />
                             </div>
@@ -110,21 +118,37 @@
                                 {{ header }}
                             </div>
                         </div>
-                        <div class="flex justify-between w-full">
+
+                        <div
+                            v-for="(_, index) in columns"
+                            :key="index"
+                            class="flex justify-between w-full"
+                        >
                             <div
                                 class="w-full py-1 font-semibold border border-black"
+                                v-for="i in 3"
                             >
                                 <input type="text" class="max-w-[150px]" />
                             </div>
-                            <div
-                                class="w-full py-1 font-semibold border border-black"
-                            >
-                                <input type="text" class="max-w-[150px]" />
-                            </div>
-                            <div
-                                class="w-full py-1 font-semibold border border-black"
-                            >
-                                <input type="text" class="max-w-[150px]" />
+                            <div class="relative">
+                                <div
+                                    v-if="index === columns - 1"
+                                    class="absolute top-2 -right-7"
+                                >
+                                    <button
+                                        v-if="columns < 5"
+                                        @click="addColumn"
+                                    >
+                                        <div
+                                            class="p-1 bg-red-600 rounded-full"
+                                        >
+                                            <component
+                                                :is="IconPlus"
+                                                class="text-xs text-white"
+                                            />
+                                        </div>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <p class="self-start mt-5 font-semibold">
@@ -236,6 +260,7 @@ import BasicCard from "../../components/BasicCard.vue";
 import BasicForm from "../../components/BasicForm.vue";
 import FormInputBasic from "../../components/FormInputBasic.vue";
 import IconMagnifier from "../../components/icons/IconMagnifying.vue";
+import IconPlus from "../../components/icons/IconPlus.vue";
 import UIDivider from "../../components/ui/UIDivider.vue";
 import UIButton from "../../components/ui/UIButton.vue";
 import LabelForm from "../../components/LabelForm.vue";
@@ -273,13 +298,21 @@ const statusBaru = ref([
     "22001234 - Panca Dias Purnomo",
 ]);
 
+const columns = ref(1);
+
+const addColumn = () => {
+    columns.value++;
+};
+
+const removeColumn = () => {
+    columns.value--;
+};
+
 const values = ref({
     nik: "",
     mut_type: "Individu",
     mut_reason: "",
 });
-
-console.log({ values: values.value });
 
 const headerTunjangan = ref(["Nama Tunjangan", "Nilai Tunjangan", "Net"]);
 </script>

@@ -24,7 +24,7 @@
         <Divider />
 
         <p class="text-2xl">On Going Project</p>
-        <div class="flex gap-x-10">
+        <div class="flex gap-x-5">
             <template v-if="data.transaksi.length > 0">
                 <ProfileCard
                     v-for="i in data.employee"
