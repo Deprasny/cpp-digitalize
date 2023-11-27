@@ -1,7 +1,8 @@
 <template>
     <div class="relative shadow-xl -top-8" @click="toggleDropdown">
         <div
-            class="absolute min-w-[440px] mt-2 bg-white border border-gray-500 rounded-lg shadow-xs dropdown-content z-10"
+            class="absolute z-10 mt-2 bg-white border border-gray-500 rounded-lg shadow-xs dropdown-content"
+            :class="classes"
         >
             <a href="#" class="block px-4 py-3">
                 <span class="flex items-center justify-between">
@@ -36,6 +37,10 @@ const props = defineProps({
     selectedOptionText: {
         type: String,
         required: true,
+    },
+    classes: {
+        type: String,
+        default: "min-w-[300px]",
     },
 });
 

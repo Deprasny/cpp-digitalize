@@ -14,7 +14,7 @@
                             />
                         </div>
                         <div
-                            v-if="enteredNames"
+                            v-if="enteredNames.length > 0"
                             class="flex flex-wrap w-full my-8 gap-x-4 gap-y-4"
                         >
                             <div
@@ -136,7 +136,10 @@ const enteredNames = ref([]);
 const addName = () => {
     enteredNames.value.push(nama.value);
     nama.value = "";
-    console.log(enteredNames.value);
+};
+
+const removeName = (index) => {
+    enteredNames.value.splice(index, 1);
 };
 
 const listInfo = ref([

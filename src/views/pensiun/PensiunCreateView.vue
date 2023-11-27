@@ -43,21 +43,82 @@
 
                         <UIDivider />
                         <!-- section 2  -->
-                        <div class="flex flex-col mt-10 mb-20">
-                            <p class="mb-10 font-semibold">KEPUTUSAN</p>
-                            <!-- dropdown  -->
-                            <FormDropdown
-                                class="w-[300px]"
-                                :dropdownOptions="[
-                                    'Pensiun, Diganti',
-                                    'Pensiun, Tidak diganti',
-                                    'Diperpanjang Kontrak',
-                                ]"
-                                :selectedOptionText="selectedOption"
-                                @update:selectedOptionText="
-                                    handleSelectedOptionUpdate
+                        <div class="flex gap-x-10">
+                            <div class="flex flex-col mt-10 mb-20">
+                                <p class="font-semibold mb-9">KEPUTUSAN</p>
+                                <div class="flex gap-x-10">
+                                    <!-- dropdown  -->
+                                    <FormDropdown
+                                        class="w-[300px]"
+                                        :dropdownOptions="[
+                                            'Pensiun, Diganti',
+                                            'Pensiun, Tidak diganti',
+                                            'Diperpanjang Kontrak',
+                                        ]"
+                                        :selectedOptionText="
+                                            selectedOptionKeputusan
+                                        "
+                                        @update:selectedOptionText="
+                                            handleSelectedKeputusan
+                                        "
+                                    />
+                                    <FormDropdown
+                                        v-if="
+                                            selectedOptionKeputusan ===
+                                            'Diperpanjang Kontrak'
+                                        "
+                                        classes="min-w-[100px]"
+                                        :dropdownOptions="['1', '2', '3']"
+                                        :selectedOptionText="
+                                            selectedOptionPeriode
+                                        "
+                                        @update:selectedOptionText="
+                                            handleSelectedPeriode
+                                        "
+                                    />
+                                </div>
+                            </div>
+                            <div
+                                class="flex flex-col mt-10"
+                                v-if="
+                                    selectedOptionKeputusan ===
+                                    'Pensiun, Diganti'
                                 "
-                            />
+                            >
+                                <div class="flex flex-col gap-x-5">
+                                    <!-- dropdown  -->
+                                    <div class="w-[285px]">
+                                        <FormInputBasic
+                                            label="CALON PENGGANTI"
+                                            :icon="IconMagnifier"
+                                            v-model="nama"
+                                            @addName="addName"
+                                            placeholder="Isi nama pengganti"
+                                        />
+                                    </div>
+                                    <div
+                                        v-if="enteredNames.length > 0"
+                                        class="flex flex-wrap w-full my-5 gap-x-4 gap-y-4"
+                                    >
+                                        <div
+                                            v-for="(
+                                                name, index
+                                            ) in enteredNames"
+                                            :key="name"
+                                            class="text-black w-[270px] p-3 rounded-2xl shadow-xl px-6 flex justify-between relative overflow-hidden"
+                                        >
+                                            {{ name }}
+                                            <button
+                                                :key="name"
+                                                @click="() => removeName(index)"
+                                                class="absolute top-0 right-0 p-2 text-white bg-[#FB6255] cursor-pointer rounded-bl-full text-xs"
+                                            >
+                                                X
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <UIDivider />
@@ -95,9 +156,24 @@ import UIButton from "../../components/ui/UIButton.vue";
 import FormDropdown from "../../components/FormDropdown.vue";
 import FormTextArea from "../../components/FormTextArea.vue";
 
-const selectedOption = ref("Pilih salah satu");
+const nama = ref("");
+const enteredNames = ref([]);
 
-const handleSelectedOptionUpdate = (value) => {
-    selectedOption.value = value;
+const addName = () => {
+    enteredNames.value.push(nama.value);
+    nama.value = "";
+};
+const removeName = (index) => {
+    enteredNames.value.splice(index, 1);
+};
+
+const selectedOptionKeputusan = ref("Pilih salah satu");
+const selectedOptionPeriode = ref("Pilih");
+
+const handleSelectedKeputusan = (value) => {
+    selectedOptionKeputusan.value = value;
+};
+const handleSelectedPeriode = (value) => {
+    selectedOptionPeriode.value = value;
 };
 </script>

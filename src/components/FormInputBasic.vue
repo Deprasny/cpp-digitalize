@@ -11,7 +11,7 @@
                 @input="emit('update:modelValue', $event.target.value)"
                 class="w-full px-3 py-3 text-black placeholder-black placeholder-opacity-50 bg-transparent border border-gray-500 rounded-lg shadow appearance-none focus:placeholder-opacity-100"
                 :placeholder="placeholder"
-                @change="emitHandleAddName"
+                @keydown.enter.prevent="emitHandleAddName"
             />
             <div
                 v-if="icon"
