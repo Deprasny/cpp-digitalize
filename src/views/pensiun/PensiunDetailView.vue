@@ -148,28 +148,8 @@
                 </div>
             </BasicCard>
 
-            <p class="mx-3 mt-1 font-semibold">Status:</p>
-            <div class="flex flex-col w-[20%] gap-y-2">
-                <div
-                    v-for="(item, index) in listLog"
-                    :key="index"
-                    :class="{ 'last-item': index === listLog.length - 1 }"
-                    class="flex h-[90px]"
-                >
-                    <div class="relative">
-                        <p class="inline-block text-3xl text-[#0A70A9]">O</p>
-                        <span
-                            v-if="index !== listLog.length - 1"
-                            class="absolute h-[70px] transform -translate-x-1/2 border-r-[3px] border-[#0A70A9] border-dotted left-[10px] top-8"
-                            >&nbsp;</span
-                        >
-                    </div>
-                    <div class="flex flex-col pt-1 ml-2 gap-y-2">
-                        <p class="text-[#0A70A9]">{{ item.date }}</p>
-                        <p class="text-lg">{{ item.description }}</p>
-                    </div>
-                </div>
-            </div>
+            <!-- Log -->
+            <Log :data="listLog" />
         </div>
     </div>
 </template>
@@ -181,6 +161,7 @@ import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
 import UIDivider from "@/components/ui/UIDivider.vue";
 import BasicCard from "../../components/BasicCard.vue";
 import LabelForm from "../../components/LabelForm.vue";
+import Log from "../../components/Log.vue";
 
 import { useRouter } from "vue-router";
 
