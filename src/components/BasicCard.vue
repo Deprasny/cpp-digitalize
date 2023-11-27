@@ -1,7 +1,21 @@
 <template>
     <div class="flex flex-col bg-white shadow-xl">
-        <div :class="cardClasses" class="w-full py-4 border px-7 rounded-t-xl">
+        <div
+            :class="cardClasses"
+            class="flex justify-between w-full py-4 border px-7 rounded-t-xl"
+        >
             <span class="text-lg font-semibold">{{ props.title }}</span>
+            <button
+                v-if="tooltip"
+                class="text-lg font-semibold"
+                @click="tooltipHandle"
+            >
+                <div
+                    class="flex items-center justify-center w-6 h-6 border-2 border-black rounded-full"
+                >
+                    !
+                </div>
+            </button>
         </div>
         <div>
             <slot></slot>
@@ -13,6 +27,8 @@
 import { computed } from "@vue/reactivity";
 import { defineProps } from "vue";
 
+const emit = defineEmits(["tooltip"]);
+
 const props = defineProps({
     title: {
         type: String,
@@ -22,6 +38,10 @@ const props = defineProps({
         type: String,
         default: "form",
     },
+    tooltip: {
+        type: String,
+        default: false,
+    },
 });
 
 const cardClasses = computed(() => {
@@ -30,4 +50,8 @@ const cardClasses = computed(() => {
         "bg-accent-1 text-white": props.variant === "detail",
     };
 });
+
+const tooltipHandle = () => {
+    emit("tooltip");
+};
 </script>

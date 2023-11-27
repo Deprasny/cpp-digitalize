@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, onBeforeMount } from "vue";
+import { ref, onBeforeMount } from "vue";
 import Table from "@/components/BasicTable.vue";
 import { createColumnHelper } from "@tanstack/table-core";
 import UIButton from "@/components/ui/UIButton.vue";

@@ -9,75 +9,76 @@
         <UIDivider />
 
         <div class="mt-10">
-            <BasicCard title="FORM PENSIUN">
-                <BasicForm class="px-10 py-5">
-                    <!-- form basic -->
-                    <div class="w-[900px] my-10">
-                        <FormInputBasic
-                            label="Nama & NIK"
-                            :icon="IconMagnifier"
-                        />
+            <BasicForm>
+                <BasicCard title="FORM PENSIUN">
+                    <div class="px-10 py-5">
+                        <!-- form basic -->
+                        <div class="w-[900px] mb -10">
+                            <FormInputBasic
+                                label="Nama & NIK"
+                                :icon="IconMagnifier"
+                            />
 
-                        <div class="flex gap-x-7">
-                            <FormInputBasic label="Jabatan" />
-                            <FormInputBasic label="Level" />
+                            <div class="flex gap-x-7">
+                                <FormInputBasic label="Jabatan" />
+                                <FormInputBasic label="Level" />
+                            </div>
+                            <div class="flex gap-x-7">
+                                <FormInputBasic label="BU Head" />
+                                <FormInputBasic label="Divisi" />
+                            </div>
+                            <div class="flex gap-x-7">
+                                <FormInputBasic label="Personal Area" />
+                                <FormInputBasic label="Usia" />
+                            </div>
+                            <div class="flex gap-x-7">
+                                <FormInputBasic label="Status" />
+                                <FormInputBasic label="Tanggal Pensiun" />
+                            </div>
+                            <div class="flex gap-x-7">
+                                <FormInputBasic label="Year of Service" />
+                                <FormInputBasic label="-" />
+                            </div>
                         </div>
-                        <div class="flex gap-x-7">
-                            <FormInputBasic label="BU Head" />
-                            <FormInputBasic label="Divisi" />
+
+                        <UIDivider />
+                        <!-- section 2  -->
+                        <div class="flex flex-col mt-10 mb-20">
+                            <p class="mb-10 font-semibold">KEPUTUSAN</p>
+                            <!-- dropdown  -->
+                            <FormDropdown
+                                class="w-[300px]"
+                                :dropdownOptions="[
+                                    'Pensiun, Diganti',
+                                    'Pensiun, Tidak diganti',
+                                    'Diperpanjang Kontrak',
+                                ]"
+                                :selectedOptionText="selectedOption"
+                                @update:selectedOptionText="
+                                    handleSelectedOptionUpdate
+                                "
+                            />
                         </div>
-                        <div class="flex gap-x-7">
-                            <FormInputBasic label="Personal Area" />
-                            <FormInputBasic label="Usia" />
-                        </div>
-                        <div class="flex gap-x-7">
-                            <FormInputBasic label="Status" />
-                            <FormInputBasic label="Tanggal Pensiun" />
-                        </div>
-                        <div class="flex gap-x-7">
-                            <FormInputBasic label="Year of Service" />
-                            <FormInputBasic label="-" />
+
+                        <UIDivider />
+
+                        <!-- section 3 -->
+                        <div class="my-10">
+                            <FormTextArea label="Catatan" v-model="catatan" />
                         </div>
                     </div>
-
-                    <UIDivider />
-                    <!-- section 2  -->
-                    <div class="flex flex-col mt-10 mb-20">
-                        <p class="mb-10 font-semibold">KEPUTUSAN</p>
-                        <!-- dropdown  -->
-                        <FormDropdown
-                            class="w-[300px]"
-                            :dropdownOptions="[
-                                'Pensiun, Diganti',
-                                'Pensiun, Tidak diganti',
-                                'Diperpanjang Kontrak',
-                            ]"
-                            :selectedOptionText="selectedOption"
-                            @update:selectedOptionText="
-                                handleSelectedOptionUpdate
-                            "
-                        />
-                    </div>
-
-                    <UIDivider />
-
-                    <!-- section 3 -->
-                    <div class="my-10">
-                        <FormTextArea label="Catatan" v-model="catatan" />
-                    </div>
-
-                    <div
-                        class="flex items-center justify-end w-full mt-5 gap-x-4"
-                    >
-                        <UIButton variant="form" class="w-[200px]">
-                            Submit
-                        </UIButton>
-                        <UIButton variant="form" class="w-[200px]">
-                            Simpan ke Draft
-                        </UIButton>
-                    </div>
-                </BasicForm>
-            </BasicCard>
+                </BasicCard>
+                <div
+                    class="flex items-center justify-start w-full mt-5 gap-x-4"
+                >
+                    <UIButton variant="form" class="w-[200px]">
+                        Submit
+                    </UIButton>
+                    <UIButton variant="form" class="w-[200px]">
+                        Simpan ke Draft
+                    </UIButton>
+                </div>
+            </BasicForm>
         </div>
     </div>
 </template>

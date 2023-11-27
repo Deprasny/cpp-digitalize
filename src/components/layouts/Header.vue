@@ -1,5 +1,8 @@
 <template>
-    <header class="flex items-center justify-between p-7">
+    <header
+        class="fixed z-20 flex items-center justify-between w-full p-5 transition-all duration-300 ease-in-out"
+        :class="{ 'bg-white shadow-lg': isScrolled }"
+    >
         <div class="flex items-center gap-x-5">
             <div class="relative">
                 <input
@@ -34,7 +37,21 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import IconMagnifying from "@/components/icons/IconMagnifying.vue";
 import IconBell from "@/components/icons/IconBell.vue";
 import IconArrowRight from "../icons/IconArrowRight.vue";
+const isScrolled = ref(false);
+
+onMounted(() => {
+    window.addEventListener("scroll", handleScroll);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener("scroll", handleScroll);
+});
+
+const handleScroll = () => {
+    isScrolled.value = window.scrollY > 0;
+};
 </script>

@@ -1,257 +1,270 @@
 <template>
     <div class="mt-28">
-        <BasicCard title="FORM MUTASI">
-            <BasicForm class="px-10 py-5">
-                <!-- form basic -->
-                <div class="w-[900px]">
-                    <FormInputBasic
-                        label="Nama & NIK"
-                        :icon="IconMagnifier"
-                        v-model="values.nik"
-                    />
-
-                    <div class="flex gap-x-7">
-                        <FormInputBasic label="Tanggal Masuk" type="date" />
-                        <FormInputBasic label="Home Base" />
-                    </div>
-                    <div class="flex gap-x-7">
-                        <FormInputBasic label="Tanggal Lahir" type="date" />
-                        <FormInputBasic label="Pendidikan" />
-                    </div>
-                    <div class="flex gap-x-7">
+        <BasicForm>
+            <BasicCard title="FORM MUTASI">
+                <div class="px-10 py-5">
+                    <!-- form basic -->
+                    <div class="w-[900px]">
                         <FormInputBasic
-                            label="Tanggal Efektif Mutasi"
-                            type="date"
+                            label="Nama & NIK"
+                            :icon="IconMagnifier"
+                            v-model="values.nik"
                         />
-                        <FormInputBasic
-                            label="Alasan Mutasi"
-                            v-model="values.mut_reason"
-                        />
-                    </div>
-                </div>
 
-                <!-- form status -->
-                <div class="flex items-baseline justify-between my-10">
-                    <div class="flex flex-col items-start w-1/5">
-                        <div class="py-1">-</div>
-                        <div
-                            v-for="list in listInfo"
-                            :key="list"
-                            class="w-full py-[17px] font-semibold"
-                        >
-                            <LabelForm :label="list" />
+                        <div class="flex gap-x-7">
+                            <FormInputBasic label="Tanggal Masuk" type="date" />
+                            <FormInputBasic label="Home Base" />
+                        </div>
+                        <div class="flex gap-x-7">
+                            <FormInputBasic label="Tanggal Lahir" type="date" />
+                            <FormInputBasic label="Pendidikan" />
+                        </div>
+                        <div class="flex gap-x-7">
+                            <FormInputBasic
+                                label="Tanggal Efektif Mutasi"
+                                type="date"
+                            />
+                            <FormInputBasic
+                                label="Alasan Mutasi"
+                                v-model="values.mut_reason"
+                            />
                         </div>
                     </div>
-                    <div class="flex flex-col items-center flex-1 text-center">
-                        <div class="w-full py-1 text-lg font-bold bg-accent-2">
-                            STATUS LAMA
-                        </div>
-                        <div
-                            v-for="status in statusLama"
-                            :key="status"
-                            class="w-full py-4 border border-l-0 border-black"
-                        >
-                            {{ status }}
-                        </div>
-                        <div
-                            class="flex justify-between w-full mt-10 bg-accent-2"
-                        >
+
+                    <!-- form status -->
+                    <div class="flex items-baseline justify-between my-10">
+                        <div class="flex flex-col items-start w-1/5">
+                            <div class="py-1">-</div>
                             <div
-                                v-for="header in headerTunjangan"
-                                :key="header"
-                                class="w-full py-1 font-semibold border-black border-x"
+                                v-for="list in listInfo"
+                                :key="list"
+                                class="w-full py-[17px] font-semibold"
                             >
-                                {{ header }}
+                                <LabelForm :label="list" />
                             </div>
                         </div>
                         <div
-                            v-for="(_, index) in columns"
-                            :key="index"
-                            class="flex justify-between w-full"
+                            class="flex flex-col items-center flex-1 text-center"
                         >
-                            <div class="relative">
+                            <div
+                                class="w-full py-1 text-lg font-bold bg-accent-2"
+                            >
+                                STATUS LAMA
+                            </div>
+                            <div
+                                v-for="status in statusLama"
+                                :key="status"
+                                class="w-full py-4 border border-l-0 border-black"
+                            >
+                                {{ status }}
+                            </div>
+                            <div
+                                class="flex justify-between w-full mt-10 bg-accent-2"
+                            >
                                 <div
-                                    v-if="index === columns - 1"
-                                    class="absolute top-1 -left-5"
+                                    v-for="header in headerTunjangan"
+                                    :key="header"
+                                    class="w-full py-1 font-semibold border-black border-x"
                                 >
-                                    <button
-                                        v-if="columns > 1"
-                                        @click="removeColumn"
-                                    >
-                                        -
-                                    </button>
+                                    {{ header }}
                                 </div>
                             </div>
                             <div
-                                class="w-full py-1 font-semibold border border-black"
-                                v-for="i in 3"
+                                v-for="(_, index) in columns"
+                                :key="index"
+                                class="flex justify-between w-full"
                             >
-                                <input type="text" class="max-w-[150px]" />
-                            </div>
-                        </div>
-                        <p class="self-start mt-5 font-semibold">
-                            Total : 1.000.000
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-1 text-center">
-                        <div
-                            class="w-full py-1 text-lg font-bold text-white bg-accent-1"
-                        >
-                            STATUS BARU
-                        </div>
-                        <div
-                            v-for="status in statusBaru"
-                            :key="status"
-                            class="w-full py-4 border border-l-0 border-black last:border-b-[2px]"
-                        >
-                            {{ status }}
-                        </div>
-
-                        <div
-                            class="flex justify-between w-full mt-10 bg-accent-1"
-                        >
-                            <div
-                                v-for="header in headerTunjangan"
-                                :key="header"
-                                class="w-full py-1 font-semibold text-white border-black border-x"
-                            >
-                                {{ header }}
-                            </div>
-                        </div>
-
-                        <div
-                            v-for="(_, index) in columns"
-                            :key="index"
-                            class="flex justify-between w-full"
-                        >
-                            <div
-                                class="w-full py-1 font-semibold border border-black"
-                                v-for="i in 3"
-                            >
-                                <input type="text" class="max-w-[150px]" />
-                            </div>
-                            <div class="relative">
-                                <div
-                                    v-if="index === columns - 1"
-                                    class="absolute top-2 -right-7"
-                                >
-                                    <button
-                                        v-if="columns < 5"
-                                        @click="addColumn"
+                                <div class="relative">
+                                    <div
+                                        v-if="index === columns - 1"
+                                        class="absolute top-1 -left-5"
                                     >
-                                        <div
-                                            class="p-1 bg-red-600 rounded-full"
+                                        <button
+                                            v-if="columns > 1"
+                                            @click="removeColumn"
                                         >
-                                            <component
-                                                :is="IconPlus"
-                                                class="text-xs text-white"
-                                            />
-                                        </div>
-                                    </button>
+                                            -
+                                        </button>
+                                    </div>
+                                </div>
+                                <div
+                                    class="w-full py-1 font-semibold border border-black"
+                                    v-for="i in 3"
+                                >
+                                    <input type="text" class="max-w-[150px]" />
                                 </div>
                             </div>
+                            <p class="self-start mt-5 font-semibold">
+                                Total : 1.000.000
+                            </p>
                         </div>
-                        <p class="self-start mt-5 font-semibold">
-                            Total : 1.000.000
-                        </p>
-                    </div>
-                </div>
-
-                <UIDivider />
-
-                <!-- form radio  -->
-                <div class="flex items-start justify-between w-full my-10">
-                    <div class="flex flex-col items-start">
-                        <p class="font-semibold">Keluarga</p>
-                        <p class="mb-3 text-xs italic">(Pilih salah satu)</p>
-                        <div class="flex gap-x-2">
-                            <input type="radio" name="keluarga" />
-                            <p>Ikut pindah kelokasi kerja baru</p>
-                        </div>
-                        <div class="flex gap-x-2">
-                            <input type="radio" name="keluarga" />
-                            <p>Ikut pindah kelokasi kerja baru</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-start">
-                        <p class="font-semibold">Tunj. Perumahan</p>
-                        <p class="mb-3 text-xs italic">(Pilih salah satu)</p>
-                        <div class="flex gap-x-2">
-                            <input type="radio" name="tunjangan" />
-                            <p>Diambil Bulanan</p>
-                        </div>
-                        <div class="flex gap-x-2">
-                            <input type="radio" name="tunjangan" />
-                            <p>Diambil per 1 Tahun</p>
-                        </div>
-                        <div class="flex gap-x-2">
-                            <input type="radio" name="tunjangan" />
-                            <p>Diambil per 2 Tahun</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-start">
-                        <p class="font-semibold">Transportasi Barang</p>
-                        <p class="mb-3 text-xs italic">(Pilih salah satu)</p>
-                        <div class="flex gap-x-2">
-                            <input type="radio" name="barang" />
-                            <p>Ambil Tunai</p>
-                        </div>
-                        <div class="flex gap-x-2">
-                            <input type="radio" name="barang" />
-                            <p>Difasilitasi Perusahaan</p>
-                        </div>
-                    </div>
-                </div>
-
-                <UIDivider />
-
-                <!-- form additional -->
-                <div class="w-[900px] my-10">
-                    <div class="flex gap-x-7">
-                        <FormInputBasic label="Sisa Cuti" />
-                        <FormInputBasic label="Sisa Plafon Berobat" />
-                    </div>
-                    <div class="flex gap-x-7">
-                        <FormInputBasic label="Hak Karyawan Belum Terbayar" />
-                        <FormInputBasic label="Hutang ke Perusahaan" />
-                    </div>
-                    <FormInputBasic label="Keterangan" />
-                </div>
-
-                <UIDivider />
-
-                <!-- form upload  -->
-                <div
-                    class="flex items-start justify-between max-w-[500px] my-10"
-                >
-                    <div class="flex flex-col items-start">
-                        <p class="font-semibold">Lampiran</p>
-                        <div class="flex items-center gap-x-5">
-                            <UIButton
-                                variant="form"
-                                class="w-[200px]"
-                                type="file"
+                        <div
+                            class="flex flex-col items-center flex-1 text-center"
+                        >
+                            <div
+                                class="w-full py-1 text-lg font-bold text-white bg-accent-1"
                             >
-                                Upload File
-                            </UIButton>
-                            <p class="text-xs">
-                                Mohon melampirkan struktur organisasi sebelum
-                                dan sesudah
+                                STATUS BARU
+                            </div>
+                            <div
+                                v-for="status in statusBaru"
+                                :key="status"
+                                class="w-full py-4 border border-l-0 border-black last:border-b-[2px]"
+                            >
+                                {{ status }}
+                            </div>
+
+                            <div
+                                class="flex justify-between w-full mt-10 bg-accent-1"
+                            >
+                                <div
+                                    v-for="header in headerTunjangan"
+                                    :key="header"
+                                    class="w-full py-1 font-semibold text-white border-black border-x"
+                                >
+                                    {{ header }}
+                                </div>
+                            </div>
+
+                            <div
+                                v-for="(_, index) in columns"
+                                :key="index"
+                                class="flex justify-between w-full"
+                            >
+                                <div
+                                    class="w-full py-1 font-semibold border border-black"
+                                    v-for="i in 3"
+                                >
+                                    <input type="text" class="max-w-[150px]" />
+                                </div>
+                                <div class="relative">
+                                    <div
+                                        v-if="index === columns - 1"
+                                        class="absolute top-2 -right-7"
+                                    >
+                                        <button
+                                            v-if="columns < 5"
+                                            @click="addColumn"
+                                        >
+                                            <div
+                                                class="p-1 bg-red-600 rounded-full"
+                                            >
+                                                <component
+                                                    :is="IconPlus"
+                                                    class="text-xs text-white"
+                                                />
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="self-start mt-5 font-semibold">
+                                Total : 1.000.000
                             </p>
                         </div>
                     </div>
-                </div>
 
-                <div class="flex items-center justify-end w-full mt-5 gap-x-4">
-                    <UIButton variant="form" class="w-[200px]">
-                        Submit
-                    </UIButton>
-                    <UIButton variant="form" class="w-[200px]">
-                        Simpan ke Draft
-                    </UIButton>
+                    <UIDivider />
+
+                    <!-- form radio  -->
+                    <div class="flex items-start justify-between w-full my-10">
+                        <div class="flex flex-col items-start">
+                            <p class="font-semibold">Keluarga</p>
+                            <p class="mb-3 text-xs italic">
+                                (Pilih salah satu)
+                            </p>
+                            <div class="flex gap-x-2">
+                                <input type="radio" name="keluarga" />
+                                <p>Ikut pindah kelokasi kerja baru</p>
+                            </div>
+                            <div class="flex gap-x-2">
+                                <input type="radio" name="keluarga" />
+                                <p>Ikut pindah kelokasi kerja baru</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-start">
+                            <p class="font-semibold">Tunj. Perumahan</p>
+                            <p class="mb-3 text-xs italic">
+                                (Pilih salah satu)
+                            </p>
+                            <div class="flex gap-x-2">
+                                <input type="radio" name="tunjangan" />
+                                <p>Diambil Bulanan</p>
+                            </div>
+                            <div class="flex gap-x-2">
+                                <input type="radio" name="tunjangan" />
+                                <p>Diambil per 1 Tahun</p>
+                            </div>
+                            <div class="flex gap-x-2">
+                                <input type="radio" name="tunjangan" />
+                                <p>Diambil per 2 Tahun</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-start">
+                            <p class="font-semibold">Transportasi Barang</p>
+                            <p class="mb-3 text-xs italic">
+                                (Pilih salah satu)
+                            </p>
+                            <div class="flex gap-x-2">
+                                <input type="radio" name="barang" />
+                                <p>Ambil Tunai</p>
+                            </div>
+                            <div class="flex gap-x-2">
+                                <input type="radio" name="barang" />
+                                <p>Difasilitasi Perusahaan</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <UIDivider />
+
+                    <!-- form additional -->
+                    <div class="w-[900px] my-10">
+                        <div class="flex gap-x-7">
+                            <FormInputBasic label="Sisa Cuti" />
+                            <FormInputBasic label="Sisa Plafon Berobat" />
+                        </div>
+                        <div class="flex gap-x-7">
+                            <FormInputBasic
+                                label="Hak Karyawan Belum Terbayar"
+                            />
+                            <FormInputBasic label="Hutang ke Perusahaan" />
+                        </div>
+                        <FormInputBasic label="Keterangan" />
+                    </div>
+
+                    <UIDivider />
+
+                    <!-- form upload  -->
+                    <div
+                        class="flex items-start justify-between max-w-[500px] my-10"
+                    >
+                        <div class="flex flex-col items-start">
+                            <p class="font-semibold">Lampiran</p>
+                            <div class="flex items-center gap-x-5">
+                                <UIButton
+                                    variant="form"
+                                    class="w-[200px]"
+                                    type="file"
+                                >
+                                    Upload File
+                                </UIButton>
+                                <p class="text-xs">
+                                    Mohon melampirkan struktur organisasi
+                                    sebelum dan sesudah
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </BasicForm>
-        </BasicCard>
+            </BasicCard>
+            <div class="flex items-center justify-start w-full mt-5 gap-x-4">
+                <UIButton variant="form" class="w-[200px]"> Submit </UIButton>
+                <UIButton variant="form" class="w-[200px]">
+                    Simpan ke Draft
+                </UIButton>
+            </div>
+        </BasicForm>
     </div>
 </template>
 <script setup>
