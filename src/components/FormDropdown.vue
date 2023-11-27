@@ -11,7 +11,10 @@
                 </span>
             </a>
 
-            <div v-show="isDropdownOpen">
+            <div
+                v-show="isDropdownOpen"
+                class="max-h-[300px] overflow-auto scroll-smooth"
+            >
                 <div v-for="(option, index) in dropdownOptions" :key="index">
                     <div
                         class="block px-4 py-4 text-gray-800 hover:bg-line-gradient hover:border-l-accent-1 hover:border-2 hover:py-6 hover:text-accent-1 hover:font-semibold"
