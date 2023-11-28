@@ -20,7 +20,7 @@
             />
         </template>
         <template v-else>
-            <p>Loading...</p>
+            <UILoader />
         </template>
     </div>
 </template>
@@ -33,6 +33,7 @@ import UIButton from "@/components/ui/UIButton.vue";
 import IconPlus from "@/components/icons/IconPlus.vue";
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
 import { useRouter } from "vue-router";
+import UILoader from "../../components/ui/UILoader.vue";
 
 import useFetch from "../../hooks/useFetch";
 import { getMutationsTable } from "../../services/mutation.services";
@@ -55,33 +56,33 @@ onBeforeMount(async () => {
 
 const columnHelper = createColumnHelper();
 const columns = [
-    columnHelper.accessor((row) => row.mut_req_no, {
-        id: "mut_req_no",
+    columnHelper.accessor((row) => row.no_mutasi, {
+        id: "no_mutasi",
         cell: (info) => info.getValue(),
         header: () => "Mutasi no",
     }),
-    columnHelper.accessor((row) => row.employee_name, {
-        id: "employee_name",
+    columnHelper.accessor((row) => row.karyawan, {
+        id: "karyawan",
         cell: (info) => info.getValue(),
         header: () => "Nama Karyawan",
     }),
-    columnHelper.accessor((row) => row.mut_date, {
-        id: "mut_date",
+    columnHelper.accessor((row) => row.tgl_pengajuan, {
+        id: "tgl_pengajuan",
         cell: (info) => info.getValue(),
         header: () => "Tanggal Pengajuan",
     }),
-    columnHelper.accessor((row) => row.step_status, {
-        id: "step_status",
+    columnHelper.accessor((row) => row.status, {
+        id: "status",
         cell: (info) => info.getValue(),
         header: () => "Status",
     }),
-    columnHelper.accessor((row) => row.mut_type, {
-        id: "mut_type",
+    columnHelper.accessor((row) => row.jenis_mutasi, {
+        id: "jenis_mutasi",
         cell: (info) => info.getValue(),
         header: () => "Jenis",
     }),
-    columnHelper.accessor((row) => row.mut_date, {
-        id: "mut_date",
+    columnHelper.accessor((row) => row.tgl_pengajuan, {
+        id: "tgl_pengajuan",
         cell: (info) => info.getValue(),
         header: () => "Date",
     }),

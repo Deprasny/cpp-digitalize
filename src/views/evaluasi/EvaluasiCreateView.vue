@@ -15,7 +15,7 @@
                     title="FORM EVALUASI"
                     tooltip="true"
                 >
-                    <ToolTip v-if="tooltip" class="left-[710px] -top-10">
+                    <ToolTip v-if="tooltip" class="left-[60%] -top-10">
                         <p class="font-semibold">Catatan</p>
                         <ol class="space-y-2 list-decimal">
                             <li v-for="note in listInfoForm" :key="note">
@@ -361,7 +361,11 @@
                 <div
                     class="flex items-center justify-start w-full mt-5 gap-x-4"
                 >
-                    <UIButton variant="form" class="w-[200px]">
+                    <UIButton
+                        variant="form"
+                        class="w-[200px]"
+                        @click="store.toggleModal"
+                    >
                         Submit
                     </UIButton>
                     <UIButton variant="form" class="w-[200px]">
@@ -369,6 +373,20 @@
                     </UIButton>
                 </div>
             </BasicForm>
+            <Modal
+                :isModalOpen="store.isModalOpen"
+                @toggleModal="store.toggleModal"
+                @submit="handleSubmit"
+                modalTitle="Anda yakin untuk submit Form Evaluasi berikut?"
+            />
+
+            <Modal
+                v-if="showSuccessModal"
+                :isModalOpen="showSuccessModal"
+                @toggleModal="showSuccessModal = false"
+                modalTitle="Form Evaluasi Anda telah berhasil disubmit"
+                modalType="success"
+            />
         </div>
     </div>
 </template>
@@ -384,6 +402,17 @@ import UIDivider from "../../components/ui/UIDivider.vue";
 import UIButton from "../../components/ui/UIButton.vue";
 import FormDropdown from "../../components/FormDropdown.vue";
 import ToolTip from "../../components/ToolTip.vue";
+import Modal from "../../components/Modal.vue";
+import { useModalStore } from "../../stores/index.js";
+
+const store = useModalStore();
+
+const showSuccessModal = ref(false);
+
+const handleSubmit = () => {
+    store.toggleModal();
+    showSuccessModal.value = true;
+};
 
 const tooltip = ref(false);
 const tooltipScore = ref(false);

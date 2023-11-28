@@ -16,6 +16,7 @@ const useFetch = async ({ services, options }) => {
         } catch (error) {
             state.hasError = true;
             state.errorMessage = error.message;
+            console.error(error);
         } finally {
             state.isLoading = false;
         }

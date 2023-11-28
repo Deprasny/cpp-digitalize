@@ -112,12 +112,32 @@
                 </div>
             </BasicCard>
             <div class="flex items-center justify-start w-full mt-5 gap-x-4">
-                <UIButton variant="form" class="w-[200px]"> Submit </UIButton>
+                <UIButton
+                    variant="form"
+                    class="w-[200px]"
+                    @click="store.toggleModal"
+                >
+                    Submit
+                </UIButton>
                 <UIButton variant="form" class="w-[200px]">
                     Simpan ke Draft
                 </UIButton>
             </div>
         </BasicForm>
+        <Modal
+            :isModalOpen="store.isModalOpen"
+            @toggleModal="store.toggleModal"
+            @submit="handleSubmit"
+            modalTitle="Anda yakin untuk submit Form Mutasi berikut? "
+        />
+
+        <Modal
+            v-if="showSuccessModal"
+            :isModalOpen="showSuccessModal"
+            @toggleModal="showSuccessModal = false"
+            modalTitle="Form Mutasi Anda telah berhasil disubmit"
+            modalType="success"
+        />
     </div>
 </template>
 <script setup>
@@ -129,6 +149,17 @@ import IconMagnifier from "../../components/icons/IconMagnifying.vue";
 import UIDivider from "../../components/ui/UIDivider.vue";
 import UIButton from "../../components/ui/UIButton.vue";
 import LabelForm from "../../components/LabelForm.vue";
+import Modal from "../../components/Modal.vue";
+import { useModalStore } from "../../stores/index.js";
+
+const store = useModalStore();
+
+const showSuccessModal = ref(false);
+
+const handleSubmit = () => {
+    store.toggleModal();
+    showSuccessModal.value = true;
+};
 
 const nama = ref("");
 const enteredNames = ref([]);
