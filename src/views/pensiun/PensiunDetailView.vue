@@ -144,7 +144,9 @@
                     <UIButton variant="danger"> Reject </UIButton>
                 </div>
                 <div v-else class="flex justify-end mx-10 gap-x-5">
-                    <UIButton variant="form"> Kembali </UIButton>
+                    <UIButton @click="$router.back()" variant="form">
+                        Kembali
+                    </UIButton>
                 </div>
             </BasicCard>
 

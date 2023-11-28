@@ -251,7 +251,9 @@
                 </div>
 
                 <div class="flex justify-end mx-10">
-                    <UIButton variant="form"> Kembali </UIButton>
+                    <UIButton @click="$router.back()" variant="form">
+                        Kembali
+                    </UIButton>
                 </div>
             </BasicCard>
 

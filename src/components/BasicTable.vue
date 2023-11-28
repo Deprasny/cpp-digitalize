@@ -79,7 +79,7 @@ function handlePageSizeChange(newPageSize) {
                     class="border-b border-black last:border-b-0"
                 >
                     <td
-                        class="py-8 pl-5 text-base font-light leading-4 text-black break-words"
+                        class="py-8 pl-5 text-base font-light leading-4 text-black break-words cursor-pointer"
                         v-for="cell in row.getVisibleCells()"
                         :key="cell.id"
                         @click="emit('onCellClick', cell)"
