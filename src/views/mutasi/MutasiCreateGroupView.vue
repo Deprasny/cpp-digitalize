@@ -81,7 +81,12 @@
                                 :key="status"
                                 class="w-full py-4 border border-black border-r-2 last:border-b-[2px]"
                             >
-                                {{ status }}
+                                <Dropdown
+                                    :dropdownOptions="['1', '2']"
+                                    :selectedOptionText="status"
+                                    @update:selectedOptionText="status = $event"
+                                />
+                                />
                             </div>
                         </div>
                     </div>
@@ -151,6 +156,7 @@ import UIButton from "../../components/ui/UIButton.vue";
 import LabelForm from "../../components/LabelForm.vue";
 import Modal from "../../components/Modal.vue";
 import { useModalStore } from "../../stores/index.js";
+import Dropdown from "../../components/Dropdown.vue";
 
 const store = useModalStore();
 
