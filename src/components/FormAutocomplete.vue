@@ -1,8 +1,8 @@
 <template>
     <div class="relative w-full mb-4">
-        <label :for="id" class="text-base font-semibold leading-5 text-black">{{
-            label
-        }}</label>
+        <label :for="id" class="text-base font-semibold leading-5 text-black">
+            Nama & NIK</label
+        >
         <div class="relative flex items-center mt-3 w-full border p-2">
             <div
                 class="h-full pr-2 text-lg cursor-pointer m-auto top-0 bottom-0 flex items-center justify-center pl-2"
@@ -10,55 +10,30 @@
                 <component :is="IconMagnifier" />
             </div>
 
-            <v-select
-                :options="data"
-                class="style-chooser"
-                :id="id"
-                :placeholder="placeholder"
-                :onSearch="debounce(fetchData, 500)"
-                :v-model="value"
-            >
-            </v-select>
+            <slot> </slot>
         </div>
     </div>
+    {{ selectedItem }}
 </template>
 
 <script setup>
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import IconMagnifier from "./icons/IconMagnifying.vue";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, toRefs, watch, watchEffect, defineProps } from "vue";
 import useFetch from "../hooks/useFetch";
 import { getEmployeeByUser } from "../services/form.services";
 import debounce from "../utils/debounce";
+import { computed } from "@vue/reactivity";
 
-const props = defineProps({
-    id: {
-        type: String,
-        required: true,
-    },
-    label: {
-        type: String,
-        required: true,
-    },
-
-    placeholder: {
-        type: String,
-        default: "isi data",
-        required: false,
-    },
-});
-
-const emit = defineEmits(["update:value", "toggleIcon"]);
-
-const value = ref("");
 onMounted(() => {
     fetchData();
 });
 
-console.log(value.value);
+const props = defineProps(["modelValue"]);
 
 const data = ref([]);
+const selectedItem = ref(null);
 
 const fetchData = async () => {
     const { data: response } = await useFetch({
@@ -66,7 +41,7 @@ const fetchData = async () => {
         options: {
             page: 1,
             limit: 10,
-            cari: value.value,
+            cari: selectedItem.value,
         },
     });
 

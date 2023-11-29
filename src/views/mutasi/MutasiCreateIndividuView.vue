@@ -5,12 +5,19 @@
                 <div class="px-10 py-5">
                     <!-- form basic -->
                     <div class="w-[900px]">
-                        <FormAutocomplete
-                            label="Nama & NIK"
-                            placeholder="Cari nama karyawan / NIK"
-                            id="nik"
-                            :options="options"
-                        />
+                        <FormAutocomplete>
+                            <v-select
+                                :options="data"
+                                class="style-chooser"
+                                id="nik"
+                                placeholder="Cari nama karyawan / NIK"
+                                :onSearch="debounce(fetchData, 500)"
+                                v-model="values.nik"
+                            >
+                            </v-select>
+                        </FormAutocomplete>
+
+                        {{ values.nik }}
 
                         <div class="flex gap-x-7">
                             <FormInputBasic label="Tanggal Masuk" type="date" />
@@ -305,6 +312,11 @@ import LabelForm from "../../components/LabelForm.vue";
 import Modal from "../../components/Modal.vue";
 import { useModalStore } from "../../stores/index.js";
 import Dropdown from "../../components/Dropdown.vue";
+import FormAutocomplete from "../../components/FormAutocomplete.vue";
+import vSelect from "vue-select";
+import useFetch from "../../hooks/useFetch";
+import { getEmployeeByUser } from "../../services/form.services";
+import debounce from "../../utils/debounce";
 
 const store = useModalStore();
 const showSuccessModal = ref(false);
@@ -313,10 +325,6 @@ const handleSubmit = () => {
     store.toggleModal();
     showSuccessModal.value = true;
     console.log(values.value);
-};
-
-const updateModelValue = (value) => {
-    values.value = value;
 };
 
 const listInfo = ref([
@@ -363,10 +371,37 @@ const removeColumn = () => {
 };
 
 const values = ref({
-    nik: "",
+    nik: null,
     mut_type: "Individu",
     mut_reason: "",
 });
 
 const headerTunjangan = ref(["Nama Tunjangan", "Nilai Tunjangan", "Net"]);
+
+onMounted(() => {
+    fetchData();
+});
+
+const props = defineProps(["modelValue"]);
+
+const data = ref([]);
+
+const fetchData = async () => {
+    const { data: response } = await useFetch({
+        services: getEmployeeByUser,
+        options: {
+            page: 1,
+            limit: 10,
+            cari: values.value.nik?.value,
+        },
+    });
+
+    data.value = response?.value.map((item) => {
+        return {
+            label: `${item?.nik} - ${item?.nama}`,
+            value: item?.nik,
+            details: item,
+        };
+    });
+};
 </script>
