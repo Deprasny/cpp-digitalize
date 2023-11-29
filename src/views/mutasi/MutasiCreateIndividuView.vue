@@ -5,10 +5,11 @@
                 <div class="px-10 py-5">
                     <!-- form basic -->
                     <div class="w-[900px]">
-                        <FormInputBasic
+                        <FormAutocomplete
                             label="Nama & NIK"
-                            :icon="IconMagnifier"
-                            v-model="values.nik"
+                            placeholder="Cari nama karyawan / NIK"
+                            id="nik"
+                            :options="options"
                         />
 
                         <div class="flex gap-x-7">
@@ -288,17 +289,21 @@
     </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { onBeforeMount, onMounted, ref, watch } from "vue";
 import BasicCard from "../../components/BasicCard.vue";
 import BasicForm from "../../components/BasicForm.vue";
 import FormInputBasic from "../../components/FormInputBasic.vue";
-import IconMagnifier from "../../components/icons/IconMagnifying.vue";
+
 import IconPlus from "../../components/icons/IconPlus.vue";
 import UIDivider from "../../components/ui/UIDivider.vue";
 import UIButton from "../../components/ui/UIButton.vue";
 import LabelForm from "../../components/LabelForm.vue";
 import Modal from "../../components/Modal.vue";
 import { useModalStore } from "../../stores/index.js";
+import FormAutocomplete from "../../components/FormAutocomplete.vue";
+import useFetch from "../../hooks/useFetch";
+import { getEmployeeByUser } from "../../services/form.services";
+import debounce from "../../utils/debounce";
 
 const store = useModalStore();
 const showSuccessModal = ref(false);
@@ -306,6 +311,11 @@ const showSuccessModal = ref(false);
 const handleSubmit = () => {
     store.toggleModal();
     showSuccessModal.value = true;
+    console.log(values.value);
+};
+
+const updateModelValue = (value) => {
+    values.value = value;
 };
 
 const listInfo = ref([
