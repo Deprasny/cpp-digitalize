@@ -1,7 +1,9 @@
 <template>
     <div class="flex flex-col gap-y-20">
         <div class="flex justify-between mt-5">
-            <div class="flex flex-1 gap-x-16">
+            <div
+                class="flex flex-wrap justify-center flex-1 sm:justify-start gap-x-16 gap-y-2"
+            >
                 <template v-if="data.transaksi.length > 0">
                     <StatisticCard
                         v-for="i in data.transaksi"
@@ -17,7 +19,7 @@
                     </div>
                 </template>
             </div>
-            <p>{{ currentTime }}</p>
+            <p class="hidden sm:block">{{ currentTime }}</p>
         </div>
 
         <p class="text-2xl text-accent-1">Project Progress</p>
@@ -26,7 +28,7 @@
         <Divider />
 
         <p class="text-2xl">On Going Project</p>
-        <div class="flex gap-x-5">
+        <div class="flex flex-wrap gap-x-5 gap-y-2">
             <template v-if="data.transaksi.length > 0">
                 <ProfileCard
                     v-for="i in data.employee"

@@ -6,7 +6,7 @@
             class="fixed top-0 right-0 z-50 flex items-center justify-center w-full h-full bg-white bg-opacity-50 backdrop-blur-sm"
         >
             <div
-                class="w-[500px] h-[200px] p-4 gap-y-5 border border-accent-1 rounded-3xl flex-col flex justify-center items-center bg-white relative"
+                class="w-[500px] h-[200px] p-4 border border-accent-1 rounded-3xl flex-col flex justify-center items-center bg-white relative space-y-2"
             >
                 <span
                     @click="toggleModal"
@@ -14,26 +14,34 @@
                 >
                     X
                 </span>
+                <div v-if="props.modalType === 'danger'">
+                    <IconDanger class="text-red-600 text-7xl" />
+                </div>
                 <div v-if="props.modalType === 'success'">
                     <IconCheck class="text-green-600 text-7xl" />
                 </div>
+
                 <p class="w-1/2 text-lg font-semibold text-center">
                     {{ modalTitle }}
                 </p>
                 <div
-                    v-if="props.modalType === 'confirmation'"
-                    class="flex gap-x-7"
+                    v-if="
+                        props.modalType === 'confirmation' ||
+                        props.modalType === 'danger'
+                    "
+                    class="flex items-center justify-center w-full gap-x-7"
                 >
                     <UIButton
                         variant="form"
-                        class="w-[170px]"
+                        class="w-[150px] h-[45px]"
                         @click="toggleModal"
                     >
                         <span>Kembali</span>
                     </UIButton>
                     <UIButton
+                        v-if="props.modalType === 'confirmation'"
                         variant="form"
-                        class="text-white bg-accent-1 w-[170px]"
+                        class="text-white bg-accent-1 w-[150px] h-[45px]"
                         @click="submit"
                     >
                         <span>Konfirmasi</span>
@@ -48,6 +56,7 @@
 import UIButton from "./ui/UIButton.vue";
 import { defineProps } from "vue";
 import IconCheck from "./icons/IconCheck.vue";
+import IconDanger from "./icons/IconDanger.vue";
 
 const props = defineProps({
     isModalOpen: {

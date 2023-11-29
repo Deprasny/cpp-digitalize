@@ -112,7 +112,11 @@
                                 :key="status"
                                 class="w-full py-4 border border-l-0 border-black last:border-b-[2px]"
                             >
-                                {{ status }}
+                                <Dropdown
+                                    :dropdownOptions="['0', '1', '2', '3']"
+                                    :selectedOptionText="status"
+                                />
+                                -
                             </div>
 
                             <div
@@ -300,10 +304,7 @@ import UIButton from "../../components/ui/UIButton.vue";
 import LabelForm from "../../components/LabelForm.vue";
 import Modal from "../../components/Modal.vue";
 import { useModalStore } from "../../stores/index.js";
-import FormAutocomplete from "../../components/FormAutocomplete.vue";
-import useFetch from "../../hooks/useFetch";
-import { getEmployeeByUser } from "../../services/form.services";
-import debounce from "../../utils/debounce";
+import Dropdown from "../../components/Dropdown.vue";
 
 const store = useModalStore();
 const showSuccessModal = ref(false);

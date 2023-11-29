@@ -1,6 +1,6 @@
 <template>
     <header
-        class="fixed z-20 flex items-center justify-between w-full p-5 transition-all duration-300 ease-in-out"
+        class="fixed z-20 items-center justify-between hidden w-full p-5 transition-all duration-300 ease-in-out sm:flex"
         :class="{ 'bg-white shadow-lg': isScrolled }"
     >
         <div class="flex items-center gap-x-5">
