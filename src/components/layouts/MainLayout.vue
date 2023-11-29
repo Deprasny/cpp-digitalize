@@ -5,7 +5,7 @@
             <Sidebar />
             <div class="flex flex-col bg-content w-[100%] sm:pl-72 pb-20">
                 <Header />
-                <main class="mt-20 mx-7">
+                <main class="mt-10 sm:mt-20 mx-7">
                     <router-view></router-view>
                 </main>
             </div>

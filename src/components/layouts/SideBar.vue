@@ -40,6 +40,12 @@
                 </div>
             </nav>
         </aside>
+        <div
+            v-else
+            class="fixed flex items-center justify-start w-full bg-white h-[40px] px-4"
+        >
+            <button @click="toggleSidebar"><IconHamburger /></button>
+        </div>
     </div>
 </template>
 
@@ -50,6 +56,7 @@ import IconChange from "@/components/icons/IconChange.vue";
 import IconEvaluation from "@/components/icons/IconEvaluation.vue";
 import IconPensiun from "@/components/icons/IconPensiun.vue";
 import IconCheck from "../icons/IconCheck.vue";
+import IconHamburger from "../icons/IconHamburger.vue";
 
 import IconLogo from "@/components/icons/IconLogo.vue";
 const isSidebarOpen = ref(true);
