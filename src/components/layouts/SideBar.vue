@@ -1,9 +1,6 @@
 <!-- Sidebar.vue -->
 <template>
     <div>
-        <button v-if="!isSidebarOpen" @click="toggleSidebar">
-            Open Sidebar
-        </button>
         <aside v-if="isSidebarOpen">
             <nav
                 class="w-72 h-[100vh] rounded-br-lg p-6 shadow-2xl fixed bg-white"
@@ -13,7 +10,7 @@
                         <h3 class="text-xl font-bold">HR</h3>
                         <p>Digitalize Document</p>
                     </div>
-                    <!-- <button @click="toggleSidebar">X</button> -->
+                    <button class="sm:hidden" @click="toggleSidebar">X</button>
                 </div>
                 <div class="flex flex-col justify-between h-[90%] mt-5">
                     <ul>
