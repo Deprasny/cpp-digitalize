@@ -143,7 +143,11 @@
                 <div
                     class="flex items-center justify-start w-full mt-5 gap-x-4"
                 >
-                    <UIButton variant="form" class="w-[200px]">
+                    <UIButton
+                        @click="store.toggleModal"
+                        variant="form"
+                        class="w-[200px]"
+                    >
                         Submit
                     </UIButton>
                     <UIButton variant="form" class="w-[200px]">
@@ -151,6 +155,18 @@
                     </UIButton>
                 </div>
             </BasicForm>
+            <Modal
+                :isModalOpen="store.isModalOpen"
+                @toggleModal="store.toggleModal"
+                @submit="handleSubmit"
+                modalTitle="Anda yakin untuk submit Form Pensiun berikut?"
+            />
+            <Modal
+                :isModalOpen="showSuccessModal"
+                @toggleModal="showSuccessModal = false"
+                modalTitle="Form Pensiun Anda telah berhasil disubmit"
+                modalType="success"
+            />
         </div>
     </div>
 </template>
@@ -166,6 +182,16 @@ import UIDivider from "../../components/ui/UIDivider.vue";
 import UIButton from "../../components/ui/UIButton.vue";
 import FormDropdown from "../../components/FormDropdown.vue";
 import FormTextArea from "../../components/FormTextArea.vue";
+import Modal from "../../components/Modal.vue";
+import { useModalStore } from "../../stores/index.js";
+
+const showSuccessModal = ref(false);
+const store = useModalStore();
+
+const handleSubmit = () => {
+    store.toggleModal();
+    showSuccessModal.value = true;
+};
 
 const nama = ref("");
 const enteredNames = ref([]);
