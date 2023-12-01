@@ -13,7 +13,7 @@
 
             <div
                 v-show="isDropdownOpen"
-                class="max-h-[300px] overflow-auto scroll-smooth"
+                class="max-h-[300px] overflow-auto scroll-smooth cursor-pointer"
             >
                 <div v-for="(option, index) in dropdownOptions" :key="index">
                     <div

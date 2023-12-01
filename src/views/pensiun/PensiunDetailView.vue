@@ -138,7 +138,7 @@
 
                 <div
                     v-if="approvalButton === 'approval'"
-                    class="flex justify-end mx-10 gap-x-5"
+                    class="flex justify-between mx-5 gap-x-5"
                 >
                     <UIButton variant="approve"> Approve </UIButton>
                     <UIButton variant="danger"> Reject </UIButton>

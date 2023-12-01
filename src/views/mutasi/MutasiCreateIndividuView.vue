@@ -82,19 +82,6 @@
                                 :key="index"
                                 class="flex justify-between w-full"
                             >
-                                <div class="relative">
-                                    <div
-                                        v-if="index === columns - 1"
-                                        class="absolute top-1 -left-5"
-                                    >
-                                        <button
-                                            v-if="columns > 1"
-                                            @click="removeColumn"
-                                        >
-                                            -
-                                        </button>
-                                    </div>
-                                </div>
                                 <div
                                     class="w-full py-1 font-semibold border border-black"
                                     v-for="i in 3"
@@ -155,7 +142,7 @@
                                         class="absolute top-2 -right-7"
                                     >
                                         <button
-                                            v-if="columns < 5"
+                                            v-if="columns < 7"
                                             @click="addColumn"
                                         >
                                             <div
@@ -167,6 +154,12 @@
                                                 />
                                             </div>
                                         </button>
+                                    </div>
+                                    <div
+                                        v-if="index === columns - 2"
+                                        class="absolute top-1 -right-5"
+                                    >
+                                        <button @click="removeColumn">-</button>
                                     </div>
                                 </div>
                             </div>

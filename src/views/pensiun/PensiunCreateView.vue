@@ -46,7 +46,7 @@
                         <div class="flex gap-x-10">
                             <div class="flex flex-col mt-10 mb-20">
                                 <p class="font-semibold mb-9">KEPUTUSAN</p>
-                                <div class="flex gap-x-10">
+                                <div class="flex items-center gap-x-10">
                                     <!-- dropdown  -->
                                     <FormDropdown
                                         class="w-[300px]"
@@ -79,6 +79,8 @@
                                             '8',
                                             '9',
                                             '10',
+                                            '11',
+                                            '12',
                                         ]"
                                         :selectedOptionText="
                                             selectedOptionPeriode
@@ -87,6 +89,15 @@
                                             handleSelectedPeriode
                                         "
                                     />
+                                    <p
+                                        v-if="
+                                            selectedOptionKeputusan ===
+                                            'Diperpanjang Kontrak'
+                                        "
+                                        class="ml-[70px] font-semibold"
+                                    >
+                                        Bulan
+                                    </p>
                                 </div>
                             </div>
                             <div

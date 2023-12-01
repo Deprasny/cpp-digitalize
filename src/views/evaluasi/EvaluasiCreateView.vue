@@ -15,7 +15,11 @@
                     title="FORM EVALUASI"
                     tooltip="true"
                 >
-                    <ToolTip v-if="tooltip" class="left-[60%] -top-10">
+                    <ToolTip
+                        v-if="tooltip"
+                        @close="openInfo"
+                        class="left-[60%] -top-10"
+                    >
                         <p class="font-semibold">Catatan</p>
                         <ol class="space-y-2 list-decimal">
                             <li v-for="note in listInfoForm" :key="note">
@@ -98,6 +102,7 @@
                                 <ToolTip
                                     v-if="tooltipScoreMax"
                                     class="-top-9 left-[50px]"
+                                    @close="openInfoScoreMax"
                                 >
                                     <ol class="space-y-2 list-decimal">
                                         <li
@@ -161,6 +166,7 @@
                                 <ToolTip
                                     v-if="tooltipScore"
                                     class="-top-8 left-8"
+                                    @close="openInfoScore"
                                 >
                                     <ol class="space-y-2 list-decimal">
                                         <li
@@ -238,6 +244,7 @@
                         <ToolTip
                             v-if="tooltipScoreKompetensi"
                             class="-top-16 left-[260px]"
+                            @close="openInfoScoreKompetensi"
                         >
                             <ol class="space-y-2 list-decimal">
                                 <li
