@@ -12,11 +12,20 @@ const getMutationsTable = async ({ params }) => {
     }
 };
 
-const createMutationsTable = async ({ params, body }) => {
+const getMutationsDetailTable = async ({ id }) => {
+    try {
+        const response = await apiServices.fetchData(`/mutations/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
+const createMutationsTable = async ({ body }) => {
     try {
         const response = await apiServices.postData("/mutations", {
-            params: params,
-            body: body,
+            ...body,
         });
 
         return response.data;
@@ -26,4 +35,4 @@ const createMutationsTable = async ({ params, body }) => {
     }
 };
 
-export { getMutationsTable, createMutationsTable };
+export { getMutationsTable, createMutationsTable, getMutationsDetailTable };

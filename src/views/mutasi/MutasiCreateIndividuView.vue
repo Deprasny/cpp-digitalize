@@ -177,15 +177,23 @@
                             </div>
 
                             <div
-                                v-for="(_, index) in columns"
+                                v-for="(item, index) in columns"
                                 :key="index"
                                 class="flex justify-between w-full"
                             >
                                 <div
                                     class="w-full py-1 font-semibold border border-black"
-                                    v-for="i in 3"
+                                    v-for="i in columnsData"
                                 >
-                                    <input type="text" class="max-w-[150px]" />
+                                    <input
+                                        :type="i.type"
+                                        class="max-w-[150px]"
+                                        :value="columnsValue[index][i.property]"
+                                        @input="
+                                            columnsValue[index][i.property] =
+                                                $event.target.value
+                                        "
+                                    />
                                 </div>
                                 <div class="relative">
                                     <div
@@ -416,6 +424,7 @@ import {
     getEmployeeByUser,
     getImmediateManager,
 } from "../../services/form.services";
+import { createMutationsTable } from "../../services/mutation.services";
 import debounce from "../../utils/debounce";
 
 import useFormAutoFill from "../../hooks/useFormAutoFill";
@@ -427,6 +436,8 @@ import {
     statusLamaDefaultValues,
     statusBaruDefaultValues,
     tunjanganLabelTitle,
+    columnTunjanganDefaultValues,
+    columnTunjanganValues,
 } from "../../data/mutations.data";
 
 const store = useModalStore();
@@ -442,11 +453,22 @@ const columns = ref(1);
 
 const addColumn = () => {
     columns.value++;
+    columnsValue.value.push({
+        muta_type: "",
+        muta_allow_amount: "",
+        muta_allow_grossnet: "",
+        muta_allow_code: "TRANS",
+    });
 };
 
 const removeColumn = () => {
     columns.value--;
+    columnsValue.value.pop();
 };
+
+const columnsData = ref(columnTunjanganDefaultValues);
+
+const columnsValue = ref([columnTunjanganValues]);
 
 const values = ref({
     nik: null,
@@ -467,6 +489,7 @@ const values = ref({
     mutd_debit_amount: "",
     mutd_credit_amount: "",
     mutd_notes: "",
+    allowance_now: "",
 });
 
 const autofillForm = ref({
@@ -480,10 +503,26 @@ const selectedValue = ref({});
 
 const data = ref([]);
 
+const onSubmit = async () => {
+    const { data: response } = await useFetch({
+        services: createMutationsTable,
+        options: {
+            body: {
+                ...values.value,
+            },
+        },
+    });
+
+    console.log(response);
+};
+
 const handleSubmit = () => {
     store.toggleModal();
-    showSuccessModal.value = true;
-    console.log(values.value);
+    // showSuccessModal.value = true;
+
+    values.value = { ...values.value, draft: false };
+
+    onSubmit();
 };
 
 const fetchData = async (searchValue) => {
@@ -582,6 +621,10 @@ watchEffect(() => {
         isDisabled.value = false;
     } else {
         isDisabled.value = true;
+    }
+
+    if (columnsValue.value.length) {
+        values.value.allowance_now = columnsValue.value;
     }
 });
 
