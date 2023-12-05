@@ -1,5 +1,5 @@
 const getTransactionsCode = (code) => {
-    if (code === "MUT") return "Mutations";
+    if (code === "MUT") return "Mutasi";
 
     if (code === "PEN") return "Pensiun";
 
