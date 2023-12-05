@@ -12,37 +12,64 @@
                                 id="nik"
                                 placeholder="Cari nama karyawan / NIK"
                                 :onSearch="debounce(fetchData, 500)"
-                                v-model="values.nik"
+                                v-model="selectedValue"
                             >
                             </v-select>
                         </FormAutocomplete>
 
-                        {{ values.nik }}
-
                         <div class="flex gap-x-7">
-                            <FormInputBasic label="Tanggal Masuk" type="date" />
-                            <FormInputBasic label="Home Base" />
+                            <FormInputBasic
+                                label="Tanggal Masuk"
+                                type="date"
+                                v-model="autofillForm.joindate"
+                                disabled
+                            />
+                            <FormInputBasic
+                                label="Home Base"
+                                v-model="autofillForm.homebase"
+                                disabled
+                                placeholder="-"
+                            />
                         </div>
                         <div class="flex gap-x-7">
-                            <FormInputBasic label="Tanggal Lahir" type="date" />
-                            <FormInputBasic label="Pendidikan" />
+                            <FormInputBasic
+                                label="Tanggal Lahir"
+                                :type="
+                                    autofillForm.birth_date === null
+                                        ? `text`
+                                        : `date`
+                                "
+                                v-model="autofillForm.birth_date"
+                                placeholder="-"
+                                disabled
+                            />
+
+                            <FormInputBasic
+                                label="Pendidikan"
+                                v-model="autofillForm.education"
+                                disabled
+                                placeholder="-"
+                            />
                         </div>
                         <div class="flex gap-x-7">
                             <FormInputBasic
                                 label="Tanggal Efektif Mutasi"
                                 type="date"
+                                :disabled="isDisabled"
                             />
                             <FormInputBasic
                                 label="Alasan Mutasi"
                                 v-model="values.mut_reason"
+                                placeholder="Masukan Alasan Mutasi"
+                                :disabled="isDisabled"
                             />
                         </div>
                     </div>
 
                     <!-- form status -->
                     <div class="flex items-baseline justify-between my-10">
-                        <div class="flex flex-col items-start w-1/5">
-                            <div class="py-1">-</div>
+                        <div class="flex flex-col items-start w-1/5 gap-2">
+                            <div class=""></div>
                             <div
                                 v-for="list in listInfo"
                                 :key="list"
@@ -62,7 +89,8 @@
                             <div
                                 v-for="status in statusLama"
                                 :key="status"
-                                class="w-full py-4 border border-l-0 border-black"
+                                class="w-full py-4 h-16 border border-l-0 border-black"
+                                :class="status === '-' ? 'bg-gray-100' : ''"
                             >
                                 {{ status }}
                             </div>
@@ -104,13 +132,36 @@
                             <div
                                 v-for="status in statusBaru"
                                 :key="status"
-                                class="w-full py-4 border border-l-0 border-black last:border-b-[2px]"
+                                class="w-full py-4 border border-l-0 border-black last:border-b-[2px] h-16"
+                                :class="{ 'bg-gray-100': isDisabled }"
                             >
-                                <Dropdown
-                                    :dropdownOptions="['0', '1', '2', '3']"
-                                    :selectedOptionText="status"
-                                />
-                                -
+                                <template v-if="status?.type === `dropdown`">
+                                    <Dropdown
+                                        :dropdownOptions="status?.options"
+                                        :selectedOptionText="status?.value"
+                                        @update:selected-option-text="
+                                            status.value = $event
+                                        "
+                                        :disabled="isDisabled"
+                                    />
+                                </template>
+                                <template v-else>
+                                    <input
+                                        type="text"
+                                        class="w-full"
+                                        :placeholder="status?.label"
+                                        :disabled="isDisabled"
+                                        :style="{
+                                            background: isDisabled
+                                                ? 'transparent'
+                                                : '',
+                                        }"
+                                        :value="status?.value"
+                                        @input="
+                                            status.value = $event.target.value
+                                        "
+                                    />
+                                </template>
                             </div>
 
                             <div
@@ -179,12 +230,22 @@
                                 (Pilih salah satu)
                             </p>
                             <div class="flex gap-x-2">
-                                <input type="radio" name="keluarga" />
+                                <input
+                                    type="radio"
+                                    name="keluarga"
+                                    value="YES"
+                                    v-model="values.mutd_family_move"
+                                />
                                 <p>Ikut pindah kelokasi kerja baru</p>
                             </div>
                             <div class="flex gap-x-2">
-                                <input type="radio" name="keluarga" />
-                                <p>Ikut pindah kelokasi kerja baru</p>
+                                <input
+                                    type="radio"
+                                    name="keluarga"
+                                    value="NO"
+                                    v-model="values.mutd_family_move"
+                                />
+                                <p>Tidak Ikut pindah kelokasi kerja baru</p>
                             </div>
                         </div>
                         <div class="flex flex-col items-start">
@@ -193,15 +254,30 @@
                                 (Pilih salah satu)
                             </p>
                             <div class="flex gap-x-2">
-                                <input type="radio" name="tunjangan" />
+                                <input
+                                    type="radio"
+                                    name="tunjangan"
+                                    value="Monthly"
+                                    v-model="values.mutd_house_allowance"
+                                />
                                 <p>Diambil Bulanan</p>
                             </div>
                             <div class="flex gap-x-2">
-                                <input type="radio" name="tunjangan" />
+                                <input
+                                    type="radio"
+                                    name="tunjangan"
+                                    value="Yearly"
+                                    v-model="values.mutd_house_allowance"
+                                />
                                 <p>Diambil per 1 Tahun</p>
                             </div>
                             <div class="flex gap-x-2">
-                                <input type="radio" name="tunjangan" />
+                                <input
+                                    type="radio"
+                                    name="tunjangan"
+                                    value="2 Years"
+                                    v-model="values.mutd_house_allowance"
+                                />
                                 <p>Diambil per 2 Tahun</p>
                             </div>
                         </div>
@@ -211,11 +287,21 @@
                                 (Pilih salah satu)
                             </p>
                             <div class="flex gap-x-2">
-                                <input type="radio" name="barang" />
+                                <input
+                                    type="radio"
+                                    name="barang"
+                                    value="Tunai"
+                                    v-model="values.mutd_transportation"
+                                />
                                 <p>Ambil Tunai</p>
                             </div>
                             <div class="flex gap-x-2">
-                                <input type="radio" name="barang" />
+                                <input
+                                    type="radio"
+                                    name="barang"
+                                    value="Perusahaan"
+                                    v-model="values.mutd_transportation"
+                                />
                                 <p>Difasilitasi Perusahaan</p>
                             </div>
                         </div>
@@ -226,16 +312,33 @@
                     <!-- form additional -->
                     <div class="w-[900px] my-10">
                         <div class="flex gap-x-7">
-                            <FormInputBasic label="Sisa Cuti" />
-                            <FormInputBasic label="Sisa Plafon Berobat" />
+                            <FormInputBasic
+                                label="Sisa Cuti"
+                                type="number"
+                                v-model="values.mutd_leave_bal"
+                            />
+                            <FormInputBasic
+                                label="Sisa Plafon Berobat"
+                                type="number"
+                                v-model="values.mutd_medical_bal"
+                            />
                         </div>
                         <div class="flex gap-x-7">
                             <FormInputBasic
                                 label="Hak Karyawan Belum Terbayar"
+                                type="number"
+                                v-model="values.mutd_debit_amount"
                             />
-                            <FormInputBasic label="Hutang ke Perusahaan" />
+                            <FormInputBasic
+                                label="Hutang ke Perusahaan"
+                                type="number"
+                                v-model="values.mutd_credit_amount"
+                            />
                         </div>
-                        <FormInputBasic label="Keterangan" />
+                        <FormInputBasic
+                            label="Keterangan"
+                            v-model="values.mutd_notes"
+                        />
                     </div>
 
                     <UIDivider />
@@ -293,7 +396,7 @@
     </div>
 </template>
 <script setup>
-import { onBeforeMount, onMounted, ref, watch } from "vue";
+import { onBeforeMount, onMounted, ref, watch, watchEffect } from "vue";
 import BasicCard from "../../components/BasicCard.vue";
 import BasicForm from "../../components/BasicForm.vue";
 import FormInputBasic from "../../components/FormInputBasic.vue";
@@ -308,50 +411,32 @@ import Dropdown from "../../components/Dropdown.vue";
 import FormAutocomplete from "../../components/FormAutocomplete.vue";
 import vSelect from "vue-select";
 import useFetch from "../../hooks/useFetch";
-import { getEmployeeByUser } from "../../services/form.services";
+import {
+    getDirectSpv,
+    getEmployeeByUser,
+    getImmediateManager,
+} from "../../services/form.services";
 import debounce from "../../utils/debounce";
+
+import useFormAutoFill from "../../hooks/useFormAutoFill";
+
+import useFormWatch from "../../hooks/useFormWatch";
+
+import {
+    formLabelTitle,
+    statusLamaDefaultValues,
+    statusBaruDefaultValues,
+    tunjanganLabelTitle,
+} from "../../data/mutations.data";
 
 const store = useModalStore();
 const showSuccessModal = ref(false);
-
-const handleSubmit = () => {
-    store.toggleModal();
-    showSuccessModal.value = true;
-    console.log(values.value);
-};
-
-const listInfo = ref([
-    "Perusahaan ",
-    "Jabatan ",
-    "Kelas Jabatan ",
-    "Business Units",
-    "Cost Center ",
-    "Lokasi Kerja ",
-    "Melapor Ke ",
-    "Immediate Manager",
-]);
-
-const statusLama = ref([
-    "1450 CP Prima - Jakarta (HO)",
-    "Specialist Organization Development",
-    "4A",
-    "Organization Development",
-    "1450 145766 HR Corporate",
-    "DKI Jakarta_SCBD",
-    "Panca Dias Purnomo - 22000130",
-    "22001234 - Panca Dias Purnomo",
-]);
-
-const statusBaru = ref([
-    "1450 CP Prima - Jakarta 0401",
-    "-",
-    "4A",
-    "Center of Excellence",
-    "-",
-    "-",
-    "22200169 - A.A Sagung Purnama Dewi Pata",
-    "22001234 - Panca Dias Purnomo",
-]);
+const headerTunjangan = ref(tunjanganLabelTitle);
+const listInfo = ref(formLabelTitle);
+const statusBaru = ref(statusBaruDefaultValues);
+const statusLama = ref(statusLamaDefaultValues);
+const isDisabled = ref(true);
+const props = defineProps(["modelValue"]);
 
 const columns = ref(1);
 
@@ -367,25 +452,47 @@ const values = ref({
     nik: null,
     mut_type: "Individu",
     mut_reason: "",
+    mutd_to_company: "",
+    mutd_to_position: "",
+    mutd_to_division: "",
+    mutd_to_costcenter: "",
+    mutd_to_work_location: "",
+    mutd_to_direct_spv: "",
+    mutd_to_immed_mgr: "",
+    mutd_family_move: "",
+    mutd_house_allowance: "",
+    mutd_transportation: "",
+    mutd_leave_bal: "",
+    mutd_medical_bal: "",
+    mutd_debit_amount: "",
+    mutd_credit_amount: "",
+    mutd_notes: "",
 });
 
-const headerTunjangan = ref(["Nama Tunjangan", "Nilai Tunjangan", "Net"]);
-
-onMounted(() => {
-    fetchData();
+const autofillForm = ref({
+    joindate: "",
+    homebase: "",
+    birth_date: "",
+    education: "",
 });
 
-const props = defineProps(["modelValue"]);
+const selectedValue = ref({});
 
 const data = ref([]);
 
-const fetchData = async () => {
+const handleSubmit = () => {
+    store.toggleModal();
+    showSuccessModal.value = true;
+    console.log(values.value);
+};
+
+const fetchData = async (searchValue) => {
     const { data: response } = await useFetch({
         services: getEmployeeByUser,
         options: {
             page: 1,
             limit: 10,
-            cari: values.value.nik?.value,
+            cari: searchValue,
         },
     });
 
@@ -397,4 +504,148 @@ const fetchData = async () => {
         };
     });
 };
+
+const fetchAutoFillForms = async () => {
+    const {
+        businessUnitValues,
+        companyValues,
+        costCenterValues,
+        positionValues,
+        workLocationValues,
+    } = await useFormAutoFill();
+
+    statusBaru.value[0].options = companyValues;
+    statusBaru.value[1].options = positionValues;
+    statusBaru.value[3].options = businessUnitValues;
+    statusBaru.value[4].options = costCenterValues;
+    statusBaru.value[5].options = workLocationValues;
+};
+
+const fetchAutoFillFormParams = async () => {
+    const { data: directSpvResponse } = await useFetch({
+        services: getDirectSpv,
+        options: {
+            params: {
+                bu: statusBaru.value[3].value,
+            },
+        },
+    });
+
+    const { data: immdieateManagerResponse } = await useFetch({
+        services: getImmediateManager,
+        options: {
+            params: {
+                bu: statusBaru.value[3].value,
+            },
+        },
+    });
+
+    statusBaru.value[6].options = directSpvResponse?.value.map((item) => {
+        return `${item?.nik} - ${item?.nama}`;
+    });
+
+    statusBaru.value[7].options = immdieateManagerResponse?.value.map(
+        (item) => {
+            return `${item?.nik} - ${item?.nama}`;
+        }
+    );
+};
+
+onMounted(() => {
+    fetchData();
+    fetchAutoFillForms();
+});
+
+watchEffect(() => {
+    if (selectedValue.value?.details) {
+        autofillForm.value.joindate = selectedValue.value?.details?.joindate;
+        autofillForm.value.homebase = selectedValue.value?.details?.homebase;
+        autofillForm.value.birth_date =
+            selectedValue.value?.details?.birth_date;
+        autofillForm.value.education = selectedValue.value?.details?.education;
+
+        values.value.nik = selectedValue.value?.details?.nik;
+
+        statusLama.value = [
+            selectedValue.value?.details?.persarea,
+            selectedValue.value?.details?.posisi,
+            selectedValue?.value?.details?.level,
+            selectedValue.value?.details?.busunit,
+            selectedValue.value?.details?.costcenter,
+            selectedValue.value?.details?.office,
+            selectedValue.value?.details?.empl_nik_spv,
+            selectedValue.value?.details?.immedmgr,
+        ];
+    }
+
+    if (selectedValue.value?.details?.nik) {
+        isDisabled.value = false;
+    } else {
+        isDisabled.value = true;
+    }
+});
+
+watch(
+    () => statusBaru.value[0].value,
+    (newValue) => {
+        if (newValue) {
+            values.value.mutd_to_company = newValue;
+        }
+    }
+);
+
+watch(
+    () => statusBaru.value[1].value,
+    (newValue) => {
+        if (newValue) {
+            values.value.mutd_to_position = newValue;
+        }
+    }
+);
+
+watch(
+    () => statusBaru.value[3].value,
+    (newValue) => {
+        if (newValue) {
+            fetchAutoFillFormParams();
+            values.value.mutd_to_division = newValue;
+        }
+    }
+);
+
+watch(
+    () => statusBaru.value[4].value,
+    (newValue) => {
+        if (newValue) {
+            values.value.mutd_to_costcenter = newValue;
+        }
+    }
+);
+
+watch(
+    () => statusBaru.value[5].value,
+    (newValue) => {
+        if (newValue) {
+            values.value.mutd_to_work_location = newValue;
+        }
+    }
+);
+
+watch(
+    () => statusBaru.value[6].value,
+    (newValue) => {
+        if (newValue) {
+            values.value.mutd_to_direct_spv = newValue;
+        }
+    }
+);
+
+watch(
+    () => statusBaru.value[7].value,
+    (newValue) => {
+        if (newValue) {
+            values.value.mutd_to_immed_mgr = newValue;
+        }
+    }
+);
 </script>

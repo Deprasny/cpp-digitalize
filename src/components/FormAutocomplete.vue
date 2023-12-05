@@ -25,34 +25,6 @@ import useFetch from "../hooks/useFetch";
 import { getEmployeeByUser } from "../services/form.services";
 import debounce from "../utils/debounce";
 import { computed } from "@vue/reactivity";
-
-onMounted(() => {
-    fetchData();
-});
-
-const props = defineProps(["modelValue"]);
-
-const data = ref([]);
-const selectedItem = ref(null);
-
-const fetchData = async () => {
-    const { data: response } = await useFetch({
-        services: getEmployeeByUser,
-        options: {
-            page: 1,
-            limit: 10,
-            cari: selectedItem.value,
-        },
-    });
-
-    data.value = response?.value.map((item) => {
-        return {
-            label: `${item?.nik} - ${item?.nama}`,
-            value: item?.nik,
-            details: item,
-        };
-    });
-};
 </script>
 
 <style>

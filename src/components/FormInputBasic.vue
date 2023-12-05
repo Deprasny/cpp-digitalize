@@ -5,6 +5,7 @@
         }}</label>
         <div class="relative flex items-center mt-3">
             <input
+                :disabled="disabled"
                 :type="type"
                 :id="id"
                 :value="modelValue"
@@ -12,6 +13,7 @@
                 class="w-full px-3 py-3 text-black placeholder-black placeholder-opacity-50 bg-transparent border border-gray-500 rounded-lg shadow appearance-none focus:placeholder-opacity-100"
                 :placeholder="placeholder"
                 @keydown.enter.prevent="emitHandleAddName"
+                :class="{ 'bg-gray-100': disabled }"
             />
             <div
                 v-if="icon"
@@ -50,6 +52,11 @@ const props = defineProps({
     placeholder: {
         type: String,
         default: "isi data",
+        required: false,
+    },
+    disabled: {
+        type: Boolean,
+        default: false,
         required: false,
     },
 });

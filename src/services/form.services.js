@@ -12,4 +12,97 @@ const getEmployeeByUser = async ({ params }) => {
     }
 };
 
-export { getEmployeeByUser };
+const getAllCompany = async ({ params }) => {
+    try {
+        const response = await apiServices.fetchData("/company", {
+            ...params,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
+const getAllPosition = async ({ params }) => {
+    try {
+        const response = await apiServices.fetchData("/position", {
+            ...params,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
+const getAllBusinessUnit = async ({ params }) => {
+    try {
+        const response = await apiServices.fetchData("/bu", {
+            ...params,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
+const getAllCostCenter = async ({ params }) => {
+    try {
+        const response = await apiServices.fetchData("/costcenter", {
+            ...params,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
+const getAllWorkLocation = async ({ params }) => {
+    try {
+        const response = await apiServices.fetchData("/work_location", {
+            ...params,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
+const getDirectSpv = async ({ params }) => {
+    try {
+        const response = await apiServices.fetchData("/directSpv", {
+            ...params,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
+const getImmediateManager = async ({ params }) => {
+    try {
+        const response = await apiServices.fetchData("/immedMgr", {
+            ...params,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
+export {
+    getEmployeeByUser,
+    getAllCompany,
+    getAllPosition,
+    getAllBusinessUnit,
+    getAllCostCenter,
+    getAllWorkLocation,
+    getDirectSpv,
+    getImmediateManager,
+};

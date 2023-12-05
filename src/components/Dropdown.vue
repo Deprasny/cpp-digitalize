@@ -1,7 +1,7 @@
 <template>
     <div class="relative shadow-xl -top-3" @click="toggleDropdown">
         <div
-            class="absolute w-full bg-white rounded-lg shadow-xs dropdown-content"
+            class="absolute w-full rounded-lg shadow-xs dropdown-content"
             :class="{ 'z-20': isDropdownOpen }"
         >
             <a href="#" class="block px-4 py-3 mb-1">
@@ -13,7 +13,7 @@
 
             <div
                 v-show="isDropdownOpen"
-                class="max-h-[300px] overflow-auto scroll-smooth"
+                class="max-h-[300px] overflow-auto scroll-smooth z-30 bg-white"
             >
                 <div v-for="(option, index) in dropdownOptions" :key="index">
                     <div
@@ -40,15 +40,23 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    disabled: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const emits = defineEmits(["update:selectedOptionText"]);
 
 const isDropdownOpen = ref(false);
 
-const toggleDropdown = () => {
+const toggleDropdown = (event) => {
     event.preventDefault();
-    isDropdownOpen.value = !isDropdownOpen.value;
+    if (!props.disabled) {
+        isDropdownOpen.value = !isDropdownOpen.value;
+    }
+
+    return;
 };
 
 const handleDropdownItemClick = (option) => {
