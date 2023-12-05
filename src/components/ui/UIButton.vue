@@ -44,7 +44,7 @@ const buttonClasses = computed(() => {
             props.variant === "tab",
         "py-3 px-6 border rounded-xl text-accent-1 font-semibold w-[220px] border-accent-1":
             props.variant === "form",
-        "py-3 px-6 border rounded-xl text-accent-1 font-semibold w-[220px] border-red-500 bg-red-500 text-white":
+        "py-3 px-6 border rounded-xl text-accent-1 font-semibold w-[220px] border-red-500 bg-red-500 text-white ":
             props.variant === "danger",
         "py-3 px-6 border rounded-xl text-accent-1 font-semibold w-[220px] border-accent-1 bg-accent-1 text-white":
             props.variant === "approve",

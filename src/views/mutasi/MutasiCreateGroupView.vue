@@ -5,13 +5,19 @@
                 <div class="px-10 py-5">
                     <!-- form basic -->
                     <div>
-                        <div class="w-[485px]">
+                        <div class="w-full flex gap-x-2">
                             <FormInputBasic
                                 label="Nama & NIK"
                                 :icon="IconMagnifier"
                                 v-model="nama"
                                 @addName="addName"
                             />
+                            <UIButton
+                                variant="form"
+                                @click="addName"
+                                class="mt-9"
+                                >Add NIK</UIButton
+                            >
                         </div>
                         <div
                             v-if="enteredNames.length > 0"
@@ -43,7 +49,7 @@
                     <!-- form status -->
                     <div class="flex items-baseline justify-between my-10">
                         <div class="flex flex-col items-start w-1/5">
-                            <div class="py-1">-</div>
+                            <div class="py-1"></div>
                             <div
                                 v-for="list in listInfo"
                                 :key="list"
