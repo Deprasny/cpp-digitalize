@@ -753,6 +753,8 @@ const handleConditionalSubmit = () => {
     }
 };
 
+console.log(statusBaru.value);
+
 watch(
     () => statusBaru.value[0].value,
     (newValue) => {
