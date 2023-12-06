@@ -292,7 +292,9 @@
                         <UIButton @click="handleApprove" variant="approve">
                             Approve
                         </UIButton>
-                        <UIButton variant="danger"> Reject </UIButton>
+                        <UIButton @click="handleReject" variant="danger">
+                            Reject
+                        </UIButton>
                     </div>
                     <div v-else class="flex justify-end mx-10 gap-x-5">
                         <UIButton @click="$router.back()" variant="form">
@@ -314,14 +316,15 @@
         :isModalOpen="store.isModalOpen"
         @toggleModal="store.toggleModal"
         @submit="handleConditionalSubmit"
-        modalTitle="Anda yakin untuk approve mutasi berikut?"
+        modalTitle="Anda yakin untuk melakukan proses berikut?"
+        :isLoading="modalLoading"
     />
 
     <Modal
         v-if="showSuccessModal"
         :isModalOpen="showSuccessModal"
         @toggleModal="showSuccessModal = false"
-        modalTitle=" Mutasi Anda telah berhasil diapprove"
+        modalTitle="Mutasi Anda telah berhasil diapprove"
         modalType="success"
     />
 
@@ -329,7 +332,7 @@
         v-if="showErrorModal"
         :isModalOpen="showErrorModal"
         @toggleModal="showErrorModal = false"
-        modalTitle="Approval Anda gagal disubmit"
+        :modalTitle="errorMessages"
         modalType="danger"
     />
 </template>
@@ -356,12 +359,14 @@ const store = useModalStore();
 
 const route = useRoute();
 const id = route.params.id;
-
+const modalLoading = ref(false);
 const isLoading = ref(false);
-
+const errorMessages = ref("");
+const showSuccessModal = ref(false);
+const showErrorModal = ref(false);
 const routeName = useRouter();
 const approvalButton = routeName.currentRoute.value.query.type;
-
+const statusApproval = ref("");
 const data = ref({});
 
 const handleFetch = async () => {
@@ -381,18 +386,18 @@ onMounted(() => {
 
 const onApprove = async (id) => {
     try {
+        modalLoading.value = true;
         const { data: response } = await useFetch({
             services: putMutationsTable,
             options: {
                 id: id,
                 body: [
                     {
-                        statusApproval: "Y",
+                        statusApproval: statusApproval,
                     },
                 ],
             },
         });
-
         if (response.value.message === "Success") {
             isLoading.value = false;
             showSuccessModal.value = true;
@@ -401,13 +406,28 @@ const onApprove = async (id) => {
                 routeName.push({ name: "approval" });
             }, 1000);
         }
-    } catch (error) {}
+    } catch (error) {
+        errorMessages.value = error.response.data.message;
+        isLoading.value = false;
+        showErrorModal.value = true;
+    } finally {
+        modalLoading.value = false;
+    }
+};
+const handleConditionalSubmit = () => {
+    onApprove(id, statusApproval.value);
 };
 
 const handleApprove = () => {
     store.toggleModal();
+    statusApproval.value = "Y";
     isLoading.value = true;
-    onApprove(id);
+};
+
+const handleReject = () => {
+    store.toggleModal();
+    statusApproval.value = "N";
+    isLoading.value = true;
 };
 
 const listLog = ref([

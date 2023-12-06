@@ -53,7 +53,6 @@ export default {
             const response = await apiService.put(endpoint, data);
             return response.data;
         } catch (error) {
-            console.error("Error putting data:", error);
             throw error;
         }
     },
