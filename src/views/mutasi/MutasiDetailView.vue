@@ -8,168 +8,235 @@
             </a>
 
             <UIDivider />
-            <div class="flex my-16">
+            <div class="flex my-16 md:flex-row flex-col w-full">
                 <BasicCard
                     :title="data?.mut_req_no"
                     variant="detail"
-                    class="w-[95%]"
+                    class="md:w-[750px] w-full"
                 >
-                    <div
-                        class="my-5"
-                        v-for="(item, index) in data?.employee"
-                        :key="index"
-                    >
-                        <div class="flex w-full py-4 px-7 text-start">
-                            <div class="flex w-full">
-                                <LabelForm
-                                    label="Nama & NIK"
-                                    value="John Doe"
-                                    class="w-full font-semibold"
-                                />
-                                <p class="w-full">
-                                    {{ item?.nama }} - {{ item?.nik }}
-                                </p>
+                    <template v-if="formType === 'Group'">
+                        <div class="my-5">
+                            <div class="flex w-full py-4 px-7 text-start">
+                                <div class="flex w-full">
+                                    <LabelForm
+                                        label="Nama & NIK"
+                                        class="w-full font-semibold"
+                                    />
+                                    <div class="flex flex-col gap-2 w-full">
+                                        <div
+                                            class="w-full flex gap-2"
+                                            v-for="(
+                                                item, index
+                                            ) in data?.employee"
+                                        >
+                                            <p class="w-4">{{ index + 1 }}</p>
+                                            <p>
+                                                {{ item?.nama }} -
+                                                {{ item?.nik }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-full hidden md:flex"></div>
                             </div>
-                            <div class="flex w-full">
-                                <LabelForm
-                                    label="Tanggal Lahir"
-                                    value="John Doe"
-                                    class="w-full font-semibold"
-                                />
-                                <p class="w-full">{{ item.tgl_lahir }}</p>
+
+                            <div class="flex w-full py-4 px-7 text-start">
+                                <div class="flex w-full">
+                                    <LabelForm
+                                        label="Tanggal Efektif Mutasi"
+                                        class="w-full font-semibold"
+                                    />
+                                    <div class="flex flex-col gap-2 w-full">
+                                        -
+                                    </div>
+                                </div>
+                                <div class="w-full hidden md:flex"></div>
                             </div>
-                        </div>
-                        <div class="flex w-full py-4 px-7 text-start">
-                            <div class="flex w-full">
-                                <LabelForm
-                                    label="Tanggal Masuk"
-                                    value="John Doe"
-                                    class="w-full font-semibold"
-                                />
-                                <p class="w-full">{{ item.tgl_masuk }}</p>
-                            </div>
-                            <div class="flex w-full">
-                                <LabelForm
-                                    label="Pendidikan"
-                                    value="John Doe"
-                                    class="w-full font-semibold"
-                                />
-                                <p class="w-full">{{ item?.education }}</p>
-                            </div>
-                        </div>
-                        <div class="flex w-full py-4 px-7 text-start">
-                            <div class="flex w-1/2">
-                                <LabelForm
-                                    label="Home Base"
-                                    value="John Doe"
-                                    class="w-full font-semibold"
-                                />
-                                <p class="w-full">
-                                    {{ item?.homebase || "-" }}
-                                </p>
+
+                            <div class="flex w-full py-4 px-7 text-start">
+                                <div class="flex w-full">
+                                    <LabelForm
+                                        label="Alasan Mutasi"
+                                        class="w-full font-semibold"
+                                    />
+                                    <div class="flex flex-col gap-2 w-full">
+                                        -
+                                    </div>
+                                </div>
+                                <div class="w-full hidden md:flex"></div>
                             </div>
                         </div>
-                        <div class="flex w-full py-4 px-7 text-start">
-                            <div class="flex w-1/2">
-                                <LabelForm
-                                    label="Tanggal Efektif Mutasi"
-                                    value="John Doe"
-                                    class="w-full font-semibold"
-                                />
-                                <p class="w-full">-</p>
+                    </template>
+                    <template v-else>
+                        <div
+                            class="my-5"
+                            v-for="(item, index) in data?.employee"
+                            :key="index"
+                        >
+                            <div
+                                class="flex w-full py-4 px-7 text-start md:flex-row flex-col"
+                            >
+                                <div class="flex w-full">
+                                    <LabelForm
+                                        label="Nama & NIK"
+                                        value="John Doe"
+                                        class="w-full font-semibold"
+                                    />
+                                    <p class="w-full">
+                                        {{ item?.nama }} - {{ item?.nik }}
+                                    </p>
+                                </div>
+                                <div class="flex w-full">
+                                    <LabelForm
+                                        label="Tanggal Lahir"
+                                        value="John Doe"
+                                        class="w-full font-semibold"
+                                    />
+                                    <p class="w-full">{{ item.tgl_lahir }}</p>
+                                </div>
+                            </div>
+                            <div
+                                class="flex w-full py-4 px-7 text-start md:flex-row flex-col"
+                            >
+                                <div class="flex w-full">
+                                    <LabelForm
+                                        label="Tanggal Masuk"
+                                        value="John Doe"
+                                        class="w-full font-semibold"
+                                    />
+                                    <p class="w-full">{{ item.tgl_masuk }}</p>
+                                </div>
+                                <div class="flex w-full">
+                                    <LabelForm
+                                        label="Pendidikan"
+                                        value="John Doe"
+                                        class="w-full font-semibold"
+                                    />
+                                    <p class="w-full">{{ item?.education }}</p>
+                                </div>
+                            </div>
+                            <div class="flex w-full py-4 px-7 text-start">
+                                <div class="flex md:w-1/2 w-full">
+                                    <LabelForm
+                                        label="Home Base"
+                                        value="John Doe"
+                                        class="w-full font-semibold"
+                                    />
+                                    <p class="w-full">
+                                        {{ item?.homebase || "-" }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex w-full py-4 px-7 text-start">
+                                <div class="flex md:w-1/2 w-full">
+                                    <LabelForm
+                                        label="Tanggal Efektif Mutasi"
+                                        value="John Doe"
+                                        class="w-full font-semibold"
+                                    />
+                                    <p class="w-full">-</p>
+                                </div>
+                            </div>
+                            <div class="flex w-full py-4 px-7 text-start">
+                                <div class="flex md:w-1/2 w-full">
+                                    <LabelForm
+                                        label="Alasan Mutasi"
+                                        value="John Doe"
+                                        class="w-full font-semibold"
+                                    />
+                                    <p class="w-full">{{ data?.notes }}</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="flex w-full py-4 px-7 text-start">
-                            <div class="flex w-1/2">
-                                <LabelForm
-                                    label="Alasan Mutasi"
-                                    value="John Doe"
-                                    class="w-full font-semibold"
-                                />
-                                <p class="w-full">{{ data?.notes }}</p>
-                            </div>
-                        </div>
-                    </div>
+                    </template>
 
                     <UIDivider />
 
                     <!-- form status -->
-                    <div
-                        class="flex items-baseline justify-between mx-10 my-10"
-                    >
-                        <div class="flex flex-col items-start w-[25%]">
-                            <div class="py-1">-</div>
-                            <div
-                                v-for="list in listInfo"
-                                :key="list"
-                                class="w-full py-[17px] font-semibold"
-                            >
-                                <LabelForm :label="list" />
-                            </div>
-                        </div>
+                    <div class="overflow-x-auto">
                         <div
-                            class="flex flex-col items-center flex-1 text-center"
+                            class="flex items-baseline justify-between mx-10 my-10 w-[900px]"
                         >
-                            <div
-                                class="w-full py-1 text-lg font-bold bg-accent-2"
-                            >
-                                STATUS LAMA
+                            <div class="flex flex-col items-start w-[25%]">
+                                <div class="py-1"></div>
+                                <div
+                                    v-for="list in listInfo"
+                                    :key="list"
+                                    class="w-full py-[17px] font-semibold"
+                                >
+                                    <LabelForm :label="list" />
+                                </div>
                             </div>
                             <div
-                                v-for="status in statusLama"
-                                :key="status"
-                                class="w-full py-4 border border-l-0 border-black last:border-b-[2px]"
+                                class="flex flex-col items-center flex-1 text-center"
                             >
-                                <div v-if="Array.isArray(status)" class="mx-10">
+                                <div
+                                    class="w-full py-1 text-lg font-bold bg-accent-2"
+                                >
+                                    STATUS LAMA
+                                </div>
+                                <div
+                                    v-for="status in statusLama"
+                                    :key="status"
+                                    class="w-full py-4 border border-l-0 border-black last:border-b-[2px]"
+                                >
                                     <div
-                                        v-for="(item, itemIndex) in status"
-                                        :key="itemIndex"
+                                        v-if="Array.isArray(status)"
+                                        class="mx-10"
                                     >
-                                        <p>
-                                            {{
-                                                ` ${item.no}. ${item.tunjangan} : ${item.total}`
-                                            }}
-                                        </p>
-                                    </div>
-                                    <UIDivider class="mt-5" />
+                                        <div
+                                            v-for="(item, itemIndex) in status"
+                                            :key="itemIndex"
+                                        >
+                                            <p>
+                                                {{
+                                                    ` ${item.no}. ${item.tunjangan} : ${item.total}`
+                                                }}
+                                            </p>
+                                        </div>
+                                        <UIDivider class="mt-5" />
 
-                                    <p>Total : 9000</p>
-                                </div>
-                                <div v-else>
-                                    {{ status }}
+                                        <p>Total : 9000</p>
+                                    </div>
+                                    <div v-else>
+                                        {{ status }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div
-                            class="flex flex-col items-center flex-1 text-center"
-                        >
                             <div
-                                class="w-full py-1 text-lg font-bold text-white bg-accent-1"
+                                class="flex flex-col items-center flex-1 text-center"
                             >
-                                STATUS BARU
-                            </div>
-                            <div
-                                v-for="status in statusBaru"
-                                :key="status"
-                                class="w-full py-4 border border-black border-r-2 last:border-b-[2px]"
-                            >
-                                <div v-if="Array.isArray(status)" class="mx-10">
+                                <div
+                                    class="w-full py-1 text-lg font-bold text-white bg-accent-1"
+                                >
+                                    STATUS BARU
+                                </div>
+                                <div
+                                    v-for="status in statusBaru"
+                                    :key="status"
+                                    class="w-full py-4 border border-black border-r-2 last:border-b-[2px]"
+                                >
                                     <div
-                                        v-for="(item, itemIndex) in status"
-                                        :key="itemIndex"
+                                        v-if="Array.isArray(status)"
+                                        class="mx-10"
                                     >
-                                        <p>
-                                            {{
-                                                ` ${item.no}. ${item.tunjangan} : ${item.total}`
-                                            }}
-                                        </p>
-                                    </div>
-                                    <UIDivider class="mt-5" />
+                                        <div
+                                            v-for="(item, itemIndex) in status"
+                                            :key="itemIndex"
+                                        >
+                                            <p>
+                                                {{
+                                                    ` ${item.no}. ${item.tunjangan} : ${item.total}`
+                                                }}
+                                            </p>
+                                        </div>
+                                        <UIDivider class="mt-5" />
 
-                                    <p>Total : 9000</p>
-                                </div>
-                                <div v-else>
-                                    {{ status }}
+                                        <p>Total : 9000</p>
+                                    </div>
+                                    <div v-else>
+                                        {{ status }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -178,104 +245,113 @@
                     <UIDivider />
 
                     <!-- info-1 -->
-                    <div class="flex flex-col mx-10 my-10 gap-y-5">
-                        <div class="flex w-1/2">
-                            <LabelForm
-                                label="Keluarga"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">
-                                {{
-                                    data?.famMove === "YES"
-                                        ? "Ikut pindah kelokasi kerja baru"
-                                        : "Tidak Ikut pindah kelokasi kerja baru"
-                                }}
-                            </p>
+
+                    <template v-if="formType === 'Group'"></template>
+                    <template v-else>
+                        <div class="flex flex-col mx-10 my-10 gap-y-5">
+                            <div class="flex md:w-1/2 w-full">
+                                <LabelForm
+                                    label="Keluarga"
+                                    value="John Doe"
+                                    class="w-full font-semibold"
+                                />
+                                <p class="w-full">
+                                    {{
+                                        data?.famMove === "YES"
+                                            ? "Ikut pindah kelokasi kerja baru"
+                                            : "Tidak Ikut pindah kelokasi kerja baru"
+                                    }}
+                                </p>
+                            </div>
+                            <div class="flex md:w-1/2 w-full">
+                                <LabelForm
+                                    label="Tunj Rumah"
+                                    value="John Doe"
+                                    class="w-full font-semibold"
+                                />
+                                <p class="w-full">
+                                    {{
+                                        data?.houseAllow === "Yearly"
+                                            ? "Diambil per 1 Tahun"
+                                            : data?.houseAllow === "Monthly"
+                                            ? "Diambil Bulanan"
+                                            : "Diambil per 2 Tahun"
+                                    }}
+                                </p>
+                            </div>
+                            <div class="flex md:w-1/2 w-full">
+                                <LabelForm
+                                    label="Transportasi Barang"
+                                    value="John Doe"
+                                    class="w-full font-semibold"
+                                />
+                                <p class="w-full">
+                                    {{
+                                        data?.transport === "Tunai"
+                                            ? "Ambil Tunai"
+                                            : "Difasilitasi Perusahaan"
+                                    }}
+                                </p>
+                            </div>
                         </div>
-                        <div class="flex w-1/2">
-                            <LabelForm
-                                label="Tunj Rumah"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">
-                                {{
-                                    data?.houseAllow === "Yearly"
-                                        ? "Diambil per 1 Tahun"
-                                        : data?.houseAllow === "Monthly"
-                                        ? "Diambil Bulanan"
-                                        : "Diambil per 2 Tahun"
-                                }}
-                            </p>
+
+                        <UIDivider />
+
+                        <!-- info-2 -->
+                        <div class="flex flex-col mx-10 my-10 gap-y-5">
+                            <div class="flex md:w-1/2 w-full">
+                                <LabelForm
+                                    label="Sisa Cuti"
+                                    value="John Doe"
+                                    class="w-full font-semibold"
+                                />
+                                <p class="w-full">{{ data?.leaveBal }}</p>
+                            </div>
+                            <div class="flex md:w-1/2 w-full">
+                                <LabelForm
+                                    label="Sisa Plafon Berobat"
+                                    value="John Doe"
+                                    class="w-full font-semibold"
+                                />
+                                <p class="w-full">{{ data?.medBal }}</p>
+                            </div>
+                            <div class="flex md:w-1/2 w-full">
+                                <LabelForm
+                                    label="Hak Karyawan Belum Terbayar"
+                                    value="John Doe"
+                                    class="w-full font-semibold"
+                                />
+                                <p class="w-full">{{ data?.creditAmount }}</p>
+                            </div>
+                            <div class="flex md:w-1/2 w-full">
+                                <LabelForm
+                                    label="Hutang ke Perusahaan"
+                                    value="John Doe"
+                                    class="w-full font-semibold"
+                                />
+                                <p class="w-full">{{ data?.debitAmount }}</p>
+                            </div>
+                            <div class="flex md:w-1/2 w-full">
+                                <LabelForm
+                                    label="Keterangan"
+                                    value="John Doe"
+                                    class="w-full font-semibold"
+                                />
+                                <p class="w-full">{{ data?.notes }}</p>
+                            </div>
                         </div>
-                        <div class="flex w-1/2">
-                            <LabelForm
-                                label="Transportasi Barang"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">
-                                {{
-                                    data?.transport === "Tunai"
-                                        ? "Ambil Tunai"
-                                        : "Difasilitasi Perusahaan"
-                                }}
-                            </p>
-                        </div>
+
+                        <UIDivider />
+                    </template>
+
+                    <div class="w-full md:hidden flex flex-col gap-2 mt-10">
+                        <Log :data="listLog" />
+                        <UIDivider />
                     </div>
-
-                    <UIDivider />
-
-                    <!-- info-2 -->
-                    <div class="flex flex-col mx-10 my-10 gap-y-5">
-                        <div class="flex w-1/2">
-                            <LabelForm
-                                label="Sisa Cuti"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">{{ data?.leaveBal }}</p>
-                        </div>
-                        <div class="flex w-1/2">
-                            <LabelForm
-                                label="Sisa Plafon Berobat"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">{{ data?.medBal }}</p>
-                        </div>
-                        <div class="flex w-1/2">
-                            <LabelForm
-                                label="Hak Karyawan Belum Terbayar"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">{{ data?.creditAmount }}</p>
-                        </div>
-                        <div class="flex w-1/2">
-                            <LabelForm
-                                label="Hutang ke Perusahaan"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">{{ data?.debitAmount }}</p>
-                        </div>
-                        <div class="flex w-1/2">
-                            <LabelForm
-                                label="Keterangan"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">{{ data?.notes }}</p>
-                        </div>
-                    </div>
-
-                    <UIDivider />
 
                     <!-- info-3-->
                     <div class="flex flex-col mx-10 my-10 gap-y-5">
-                        <div class="flex w-1/2">
+                        <div class="flex md:w-1/2 w-full">
                             <LabelForm
                                 label="Lampiran"
                                 value="John Doe"
@@ -303,7 +379,9 @@
                     </div>
                 </BasicCard>
 
-                <Log :data="listLog" />
+                <div class="w-full md:flex hidden">
+                    <Log :data="listLog" />
+                </div>
             </div>
         </div>
     </template>
@@ -368,6 +446,8 @@ const routeName = useRouter();
 const approvalButton = routeName.currentRoute.value.query.type;
 const statusApproval = ref("");
 const data = ref({});
+
+const formType = routeName.currentRoute.value.query.form_type;
 
 const handleFetch = async () => {
     const { data: response } = await useFetch({
@@ -529,6 +609,5 @@ watchEffect(() => {
             };
         });
     }
-    console.log(data.value);
 });
 </script>

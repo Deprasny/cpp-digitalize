@@ -1,6 +1,6 @@
 <template>
     <p class="mx-3 mt-1 font-semibold">Status:</p>
-    <div class="flex flex-col w-[20%] gap-y-2">
+    <div class="flex flex-col md:w-[40%] w-full gap-y-2 ml-10 md:ml-0">
         <div
             v-for="(item, index) in data"
             :key="index"
@@ -17,7 +17,7 @@
                 ></div>
                 <span
                     v-if="index !== data.length - 1"
-                    class="absolute h-[120px] transform -translate-x-1/2 border-r-[3px] border-[#0A70A9] border-dotted left-[12px] top-8"
+                    class="absolute h-[160px] transform -translate-x-1/2 border-r-[3px] border-[#0A70A9] border-dotted left-[12px] top-8"
                     >&nbsp;</span
                 >
             </div>

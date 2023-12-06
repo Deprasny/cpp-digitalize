@@ -6,6 +6,10 @@ const props = defineProps({
         type: String,
         default: "fill text",
     },
+    value: {
+        type: String,
+        default: "fill value",
+    },
 });
 </script>
 
