@@ -75,7 +75,7 @@ const handleDetail = (cell) => {
     router.push({
         name: "mutasi-detail",
         params: { id: cell.row.original?.mut_id },
-        query: { type: "approval" },
+        query: { type: "approval", form_type: cell.row.original?.jenis_mutasi },
     });
 };
 </script>
