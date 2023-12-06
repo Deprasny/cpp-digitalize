@@ -508,12 +508,35 @@ const onSubmit = async () => {
         services: createMutationsTable,
         options: {
             body: {
-                ...values.value,
+                detail: [
+                    {
+                        nik: values.value.nik,
+                        mutd_to_company: values.value.mutd_to_company,
+                        mutd_to_position: values.value.mutd_to_position,
+                        mutd_to_division: values.value.mutd_to_division,
+                        mutd_to_costcenter: values.value.mutd_to_costcenter,
+                        mutd_to_work_location:
+                            values.value.mutd_to_work_location,
+                        mutd_to_direct_spv: values.value.mutd_to_direct_spv,
+                        mutd_to_immed_mgr: values.value.mutd_to_immed_mgr,
+                        mutd_family_move: values.value.mutd_family_move,
+                        mutd_house_allowance: values.value.mutd_house_allowance,
+                        mutd_transportation: values.value.mutd_transportation,
+                        mutd_leave_bal: values.value.mutd_leave_bal,
+                        mutd_medical_bal: values.value.mutd_medical_bal,
+                        mutd_debit_amount: values.value.mutd_debit_amount,
+                        mutd_credit_amount: values.value.mutd_credit_amount,
+                        mutd_notes: values.value.mutd_notes,
+                        allowance_now: values.value.allowance_now,
+                    },
+                ],
+
+                mut_type: values.value.mut_type,
+                mut_reason: values.value.mut_reason,
+                draft: values.value.draft,
             },
         },
     });
-
-    console.log(response);
 };
 
 const handleSubmit = () => {

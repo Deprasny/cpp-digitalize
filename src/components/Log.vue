@@ -5,9 +5,9 @@
             v-for="(item, index) in data"
             :key="index"
             :class="{ 'last-item': index === data.length - 1 }"
-            class="flex h-[90px]"
+            class="flex h-[120px]"
         >
-            <div class="relative">
+            <div class="relative h-full">
                 <div
                     class="inline-block border-2 border-[#0A70A9] w-5 h-5 rounded-full mt-2 ml-1"
                 ></div>
@@ -17,7 +17,7 @@
                 ></div>
                 <span
                     v-if="index !== data.length - 1"
-                    class="absolute h-[70px] transform -translate-x-1/2 border-r-[3px] border-[#0A70A9] border-dotted left-[12px] top-8"
+                    class="absolute h-[120px] transform -translate-x-1/2 border-r-[3px] border-[#0A70A9] border-dotted left-[12px] top-8"
                     >&nbsp;</span
                 >
             </div>
