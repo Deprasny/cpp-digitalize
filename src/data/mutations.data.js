@@ -62,7 +62,7 @@ const statusBaruDefaultValues = [
 
 const columnTunjanganDefaultValues = [
     {
-        property: "muta_type",
+        property: "muta_allow_code",
         type: "text",
     },
     {
@@ -76,10 +76,10 @@ const columnTunjanganDefaultValues = [
 ];
 
 const columnTunjanganValues = {
-    muta_type: "",
+    muta_type: "NEW",
     muta_allow_amount: "",
     muta_allow_grossnet: "",
-    muta_allow_code: "TRANS",
+    muta_allow_code: "",
 };
 
 export {
