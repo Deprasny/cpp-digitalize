@@ -310,6 +310,28 @@
             <UILoader />
         </div>
     </template>
+    <Modal
+        :isModalOpen="store.isModalOpen"
+        @toggleModal="store.toggleModal"
+        @submit="handleConditionalSubmit"
+        modalTitle="Anda yakin untuk approve mutasi berikut?"
+    />
+
+    <Modal
+        v-if="showSuccessModal"
+        :isModalOpen="showSuccessModal"
+        @toggleModal="showSuccessModal = false"
+        modalTitle=" Mutasi Anda telah berhasil diapprove"
+        modalType="success"
+    />
+
+    <Modal
+        v-if="showErrorModal"
+        :isModalOpen="showErrorModal"
+        @toggleModal="showErrorModal = false"
+        modalTitle="Approval Anda gagal disubmit"
+        modalType="danger"
+    />
 </template>
 
 <script setup>
@@ -323,13 +345,19 @@ import Log from "../../components/Log.vue";
 import { useRoute, useRouter } from "vue-router";
 import useFetch from "../../hooks/useFetch";
 import UILoader from "../../components/ui/UILoader.vue";
+import Modal from "../../components/Modal.vue";
 import {
     getMutationsDetailTable,
     putMutationsTable,
 } from "../../services/mutation.services";
+import { useModalStore } from "../../stores/index.js";
+
+const store = useModalStore();
 
 const route = useRoute();
 const id = route.params.id;
+
+const isLoading = ref(false);
 
 const routeName = useRouter();
 const approvalButton = routeName.currentRoute.value.query.type;
@@ -352,22 +380,34 @@ onMounted(() => {
 });
 
 const onApprove = async (id) => {
-    const { data: response } = await useFetch({
-        services: putMutationsTable,
-        options: {
-            id: id,
-            body: [
-                {
-                    statusApproval: "Y",
-                },
-            ],
-        },
-    });
+    try {
+        const { data: response } = await useFetch({
+            services: putMutationsTable,
+            options: {
+                id: id,
+                body: [
+                    {
+                        statusApproval: "Y",
+                    },
+                ],
+            },
+        });
+
+        if (response.value.message === "Success") {
+            isLoading.value = false;
+            showSuccessModal.value = true;
+
+            setTimeout(() => {
+                routeName.push({ name: "approval" });
+            }, 1000);
+        }
+    } catch (error) {}
 };
 
 const handleApprove = () => {
+    store.toggleModal();
+    isLoading.value = true;
     onApprove(id);
-    routeName.push({ name: "approval" });
 };
 
 const listLog = ref([
