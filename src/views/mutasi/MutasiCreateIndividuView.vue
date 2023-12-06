@@ -1,420 +1,441 @@
 <template>
     <div class="mt-28">
-        <BasicForm>
-            <BasicCard title="FORM MUTASI">
-                <div class="w-full px-10 py-5">
-                    <!-- form basic -->
-                    <div class="w-full">
-                        <FormAutocomplete>
-                            <v-select
-                                :options="data"
-                                class="style-chooser"
-                                id="nik"
-                                placeholder="Cari nama karyawan / NIK"
-                                :onSearch="debounce(fetchData, 500)"
-                                v-model="selectedValue"
-                            >
-                            </v-select>
-                        </FormAutocomplete>
-
-                        <div class="flex flex-col gap-x-7 md:flex-row">
-                            <FormInputBasic
-                                label="Tanggal Masuk"
-                                type="date"
-                                v-model="autofillForm.joindate"
-                                disabled
-                            />
-                            <FormInputBasic
-                                label="Home Base"
-                                v-model="autofillForm.homebase"
-                                disabled
-                                placeholder="-"
-                            />
-                        </div>
-                        <div class="flex flex-col gap-x-7 md:flex-row">
-                            <FormInputBasic
-                                label="Tanggal Lahir"
-                                :type="
-                                    autofillForm.birth_date === null
-                                        ? `text`
-                                        : `date`
-                                "
-                                v-model="autofillForm.birth_date"
-                                placeholder="-"
-                                disabled
-                            />
-
-                            <FormInputBasic
-                                label="Pendidikan"
-                                v-model="autofillForm.education"
-                                disabled
-                                placeholder="-"
-                            />
-                        </div>
-                        <div class="flex flex-col gap-x-7 md:flex-row">
-                            <FormInputBasic
-                                label="Tanggal Efektif Mutasi"
-                                type="date"
-                                :disabled="isDisabled"
-                            />
-                            <FormInputBasic
-                                label="Alasan Mutasi"
-                                v-model="values.mut_reason"
-                                placeholder="Masukan Alasan Mutasi"
-                                :disabled="isDisabled"
-                            />
-                        </div>
-                    </div>
-
-                    <!-- form status -->
-                    <div class="overflow-x-auto">
-                        <div
-                            class="flex items-baseline justify-between my-10 w-[900px]"
-                        >
-                            <div
-                                class="flex flex-col items-start w-1/5 gap-[0.5px]"
-                            >
-                                <div class=""></div>
-                                <div
-                                    v-for="list in listInfo"
-                                    :key="list"
-                                    class="w-full py-[17px] font-semibold"
-                                >
-                                    <LabelForm :label="list" />
-                                </div>
-                            </div>
-                            <div
-                                class="flex flex-col items-center flex-1 text-center"
-                            >
-                                <div
-                                    class="w-full py-1 text-lg font-bold bg-accent-2"
-                                >
-                                    STATUS LAMA
-                                </div>
-                                <div
-                                    v-for="status in statusLama"
-                                    :key="status"
-                                    class="w-full h-16 py-4 border border-l-0 border-black"
-                                    :class="status === '-' ? 'bg-gray-100' : ''"
-                                >
-                                    {{ status }}
-                                </div>
-                                <div
-                                    class="flex justify-between w-full mt-10 bg-accent-2"
-                                >
-                                    <div
-                                        v-for="header in headerTunjangan"
-                                        :key="header"
-                                        class="w-full py-1 font-semibold border-black border-x"
-                                    >
-                                        {{ header }}
-                                    </div>
-                                </div>
-                                <div
-                                    v-for="(_, index) in columns"
-                                    :key="index"
-                                    class="flex justify-between w-full"
-                                >
-                                    <div
-                                        class="w-full py-1 font-semibold border border-black"
-                                        v-for="i in 3"
-                                    >
-                                        <input
-                                            type="text"
-                                            class="max-w-[150px]"
-                                        />
-                                    </div>
-                                </div>
-                                <p class="self-start mt-5 font-semibold">
-                                    Total : 1.000.000
-                                </p>
-                            </div>
-                            <div
-                                class="flex flex-col items-center flex-1 text-center"
-                            >
-                                <div
-                                    class="w-full py-1 text-lg font-bold text-white bg-accent-1"
-                                >
-                                    STATUS BARU
-                                </div>
-                                <div
-                                    v-for="status in statusBaru"
-                                    :key="status"
-                                    class="w-full py-4 border border-l-0 border-black last:border-b-[2px] h-16"
-                                    :class="{ 'bg-gray-100': isDisabled }"
-                                >
-                                    <template
-                                        v-if="status?.type === `dropdown`"
-                                    >
-                                        <Dropdown
-                                            :dropdownOptions="status?.options"
-                                            :selectedOptionText="status?.value"
-                                            @update:selected-option-text="
-                                                status.value = $event
-                                            "
-                                            :disabled="isDisabled"
-                                        />
-                                    </template>
-                                    <template v-else>
-                                        <input
-                                            type="text"
-                                            class="w-full"
-                                            :placeholder="status?.label"
-                                            :disabled="isDisabled"
-                                            :style="{
-                                                background: isDisabled
-                                                    ? 'transparent'
-                                                    : '',
-                                            }"
-                                            :value="status?.value"
-                                            @input="
-                                                status.value =
-                                                    $event.target.value
-                                            "
-                                        />
-                                    </template>
-                                </div>
-
-                                <div
-                                    class="flex justify-between w-full mt-10 bg-accent-1"
-                                >
-                                    <div
-                                        v-for="header in headerTunjangan"
-                                        :key="header"
-                                        class="w-full py-1 font-semibold text-white border-black border-x"
-                                    >
-                                        {{ header }}
-                                    </div>
-                                </div>
-
-                                <div
-                                    v-for="(item, index) in columns"
-                                    :key="index"
-                                    class="flex justify-between w-full"
-                                >
-                                    <div
-                                        class="w-full py-1 font-semibold border border-black"
-                                        v-for="i in columnsData"
-                                    >
-                                        <input
-                                            :type="i.type"
-                                            class="max-w-[150px]"
-                                            :value="
-                                                columnsValue[index][i.property]
-                                            "
-                                            @input="
-                                                columnsValue[index][
-                                                    i.property
-                                                ] = $event.target.value
-                                            "
-                                        />
-                                    </div>
-                                    <div class="relative">
-                                        <div
-                                            v-if="index === columns - 1"
-                                            class="absolute top-2 -right-7"
-                                        >
-                                            <button
-                                                v-if="columns < 7"
-                                                @click="addColumn"
-                                            >
-                                                <div
-                                                    class="p-1 bg-red-600 rounded-full"
-                                                >
-                                                    <component
-                                                        :is="IconPlus"
-                                                        class="text-xs text-white"
-                                                    />
-                                                </div>
-                                            </button>
-                                        </div>
-                                        <div
-                                            v-if="index === columns - 2"
-                                            class="absolute top-1 -right-5"
-                                        >
-                                            <button @click="removeColumn">
-                                                -
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="self-start mt-5 font-semibold">
-                                    Total : 1.000.000
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <UIDivider />
-
-                    <!-- form radio  -->
-                    <div
-                        class="flex flex-col items-start justify-between w-full gap-6 my-10 md:flex-row md:gap-0"
-                    >
-                        <div class="flex flex-col items-start">
-                            <p class="font-semibold">Keluarga</p>
-                            <p class="mb-3 text-xs italic">
-                                (Pilih salah satu)
-                            </p>
-                            <div class="flex gap-x-2">
-                                <input
-                                    type="radio"
-                                    name="keluarga"
-                                    value="YES"
-                                    v-model="values.mutd_family_move"
-                                />
-                                <p>Ikut pindah kelokasi kerja baru</p>
-                            </div>
-                            <div class="flex gap-x-2">
-                                <input
-                                    type="radio"
-                                    name="keluarga"
-                                    value="NO"
-                                    v-model="values.mutd_family_move"
-                                />
-                                <p>Tidak Ikut pindah kelokasi kerja baru</p>
-                            </div>
-                        </div>
-                        <div class="flex flex-col items-start">
-                            <p class="font-semibold">Tunj. Perumahan</p>
-                            <p class="mb-3 text-xs italic">
-                                (Pilih salah satu)
-                            </p>
-                            <div class="flex gap-x-2">
-                                <input
-                                    type="radio"
-                                    name="tunjangan"
-                                    value="Monthly"
-                                    v-model="values.mutd_house_allowance"
-                                />
-                                <p>Diambil Bulanan</p>
-                            </div>
-                            <div class="flex gap-x-2">
-                                <input
-                                    type="radio"
-                                    name="tunjangan"
-                                    value="Yearly"
-                                    v-model="values.mutd_house_allowance"
-                                />
-                                <p>Diambil per 1 Tahun</p>
-                            </div>
-                            <div class="flex gap-x-2">
-                                <input
-                                    type="radio"
-                                    name="tunjangan"
-                                    value="2 Years"
-                                    v-model="values.mutd_house_allowance"
-                                />
-                                <p>Diambil per 2 Tahun</p>
-                            </div>
-                        </div>
-                        <div class="flex flex-col items-start">
-                            <p class="font-semibold">Transportasi Barang</p>
-                            <p class="mb-3 text-xs italic">
-                                (Pilih salah satu)
-                            </p>
-                            <div class="flex gap-x-2">
-                                <input
-                                    type="radio"
-                                    name="barang"
-                                    value="Tunai"
-                                    v-model="values.mutd_transportation"
-                                />
-                                <p>Ambil Tunai</p>
-                            </div>
-                            <div class="flex gap-x-2">
-                                <input
-                                    type="radio"
-                                    name="barang"
-                                    value="Perusahaan"
-                                    v-model="values.mutd_transportation"
-                                />
-                                <p>Difasilitasi Perusahaan</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <UIDivider />
-
-                    <!-- form additional -->
-                    <div class="w-full my-10">
-                        <div class="flex flex-col gap-x-7 md:flex-row">
-                            <FormInputBasic
-                                label="Sisa Cuti"
-                                type="number"
-                                v-model="values.mutd_leave_bal"
-                            />
-                            <FormInputBasic
-                                label="Sisa Plafon Berobat"
-                                type="number"
-                                v-model="values.mutd_medical_bal"
-                            />
-                        </div>
-                        <div class="flex flex-col gap-x-7 md:flex-row">
-                            <FormInputBasic
-                                label="Hak Karyawan Belum Terbayar"
-                                type="number"
-                                v-model="values.mutd_debit_amount"
-                            />
-                            <FormInputBasic
-                                label="Hutang ke Perusahaan"
-                                type="number"
-                                v-model="values.mutd_credit_amount"
-                            />
-                        </div>
-                        <FormInputBasic
-                            label="Keterangan"
-                            v-model="values.mutd_notes"
-                        />
-                    </div>
-
-                    <UIDivider />
-
-                    <!-- form upload  -->
-                    <div
-                        class="flex items-start justify-between md:max-w-[500px] my-10 w-full"
-                    >
-                        <div class="flex flex-col items-start">
-                            <p class="font-semibold">Lampiran</p>
-                            <div
-                                class="flex flex-col items-start md:items-center gap-x-5 md:flex-row"
-                            >
-                                <UIButton
-                                    variant="form"
-                                    class="w-[200px]"
-                                    type="file"
-                                >
-                                    Upload File
-                                </UIButton>
-                                <p class="text-xs">
-                                    Mohon melampirkan struktur organisasi
-                                    sebelum dan sesudah
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </BasicCard>
-            <div
-                class="flex items-center justify-start w-full mt-5 md:gap-x-4 gap-x-2"
-            >
-                <UIButton
-                    variant="form"
-                    class="w-[200px]"
-                    @click="store.toggleModal()"
-                >
-                    Submit
-                </UIButton>
-                <UIButton variant="form" class="w-[200px]">
-                    Simpan ke Draft
-                </UIButton>
+        <template v-if="isLoading">
+            <div class="flex items-center justify-center w-full h-full">
+                <UILoader />
             </div>
-        </BasicForm>
+        </template>
+        <template v-else>
+            <BasicForm>
+                <BasicCard title="FORM MUTASI">
+                    <div class="w-full px-10 py-5">
+                        <!-- form basic -->
+                        <div class="w-full">
+                            <FormAutocomplete>
+                                <v-select
+                                    :options="data"
+                                    class="style-chooser"
+                                    id="nik"
+                                    placeholder="Cari nama karyawan / NIK"
+                                    :onSearch="debounce(fetchData, 500)"
+                                    v-model="selectedValue"
+                                >
+                                </v-select>
+                            </FormAutocomplete>
+
+                            <div class="flex flex-col gap-x-7 md:flex-row">
+                                <FormInputBasic
+                                    label="Tanggal Masuk"
+                                    type="date"
+                                    v-model="autofillForm.joindate"
+                                    disabled
+                                />
+                                <FormInputBasic
+                                    label="Home Base"
+                                    v-model="autofillForm.homebase"
+                                    disabled
+                                    placeholder="-"
+                                />
+                            </div>
+                            <div class="flex flex-col gap-x-7 md:flex-row">
+                                <FormInputBasic
+                                    label="Tanggal Lahir"
+                                    :type="
+                                        autofillForm.birth_date === null
+                                            ? `text`
+                                            : `date`
+                                    "
+                                    v-model="autofillForm.birth_date"
+                                    placeholder="-"
+                                    disabled
+                                />
+
+                                <FormInputBasic
+                                    label="Pendidikan"
+                                    v-model="autofillForm.education"
+                                    disabled
+                                    placeholder="-"
+                                />
+                            </div>
+                            <div class="flex flex-col gap-x-7 md:flex-row">
+                                <FormInputBasic
+                                    label="Tanggal Efektif Mutasi"
+                                    type="date"
+                                    :disabled="isDisabled"
+                                />
+                                <FormInputBasic
+                                    label="Alasan Mutasi"
+                                    v-model="values.mut_reason"
+                                    placeholder="Masukan Alasan Mutasi"
+                                    :disabled="isDisabled"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- form status -->
+                        <div class="overflow-x-auto">
+                            <div
+                                class="flex items-baseline justify-between my-10 w-[900px]"
+                            >
+                                <div
+                                    class="flex flex-col items-start w-1/5 gap-[0.5px]"
+                                >
+                                    <div class=""></div>
+                                    <div
+                                        v-for="list in listInfo"
+                                        :key="list"
+                                        class="w-full py-[17px] font-semibold"
+                                    >
+                                        <LabelForm :label="list" />
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex flex-col items-center flex-1 text-center"
+                                >
+                                    <div
+                                        class="w-full py-1 text-lg font-bold bg-accent-2"
+                                    >
+                                        STATUS LAMA
+                                    </div>
+                                    <div
+                                        v-for="status in statusLama"
+                                        :key="status"
+                                        class="w-full h-16 py-4 border border-l-0 border-black"
+                                        :class="
+                                            status === '-' ? 'bg-gray-100' : ''
+                                        "
+                                    >
+                                        {{ status }}
+                                    </div>
+                                    <div
+                                        class="flex justify-between w-full mt-10 bg-accent-2"
+                                    >
+                                        <div
+                                            v-for="header in headerTunjangan"
+                                            :key="header"
+                                            class="w-full py-1 font-semibold border-black border-x"
+                                        >
+                                            {{ header }}
+                                        </div>
+                                    </div>
+                                    <div
+                                        v-for="(_, index) in columns"
+                                        :key="index"
+                                        class="flex justify-between w-full"
+                                    >
+                                        <div
+                                            class="w-full py-1 font-semibold bg-gray-100 border border-black"
+                                            v-for="i in 3"
+                                        >
+                                            <input
+                                                disabled
+                                                type="text"
+                                                class="max-w-[150px] bg-transparent"
+                                            />
+                                        </div>
+                                    </div>
+                                    <p class="self-start mt-5 font-semibold">
+                                        Total : 0
+                                    </p>
+                                </div>
+                                <div
+                                    class="flex flex-col items-center flex-1 text-center"
+                                >
+                                    <div
+                                        class="w-full py-1 text-lg font-bold text-white bg-accent-1"
+                                    >
+                                        STATUS BARU
+                                    </div>
+                                    <div
+                                        v-for="status in statusBaru"
+                                        :key="status"
+                                        class="w-full py-4 border border-l-0 border-black last:border-b-[2px] h-16"
+                                        :class="{ 'bg-gray-100': isDisabled }"
+                                    >
+                                        <template
+                                            v-if="status?.type === `dropdown`"
+                                        >
+                                            <Dropdown
+                                                :dropdownOptions="
+                                                    status?.options
+                                                "
+                                                :selectedOptionText="
+                                                    status?.value
+                                                "
+                                                @update:selected-option-text="
+                                                    status.value = $event
+                                                "
+                                                :disabled="isDisabled"
+                                            />
+                                        </template>
+                                        <template v-else>
+                                            <input
+                                                type="text"
+                                                class="w-full"
+                                                :placeholder="status?.label"
+                                                :disabled="isDisabled"
+                                                :style="{
+                                                    background: isDisabled
+                                                        ? 'transparent'
+                                                        : '',
+                                                }"
+                                                :value="status?.value"
+                                                @input="
+                                                    status.value =
+                                                        $event.target.value
+                                                "
+                                            />
+                                        </template>
+                                    </div>
+
+                                    <div
+                                        class="flex justify-between w-full mt-10 bg-accent-1"
+                                    >
+                                        <div
+                                            v-for="header in headerTunjangan"
+                                            :key="header"
+                                            class="w-full py-1 font-semibold text-white border-black border-x"
+                                        >
+                                            {{ header }}
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        v-for="(item, index) in columns"
+                                        :key="index"
+                                        class="flex justify-between w-full"
+                                    >
+                                        <div
+                                            class="w-full py-1 font-semibold border border-black"
+                                            v-for="i in columnsData"
+                                        >
+                                            <input
+                                                :type="i.type"
+                                                class="max-w-[150px]"
+                                                :value="
+                                                    columnsValue[index][
+                                                        i.property
+                                                    ]
+                                                "
+                                                @input="
+                                                    columnsValue[index][
+                                                        i.property
+                                                    ] = $event.target.value
+                                                "
+                                            />
+                                        </div>
+                                        <div class="relative">
+                                            <div
+                                                v-if="index === columns - 1"
+                                                class="absolute top-2 -right-7"
+                                            >
+                                                <button
+                                                    v-if="columns < 7"
+                                                    @click="addColumn"
+                                                >
+                                                    <div
+                                                        class="p-1 bg-red-600 rounded-full"
+                                                    >
+                                                        <component
+                                                            :is="IconPlus"
+                                                            class="text-xs text-white"
+                                                        />
+                                                    </div>
+                                                </button>
+                                            </div>
+                                            <div
+                                                v-if="index === columns - 2"
+                                                class="absolute top-1 -right-5"
+                                            >
+                                                <button @click="removeColumn">
+                                                    -
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="self-start mt-5 font-semibold">
+                                        Total : {{ totalTunjangn }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <UIDivider />
+
+                        <!-- form radio  -->
+                        <div
+                            class="flex flex-col items-start justify-between w-full gap-6 my-10 md:flex-row md:gap-0"
+                        >
+                            <div class="flex flex-col items-start">
+                                <p class="font-semibold">Keluarga</p>
+                                <p class="mb-3 text-xs italic">
+                                    (Pilih salah satu)
+                                </p>
+                                <div class="flex gap-x-2">
+                                    <input
+                                        type="radio"
+                                        name="keluarga"
+                                        value="YES"
+                                        v-model="values.mutd_family_move"
+                                    />
+                                    <p>Ikut pindah kelokasi kerja baru</p>
+                                </div>
+                                <div class="flex gap-x-2">
+                                    <input
+                                        type="radio"
+                                        name="keluarga"
+                                        value="NO"
+                                        v-model="values.mutd_family_move"
+                                    />
+                                    <p>Tidak Ikut pindah kelokasi kerja baru</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-start">
+                                <p class="font-semibold">Tunj. Perumahan</p>
+                                <p class="mb-3 text-xs italic">
+                                    (Pilih salah satu)
+                                </p>
+                                <div class="flex gap-x-2">
+                                    <input
+                                        type="radio"
+                                        name="tunjangan"
+                                        value="Monthly"
+                                        v-model="values.mutd_house_allowance"
+                                    />
+                                    <p>Diambil Bulanan</p>
+                                </div>
+                                <div class="flex gap-x-2">
+                                    <input
+                                        type="radio"
+                                        name="tunjangan"
+                                        value="Yearly"
+                                        v-model="values.mutd_house_allowance"
+                                    />
+                                    <p>Diambil per 1 Tahun</p>
+                                </div>
+                                <div class="flex gap-x-2">
+                                    <input
+                                        type="radio"
+                                        name="tunjangan"
+                                        value="2 Years"
+                                        v-model="values.mutd_house_allowance"
+                                    />
+                                    <p>Diambil per 2 Tahun</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-start">
+                                <p class="font-semibold">Transportasi Barang</p>
+                                <p class="mb-3 text-xs italic">
+                                    (Pilih salah satu)
+                                </p>
+                                <div class="flex gap-x-2">
+                                    <input
+                                        type="radio"
+                                        name="barang"
+                                        value="Tunai"
+                                        v-model="values.mutd_transportation"
+                                    />
+                                    <p>Ambil Tunai</p>
+                                </div>
+                                <div class="flex gap-x-2">
+                                    <input
+                                        type="radio"
+                                        name="barang"
+                                        value="Perusahaan"
+                                        v-model="values.mutd_transportation"
+                                    />
+                                    <p>Difasilitasi Perusahaan</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <UIDivider />
+
+                        <!-- form additional -->
+                        <div class="w-full my-10">
+                            <div class="flex flex-col gap-x-7 md:flex-row">
+                                <FormInputBasic
+                                    label="Sisa Cuti"
+                                    type="number"
+                                    v-model="values.mutd_leave_bal"
+                                />
+                                <FormInputBasic
+                                    label="Sisa Plafon Berobat"
+                                    type="number"
+                                    v-model="values.mutd_medical_bal"
+                                />
+                            </div>
+                            <div class="flex flex-col gap-x-7 md:flex-row">
+                                <FormInputBasic
+                                    label="Hak Karyawan Belum Terbayar"
+                                    type="number"
+                                    v-model="values.mutd_debit_amount"
+                                />
+                                <FormInputBasic
+                                    label="Hutang ke Perusahaan"
+                                    type="number"
+                                    v-model="values.mutd_credit_amount"
+                                />
+                            </div>
+                            <FormInputBasic
+                                label="Keterangan"
+                                v-model="values.mutd_notes"
+                            />
+                        </div>
+
+                        <UIDivider />
+
+                        <!-- form upload  -->
+                        <div
+                            class="flex items-start justify-between md:max-w-[500px] my-10 w-full"
+                        >
+                            <div class="flex flex-col items-start">
+                                <p class="font-semibold">Lampiran</p>
+                                <div
+                                    class="flex flex-col items-start md:items-center gap-x-5 md:flex-row"
+                                >
+                                    <UIButton
+                                        variant="form"
+                                        class="w-[200px]"
+                                        type="file"
+                                    >
+                                        Upload File
+                                    </UIButton>
+                                    <p class="text-xs">
+                                        Mohon melampirkan struktur organisasi
+                                        sebelum dan sesudah
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </BasicCard>
+                <div
+                    class="flex items-center justify-start w-full mt-5 md:gap-x-4 gap-x-2"
+                >
+                    <UIButton
+                        variant="form"
+                        class="w-[200px]"
+                        @click="handleClickSubmit"
+                    >
+                        Submit
+                    </UIButton>
+                    <UIButton
+                        variant="form"
+                        class="w-[200px]"
+                        @click="handleClickDraft"
+                    >
+                        Simpan ke Draft
+                    </UIButton>
+                </div>
+            </BasicForm>
+        </template>
+
         <Modal
             :isModalOpen="store.isModalOpen"
             @toggleModal="store.toggleModal"
-            @submit="handleSubmit"
-            modalTitle="Anda yakin untuk submit Form Mutasi berikut? "
+            @submit="handleConditionalSubmit"
+            modalTitle="Anda yakin untuk submit Form Mutasi berikut?"
         />
 
         <Modal
@@ -424,6 +445,14 @@
             modalTitle="Form Mutasi Anda telah berhasil disubmit"
             modalType="success"
         />
+
+        <Modal
+            v-if="showErrorModal"
+            :isModalOpen="showErrorModal"
+            @toggleModal="showErrorModal = false"
+            modalTitle="Form Mutasi Anda gagal disubmit"
+            modalType="danger"
+        />
     </div>
 </template>
 <script setup>
@@ -431,7 +460,7 @@ import { onBeforeMount, onMounted, ref, watch, watchEffect } from "vue";
 import BasicCard from "../../components/BasicCard.vue";
 import BasicForm from "../../components/BasicForm.vue";
 import FormInputBasic from "../../components/FormInputBasic.vue";
-
+import UILoader from "../../components/ui/UILoader.vue";
 import IconPlus from "../../components/icons/IconPlus.vue";
 import UIDivider from "../../components/ui/UIDivider.vue";
 import UIButton from "../../components/ui/UIButton.vue";
@@ -452,8 +481,6 @@ import debounce from "../../utils/debounce";
 
 import useFormAutoFill from "../../hooks/useFormAutoFill";
 
-import useFormWatch from "../../hooks/useFormWatch";
-
 import {
     formLabelTitle,
     statusLamaDefaultValues,
@@ -462,25 +489,31 @@ import {
     columnTunjanganDefaultValues,
     columnTunjanganValues,
 } from "../../data/mutations.data";
+import { useRouter } from "vue-router";
 
 const store = useModalStore();
 const showSuccessModal = ref(false);
+const showErrorModal = ref(false);
 const headerTunjangan = ref(tunjanganLabelTitle);
 const listInfo = ref(formLabelTitle);
 const statusBaru = ref(statusBaruDefaultValues);
 const statusLama = ref(statusLamaDefaultValues);
 const isDisabled = ref(true);
 const props = defineProps(["modelValue"]);
+const router = useRouter();
+const totalTunjangn = ref(0);
+
+const isLoading = ref(false);
 
 const columns = ref(1);
 
 const addColumn = () => {
     columns.value++;
     columnsValue.value.push({
-        muta_type: "",
+        muta_type: "NEW",
         muta_allow_amount: "",
         muta_allow_grossnet: "",
-        muta_allow_code: "TRANS",
+        muta_allow_code: "",
     });
 };
 
@@ -524,49 +557,84 @@ const autofillForm = ref({
 
 const selectedValue = ref({});
 
+const isDraft = ref(false);
+
 const data = ref([]);
 
 const onSubmit = async () => {
-    const { data: response } = await useFetch({
-        services: createMutationsTable,
-        options: {
-            body: {
-                detail: [
-                    {
-                        nik: values.value.nik,
-                        mutd_to_company: values.value.mutd_to_company,
-                        mutd_to_position: values.value.mutd_to_position,
-                        mutd_to_division: values.value.mutd_to_division,
-                        mutd_to_costcenter: values.value.mutd_to_costcenter,
-                        mutd_to_work_location:
-                            values.value.mutd_to_work_location,
-                        mutd_to_direct_spv: values.value.mutd_to_direct_spv,
-                        mutd_to_immed_mgr: values.value.mutd_to_immed_mgr,
-                        mutd_family_move: values.value.mutd_family_move,
-                        mutd_house_allowance: values.value.mutd_house_allowance,
-                        mutd_transportation: values.value.mutd_transportation,
-                        mutd_leave_bal: values.value.mutd_leave_bal,
-                        mutd_medical_bal: values.value.mutd_medical_bal,
-                        mutd_debit_amount: values.value.mutd_debit_amount,
-                        mutd_credit_amount: values.value.mutd_credit_amount,
-                        mutd_notes: values.value.mutd_notes,
-                        allowance_now: values.value.allowance_now,
-                    },
-                ],
+    try {
+        const { data: response } = await useFetch({
+            services: createMutationsTable,
+            options: {
+                body: {
+                    detail: [
+                        {
+                            nik: values.value.nik,
+                            mutd_to_company: values.value.mutd_to_company,
+                            mutd_to_position: values.value.mutd_to_position,
+                            mutd_to_division: values.value.mutd_to_division,
+                            mutd_to_costcenter: values.value.mutd_to_costcenter,
+                            mutd_to_work_location:
+                                values.value.mutd_to_work_location,
+                            mutd_to_direct_spv: values.value.mutd_to_direct_spv,
+                            mutd_to_immed_mgr: values.value.mutd_to_immed_mgr,
+                            mutd_family_move: values.value.mutd_family_move,
+                            mutd_house_allowance:
+                                values.value.mutd_house_allowance,
+                            mutd_transportation:
+                                values.value.mutd_transportation,
+                            mutd_leave_bal: values.value.mutd_leave_bal,
+                            mutd_medical_bal: values.value.mutd_medical_bal,
+                            mutd_debit_amount: values.value.mutd_debit_amount,
+                            mutd_credit_amount: values.value.mutd_credit_amount,
+                            mutd_notes: values.value.mutd_notes,
+                            allowance_now: values.value.allowance_now,
+                        },
+                    ],
 
-                mut_type: values.value.mut_type,
-                mut_reason: values.value.mut_reason,
-                draft: values.value.draft,
+                    mut_type: values.value.mut_type,
+                    mut_reason: values.value.mut_reason,
+                    draft: values.value.draft,
+                },
             },
-        },
-    });
+        });
+
+        if (response.value.message === "Success") {
+            isLoading.value = false;
+            showSuccessModal.value = true;
+
+            setTimeout(() => {
+                router.push({ name: "mutasi" });
+            }, 1000);
+        }
+    } catch (error) {
+        showErrorModal.value = true;
+        isLoading.value = false;
+    }
+};
+
+const handleClickSubmit = () => {
+    store.toggleModal();
+    isDraft.value = false;
+};
+
+const handleClickDraft = () => {
+    store.toggleModal();
+    isDraft.value = true;
 };
 
 const handleSubmit = () => {
     store.toggleModal();
-    // showSuccessModal.value = true;
+    isLoading.value = true;
+    values.value = { ...values.value, draft: isDraft.value };
 
-    values.value = { ...values.value, draft: false };
+    onSubmit();
+};
+
+const handleDraft = () => {
+    store.toggleModal();
+    isLoading.value = true;
+    values.value = { ...values.value, draft: isDraft.value };
 
     onSubmit();
 };
@@ -670,9 +738,21 @@ watchEffect(() => {
     }
 
     if (columnsValue.value.length) {
+        totalTunjangn.value = columnsValue.value.reduce(
+            (acc, curr) => acc + Number(curr.muta_allow_amount),
+            0
+        );
         values.value.allowance_now = columnsValue.value;
     }
 });
+
+const handleConditionalSubmit = () => {
+    if (isDraft.value) {
+        handleDraft();
+    } else {
+        handleSubmit();
+    }
+};
 
 watch(
     () => statusBaru.value[0].value,
