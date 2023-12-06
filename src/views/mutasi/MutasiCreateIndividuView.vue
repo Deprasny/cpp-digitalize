@@ -160,7 +160,7 @@
                                                     status?.options
                                                 "
                                                 :selectedOptionText="
-                                                    status?.value
+                                                    status?.value.label
                                                 "
                                                 @update:selected-option-text="
                                                     status.value = $event
@@ -490,7 +490,6 @@ import {
     columnTunjanganValues,
 } from "../../data/mutations.data";
 import { useRouter } from "vue-router";
-
 const store = useModalStore();
 const showSuccessModal = ref(false);
 const showErrorModal = ref(false);
@@ -575,7 +574,7 @@ const onSubmit = async () => {
                             mutd_to_division: values.value.mutd_to_division,
                             mutd_to_costcenter: values.value.mutd_to_costcenter,
                             mutd_to_work_location:
-                                values.value.mutd_to_work_location,
+                                values.value.mutd_to_work_location.value,
                             mutd_to_direct_spv: values.value.mutd_to_direct_spv,
                             mutd_to_immed_mgr: values.value.mutd_to_immed_mgr,
                             mutd_family_move: values.value.mutd_family_move,
@@ -817,4 +816,5 @@ watch(
         }
     }
 );
+console.log(statusBaru.value);
 </script>

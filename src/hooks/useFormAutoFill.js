@@ -35,9 +35,12 @@ const useFormAutoFill = async () => {
     const costCenterValues = costCenterResponse?.data?.value.map(
         (item) => item?.costcenter
     );
-    const workLocationValues = workLocationResponse?.data?.value.map(
-        (item) => item?.worklocation_name
-    );
+    const workLocationValues = workLocationResponse?.data?.value.map((item) => {
+        return {
+            label: item?.worklocation_name,
+            value: item?.worklocation_code,
+        };
+    });
 
     return {
         companyValues,

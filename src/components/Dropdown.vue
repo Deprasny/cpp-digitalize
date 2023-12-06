@@ -20,7 +20,7 @@
                         class="block px-2 py-2 text-gray-800 border border-b border-gray-500 hover:bg-line-gradient hover:border-l-accent-1 hover:border-2 hover:py-6 hover:text-accent-1 hover:font-semibold"
                         @click="handleDropdownItemClick(option)"
                     >
-                        {{ option }}
+                        {{ option.label }}
                     </div>
                 </div>
             </div>
