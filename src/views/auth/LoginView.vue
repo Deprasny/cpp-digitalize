@@ -97,6 +97,9 @@ const login = async () => {
     isLoading.value = true;
     try {
         await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        localStorage.setItem("user_email", email.value);
+
         router.push({ name: "dashboard" });
     } catch (err) {
         console.error("Login error:", err.message);
