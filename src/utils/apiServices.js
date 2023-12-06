@@ -35,4 +35,15 @@ export default {
             throw error;
         }
     },
+
+    // Example PUT request
+    async putData(endpoint, data) {
+        try {
+            const response = await apiService.put(endpoint, data);
+            return response.data;
+        } catch (error) {
+            console.error("Error putting data:", error);
+            throw error;
+        }
+    },
 };

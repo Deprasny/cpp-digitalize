@@ -285,7 +285,16 @@
                         </div>
                     </div>
 
-                    <div class="flex justify-end mx-10">
+                    <div
+                        v-if="approvalButton === 'approval'"
+                        class="flex justify-between mx-5 gap-x-5"
+                    >
+                        <UIButton @click="handleApprove" variant="approve">
+                            Approve
+                        </UIButton>
+                        <UIButton variant="danger"> Reject </UIButton>
+                    </div>
+                    <div v-else class="flex justify-end mx-10 gap-x-5">
                         <UIButton @click="$router.back()" variant="form">
                             Kembali
                         </UIButton>
@@ -297,7 +306,7 @@
         </div>
     </template>
     <template v-else>
-        <div class="flex justify-center items-center h-screen">
+        <div class="flex items-center justify-center h-screen">
             <UILoader />
         </div>
     </template>
@@ -311,13 +320,19 @@ import UIDivider from "@/components/ui/UIDivider.vue";
 import BasicCard from "../../components/BasicCard.vue";
 import LabelForm from "../../components/LabelForm.vue";
 import Log from "../../components/Log.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import useFetch from "../../hooks/useFetch";
 import UILoader from "../../components/ui/UILoader.vue";
-import { getMutationsDetailTable } from "../../services/mutation.services";
+import {
+    getMutationsDetailTable,
+    putMutationsTable,
+} from "../../services/mutation.services";
 
 const route = useRoute();
 const id = route.params.id;
+
+const routeName = useRouter();
+const approvalButton = routeName.currentRoute.value.query.type;
 
 const data = ref({});
 
@@ -335,6 +350,25 @@ const handleFetch = async () => {
 onMounted(() => {
     handleFetch();
 });
+
+const onApprove = async (id) => {
+    const { data: response } = await useFetch({
+        services: putMutationsTable,
+        options: {
+            id: id,
+            body: [
+                {
+                    statusApproval: "Y",
+                },
+            ],
+        },
+    });
+};
+
+const handleApprove = () => {
+    onApprove(id);
+    routeName.push({ name: "approval" });
+};
 
 const listLog = ref([
     { date: "7 Agustus 2023", description: "Approve by BU Head Penerima" },

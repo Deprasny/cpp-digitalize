@@ -2,7 +2,7 @@
     <div class="mt-28">
         <BasicForm>
             <BasicCard title="FORM MUTASI">
-                <div class="px-10 py-5 w-full">
+                <div class="w-full px-10 py-5">
                     <!-- form basic -->
                     <div class="w-full">
                         <FormAutocomplete>
@@ -17,7 +17,7 @@
                             </v-select>
                         </FormAutocomplete>
 
-                        <div class="flex gap-x-7 md:flex-row flex-col">
+                        <div class="flex flex-col gap-x-7 md:flex-row">
                             <FormInputBasic
                                 label="Tanggal Masuk"
                                 type="date"
@@ -31,7 +31,7 @@
                                 placeholder="-"
                             />
                         </div>
-                        <div class="flex gap-x-7 md:flex-row flex-col">
+                        <div class="flex flex-col gap-x-7 md:flex-row">
                             <FormInputBasic
                                 label="Tanggal Lahir"
                                 :type="
@@ -51,7 +51,7 @@
                                 placeholder="-"
                             />
                         </div>
-                        <div class="flex gap-x-7 md:flex-row flex-col">
+                        <div class="flex flex-col gap-x-7 md:flex-row">
                             <FormInputBasic
                                 label="Tanggal Efektif Mutasi"
                                 type="date"
@@ -94,7 +94,7 @@
                                 <div
                                     v-for="status in statusLama"
                                     :key="status"
-                                    class="w-full py-4 h-16 border border-l-0 border-black"
+                                    class="w-full h-16 py-4 border border-l-0 border-black"
                                     :class="status === '-' ? 'bg-gray-100' : ''"
                                 >
                                     {{ status }}
@@ -249,7 +249,7 @@
 
                     <!-- form radio  -->
                     <div
-                        class="flex items-start justify-between w-full my-10 md:flex-row flex-col md:gap-0 gap-6"
+                        class="flex flex-col items-start justify-between w-full gap-6 my-10 md:flex-row md:gap-0"
                     >
                         <div class="flex flex-col items-start">
                             <p class="font-semibold">Keluarga</p>
@@ -338,7 +338,7 @@
 
                     <!-- form additional -->
                     <div class="w-full my-10">
-                        <div class="flex gap-x-7 md:flex-row flex-col">
+                        <div class="flex flex-col gap-x-7 md:flex-row">
                             <FormInputBasic
                                 label="Sisa Cuti"
                                 type="number"
@@ -350,7 +350,7 @@
                                 v-model="values.mutd_medical_bal"
                             />
                         </div>
-                        <div class="flex gap-x-7 md:flex-row flex-col">
+                        <div class="flex flex-col gap-x-7 md:flex-row">
                             <FormInputBasic
                                 label="Hak Karyawan Belum Terbayar"
                                 type="number"
@@ -377,7 +377,7 @@
                         <div class="flex flex-col items-start">
                             <p class="font-semibold">Lampiran</p>
                             <div
-                                class="flex md:items-center items-start gap-x-5 md:flex-row flex-col"
+                                class="flex flex-col items-start md:items-center gap-x-5 md:flex-row"
                             >
                                 <UIButton
                                     variant="form"

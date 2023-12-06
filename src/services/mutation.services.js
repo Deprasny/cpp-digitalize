@@ -35,4 +35,22 @@ const createMutationsTable = async ({ body }) => {
     }
 };
 
-export { getMutationsTable, createMutationsTable, getMutationsDetailTable };
+const putMutationsTable = async ({ id, body }) => {
+    try {
+        const response = await apiServices.putData(`/mutations/${id}`, {
+            ...body,
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
+export {
+    getMutationsTable,
+    createMutationsTable,
+    getMutationsDetailTable,
+    putMutationsTable,
+};

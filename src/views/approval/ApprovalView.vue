@@ -12,77 +12,84 @@
             class="flex justify-start w-full md:mb-7 mb-2 gap-x-4 text-[#0A70A9] text-xl md:ml-10 ml-0"
         >
             <UIButton v-for="data in filter" variant="tab"
-                ><div class="flex gap-2 md:gap-x-16 md:text-base text-sm">
+                ><div class="flex gap-2 text-sm md:gap-x-16 md:text-base">
                     <span>{{ data.label }}</span>
                     <span>{{ data.value }}</span>
                 </div></UIButton
             >
         </div>
-        <Table @onCellClick="handleDetail" :columns="columns" :data="data" />
+        <template v-if="data.length > 0">
+            <Table
+                @onCellClick="handleDetail"
+                :columns="columns"
+                :data="data"
+            />
+        </template>
+        <template v-else>
+            <UILoader />
+        </template>
     </div>
 </template>
 
 <script setup>
+import { ref, onBeforeMount, watch } from "vue";
 import Table from "@/components/BasicTable.vue";
 import { createColumnHelper } from "@tanstack/table-core";
-import { ref } from "vue";
 import UIButton from "@/components/ui/UIButton.vue";
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
 import { useRouter } from "vue-router";
+import UILoader from "@/components/ui/UILoader.vue";
 import { getFormattedDate } from "@/libs/util";
+import useFetch from "@/hooks/useFetch";
+import { getMutationApprovalList } from "@/services/approval.services";
 
 const router = useRouter();
 
-const getRandomName = () => {
-    const names = [
-        "WANI MULYANI",
-        "PAULIN FARIDA",
-        "FEBI SURYATMI",
-        "KAJEN BUDIMAN",
-        "HANI UTAMI",
-    ];
+const data = ref([]);
 
-    const randomIndex = Math.floor(Math.random() * names.length);
-    return names[randomIndex];
-};
+onBeforeMount(async () => {
+    const { data: response } = await useFetch({
+        services: getMutationApprovalList,
+        options: {
+            page: 1,
+            limit: 10,
+        },
+    });
 
-const makeData = (count) => {
-    const data = [];
-    for (let i = 0; i < count; i++) {
-        data.push({
-            mutasi: `000${i}/MUTASI/X/2023`,
-            nama: getRandomName(),
-            tanggal: getFormattedDate(new Date()),
-            status: "Waiting",
-            jenis: "Individu",
-            date: "New",
-        });
-    }
-    return data;
-};
-const data = ref(makeData(4));
+    data.value = response?.value?.data;
+});
 
 const columnHelper = createColumnHelper();
 const columns = [
-    columnHelper.accessor((row) => row.mutasi, {
-        id: "mutasi",
+    columnHelper.accessor((row) => row.no_mutasi, {
+        id: "no_mutasi",
         cell: (info) => info.getValue(),
         header: () => "No Mutasi",
     }),
-    columnHelper.accessor((row) => row.nama, {
-        id: "nama",
+    columnHelper.accessor((row) => row.jenis_mutasi, {
+        id: "jenis_mutasi",
         cell: (info) => info.getValue(),
-        header: () => "Nama Karyawan",
+        header: () => "Jenis Mutasi",
     }),
-    columnHelper.accessor((row) => row.tanggal, {
-        id: "tanggal",
+    columnHelper.accessor((row) => row.tgl_pengajuan, {
+        id: "tgl_pengajuan",
         cell: (info) => info.getValue(),
         header: () => "Tanggal Pengajuan",
+    }),
+    columnHelper.accessor((row) => row.due_date, {
+        id: "due_date",
+        cell: (info) => info.getValue(),
+        header: () => "Sampai Dengan",
     }),
     columnHelper.accessor((row) => row.status, {
         id: "status",
         cell: (info) => info.getValue(),
         header: () => "Status",
+    }),
+    columnHelper.accessor((row) => row.karyawan, {
+        id: "karyawan",
+        cell: (info) => info.getValue(),
+        header: () => "Nama Karyawan",
     }),
     columnHelper.accessor((row) => row.date, {
         id: "date",
@@ -93,8 +100,8 @@ const columns = [
 
 const handleDetail = (cell) => {
     router.push({
-        name: "pensiun-detail",
-        params: { id: cell.row.id },
+        name: "mutasi-detail",
+        params: { id: cell.row.original?.mut_id },
         query: { type: "approval" },
     });
 };

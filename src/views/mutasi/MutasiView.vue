@@ -52,6 +52,7 @@ onBeforeMount(async () => {
     });
 
     data.value = response?.value;
+    console.log(data?.value);
 });
 
 const columnHelper = createColumnHelper();

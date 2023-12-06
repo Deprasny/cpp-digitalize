@@ -23,8 +23,8 @@ const props = defineProps({
 });
 
 const table = useVueTable({
-    columns: props.columns,
-    data: props.data,
+    columns: props?.columns,
+    data: props?.data,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
@@ -57,7 +57,7 @@ function handlePageSizeChange(newPageSize) {
 <template>
     <div class="w-full">
         <table
-            class="w-full mx-5 shadow-xl table-fixed text-start hidden md:table"
+            class="hidden w-full mx-5 shadow-xl table-fixed text-start md:table"
         >
             <thead>
                 <tr>
@@ -96,13 +96,13 @@ function handlePageSizeChange(newPageSize) {
         </table>
 
         <!-- Mobile Version -->
-        <div class="md:hidden w-full">
+        <div class="w-full md:hidden">
             <div
                 v-for="row in table.getRowModel().rows"
                 :key="row.id"
                 class="mb-4"
             >
-                <div class="bg-white border shadow-md p-4 rounded-lg w-full">
+                <div class="w-full p-4 bg-white border rounded-lg shadow-md">
                     <div v-for="cell in row.getVisibleCells()" :key="cell.id">
                         <strong @click="emit('onCellClick', cell)">{{
                             cell.column.columnDef.header()
