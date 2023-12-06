@@ -92,6 +92,12 @@ const columns = [
 const handleDetail = (cell) => {
     const mut_id = cell.row.original?.mut_id;
 
-    router.push({ name: "mutasi-detail", params: { id: mut_id } });
+    router.push({
+        name: "mutasi-detail",
+        params: { id: mut_id },
+        query: {
+            form_type: cell.row.original?.jenis_mutasi,
+        },
+    });
 };
 </script>
