@@ -12,16 +12,16 @@
             </router-link>
         </div>
         <div
-            class="flex justify-start w-full -mb-7 gap-x-4 text-[#0A70A9] text-xl ml-10"
+            class="flex justify-start w-full md:mb-7 mb-2 gap-x-4 text-[#0A70A9] text-xl ml-0 md:ml-10"
         >
-            <UIButton :variant="'tab'"
-                ><div class="flex gap-x-16">
+            <UIButton variant="tab"
+                ><div class="flex gap-2 md:gap-x-16 md:text-base text-sm">
                     <span>Kontrak</span>
                     <span>0</span>
                 </div></UIButton
             >
-            <UIButton :variant="'tab'"
-                ><div class="flex gap-x-16">
+            <UIButton variant="tab"
+                ><div class="flex gap-2 md:gap-x-16 md:text-base text-sm">
                     <span>Probation</span>
                     <span>0</span>
                 </div></UIButton

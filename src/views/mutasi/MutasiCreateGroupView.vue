@@ -2,10 +2,10 @@
     <div class="mt-28">
         <BasicForm>
             <BasicCard title="FORM MUTASI">
-                <div class="px-10 py-5">
+                <div class="px-10 py-5 w-full">
                     <!-- form basic -->
                     <div>
-                        <div class="flex w-full gap-x-2">
+                        <div class="flex w-full gap-x-2 md:flex-row flex-col">
                             <FormInputBasic
                                 label="Nama & NIK"
                                 :icon="IconMagnifier"
@@ -37,7 +37,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="flex gap-x-7">
+                        <div class="flex gap-x-7 md:flex-row flex-col">
                             <FormInputBasic
                                 label="Tanggal Efektif Mutasi"
                                 type="date"
@@ -47,52 +47,57 @@
                     </div>
 
                     <!-- form status -->
-                    <div class="flex items-baseline justify-between my-10">
-                        <div class="flex flex-col items-start w-1/5">
-                            <div class="py-1"></div>
-                            <div
-                                v-for="list in listInfo"
-                                :key="list"
-                                class="w-full py-[17px] font-semibold"
-                            >
-                                <LabelForm :label="list" />
-                            </div>
-                        </div>
+                    <div class="overflow-x-auto">
                         <div
-                            class="flex flex-col items-center flex-1 text-center"
+                            class="flex items-baseline justify-between my-10 w-[900px]"
                         >
-                            <div
-                                class="w-full py-1 text-lg font-bold bg-accent-2"
-                            >
-                                STATUS LAMA
+                            <div class="flex flex-col items-start w-1/5">
+                                <div class="py-1"></div>
+                                <div
+                                    v-for="list in listInfo"
+                                    :key="list"
+                                    class="w-full py-[17px] font-semibold"
+                                >
+                                    <LabelForm :label="list" />
+                                </div>
                             </div>
                             <div
-                                v-for="status in statusLama"
-                                :key="status"
-                                class="w-full py-4 border border-l-0 border-black last:border-b-[2px]"
+                                class="flex flex-col items-center flex-1 text-center"
                             >
-                                {{ status }}
+                                <div
+                                    class="w-full py-1 text-lg font-bold text-black bg-accent-2"
+                                >
+                                    STATUS LAMA
+                                </div>
+                                <div
+                                    v-for="status in statusLama"
+                                    :key="status"
+                                    class="w-full py-4 border border-l-0 border-black last:border-b-[2px] h-[60px]"
+                                >
+                                    {{ status }}
+                                </div>
                             </div>
-                        </div>
-                        <div
-                            class="flex flex-col items-center flex-1 text-center"
-                        >
                             <div
-                                class="w-full py-1 text-lg font-bold text-white bg-accent-1"
+                                class="flex flex-col items-center flex-1 text-center"
                             >
-                                STATUS BARU
-                            </div>
-                            <div
-                                v-for="status in statusBaru"
-                                :key="status"
-                                class="w-full py-4 border border-black border-r-2 last:border-b-[2px]"
-                            >
-                                <Dropdown
-                                    :dropdownOptions="['1', '2']"
-                                    :selectedOptionText="status"
-                                    @update:selectedOptionText="status = $event"
-                                />
-                                />
+                                <div
+                                    class="w-full py-1 text-lg font-bold text-white bg-accent-1"
+                                >
+                                    STATUS BARU
+                                </div>
+                                <div
+                                    v-for="status in statusBaru"
+                                    :key="status"
+                                    class="w-full py-4 border border-black border-r-2 last:border-b-[2px] h-[60px]"
+                                >
+                                    <Dropdown
+                                        :dropdownOptions="['1', '2']"
+                                        :selectedOptionText="status"
+                                        @update:selectedOptionText="
+                                            status = $event
+                                        "
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -101,11 +106,13 @@
 
                     <!-- form upload  -->
                     <div
-                        class="flex items-start justify-between max-w-[500px] my-10"
+                        class="flex items-start justify-between md:max-w-[500px] w-full my-10"
                     >
                         <div class="flex flex-col items-start">
                             <p class="font-semibold">Lampiran</p>
-                            <div class="flex items-center gap-x-5">
+                            <div
+                                class="flex md:items-center items-start gap-x-5 md:flex-row flex-col"
+                            >
                                 <UIButton
                                     variant="form"
                                     class="w-[200px]"
@@ -122,7 +129,9 @@
                     </div>
                 </div>
             </BasicCard>
-            <div class="flex items-center justify-start w-full mt-5 gap-x-4">
+            <div
+                class="flex items-center justify-start w-full mt-5 md:gap-x-4 gap-x-2"
+            >
                 <UIButton
                     variant="form"
                     class="w-[200px]"

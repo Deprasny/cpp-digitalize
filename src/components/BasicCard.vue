@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col bg-white shadow-xl">
+    <div class="flex flex-col bg-white shadow-xl w-full">
         <div
             :class="cardClasses"
             class="flex justify-between w-full py-4 border px-7 rounded-t-xl"

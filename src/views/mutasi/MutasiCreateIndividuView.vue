@@ -2,9 +2,9 @@
     <div class="mt-28">
         <BasicForm>
             <BasicCard title="FORM MUTASI">
-                <div class="px-10 py-5">
+                <div class="px-10 py-5 w-full">
                     <!-- form basic -->
-                    <div class="w-[900px]">
+                    <div class="w-full">
                         <FormAutocomplete>
                             <v-select
                                 :options="data"
@@ -17,7 +17,7 @@
                             </v-select>
                         </FormAutocomplete>
 
-                        <div class="flex gap-x-7">
+                        <div class="flex gap-x-7 md:flex-row flex-col">
                             <FormInputBasic
                                 label="Tanggal Masuk"
                                 type="date"
@@ -31,7 +31,7 @@
                                 placeholder="-"
                             />
                         </div>
-                        <div class="flex gap-x-7">
+                        <div class="flex gap-x-7 md:flex-row flex-col">
                             <FormInputBasic
                                 label="Tanggal Lahir"
                                 :type="
@@ -51,7 +51,7 @@
                                 placeholder="-"
                             />
                         </div>
-                        <div class="flex gap-x-7">
+                        <div class="flex gap-x-7 md:flex-row flex-col">
                             <FormInputBasic
                                 label="Tanggal Efektif Mutasi"
                                 type="date"
@@ -67,171 +67,190 @@
                     </div>
 
                     <!-- form status -->
-                    <div class="flex items-baseline justify-between my-10">
-                        <div class="flex flex-col items-start w-1/5 gap-2">
-                            <div class=""></div>
-                            <div
-                                v-for="list in listInfo"
-                                :key="list"
-                                class="w-full py-[17px] font-semibold"
-                            >
-                                <LabelForm :label="list" />
-                            </div>
-                        </div>
+                    <div class="overflow-x-auto">
                         <div
-                            class="flex flex-col items-center flex-1 text-center"
+                            class="flex items-baseline justify-between my-10 w-[900px]"
                         >
                             <div
-                                class="w-full py-1 text-lg font-bold bg-accent-2"
+                                class="flex flex-col items-start w-1/5 gap-[0.5px]"
                             >
-                                STATUS LAMA
-                            </div>
-                            <div
-                                v-for="status in statusLama"
-                                :key="status"
-                                class="w-full py-4 h-16 border border-l-0 border-black"
-                                :class="status === '-' ? 'bg-gray-100' : ''"
-                            >
-                                {{ status }}
-                            </div>
-                            <div
-                                class="flex justify-between w-full mt-10 bg-accent-2"
-                            >
+                                <div class=""></div>
                                 <div
-                                    v-for="header in headerTunjangan"
-                                    :key="header"
-                                    class="w-full py-1 font-semibold border-black border-x"
+                                    v-for="list in listInfo"
+                                    :key="list"
+                                    class="w-full py-[17px] font-semibold"
                                 >
-                                    {{ header }}
+                                    <LabelForm :label="list" />
                                 </div>
                             </div>
                             <div
-                                v-for="(_, index) in columns"
-                                :key="index"
-                                class="flex justify-between w-full"
+                                class="flex flex-col items-center flex-1 text-center"
                             >
                                 <div
-                                    class="w-full py-1 font-semibold border border-black"
-                                    v-for="i in 3"
+                                    class="w-full py-1 text-lg font-bold bg-accent-2"
                                 >
-                                    <input type="text" class="max-w-[150px]" />
+                                    STATUS LAMA
                                 </div>
-                            </div>
-                            <p class="self-start mt-5 font-semibold">
-                                Total : 1.000.000
-                            </p>
-                        </div>
-                        <div
-                            class="flex flex-col items-center flex-1 text-center"
-                        >
-                            <div
-                                class="w-full py-1 text-lg font-bold text-white bg-accent-1"
-                            >
-                                STATUS BARU
-                            </div>
-                            <div
-                                v-for="status in statusBaru"
-                                :key="status"
-                                class="w-full py-4 border border-l-0 border-black last:border-b-[2px] h-16"
-                                :class="{ 'bg-gray-100': isDisabled }"
-                            >
-                                <template v-if="status?.type === `dropdown`">
-                                    <Dropdown
-                                        :dropdownOptions="status?.options"
-                                        :selectedOptionText="status?.value"
-                                        @update:selected-option-text="
-                                            status.value = $event
-                                        "
-                                        :disabled="isDisabled"
-                                    />
-                                </template>
-                                <template v-else>
-                                    <input
-                                        type="text"
-                                        class="w-full"
-                                        :placeholder="status?.label"
-                                        :disabled="isDisabled"
-                                        :style="{
-                                            background: isDisabled
-                                                ? 'transparent'
-                                                : '',
-                                        }"
-                                        :value="status?.value"
-                                        @input="
-                                            status.value = $event.target.value
-                                        "
-                                    />
-                                </template>
-                            </div>
-
-                            <div
-                                class="flex justify-between w-full mt-10 bg-accent-1"
-                            >
                                 <div
-                                    v-for="header in headerTunjangan"
-                                    :key="header"
-                                    class="w-full py-1 font-semibold text-white border-black border-x"
+                                    v-for="status in statusLama"
+                                    :key="status"
+                                    class="w-full py-4 h-16 border border-l-0 border-black"
+                                    :class="status === '-' ? 'bg-gray-100' : ''"
                                 >
-                                    {{ header }}
+                                    {{ status }}
                                 </div>
-                            </div>
-
-                            <div
-                                v-for="(item, index) in columns"
-                                :key="index"
-                                class="flex justify-between w-full"
-                            >
                                 <div
-                                    class="w-full py-1 font-semibold border border-black"
-                                    v-for="i in columnsData"
+                                    class="flex justify-between w-full mt-10 bg-accent-2"
                                 >
-                                    <input
-                                        :type="i.type"
-                                        class="max-w-[150px]"
-                                        :value="columnsValue[index][i.property]"
-                                        @input="
-                                            columnsValue[index][i.property] =
-                                                $event.target.value
-                                        "
-                                    />
-                                </div>
-                                <div class="relative">
                                     <div
-                                        v-if="index === columns - 1"
-                                        class="absolute top-2 -right-7"
+                                        v-for="header in headerTunjangan"
+                                        :key="header"
+                                        class="w-full py-1 font-semibold border-black border-x"
                                     >
-                                        <button
-                                            v-if="columns < 7"
-                                            @click="addColumn"
+                                        {{ header }}
+                                    </div>
+                                </div>
+                                <div
+                                    v-for="(_, index) in columns"
+                                    :key="index"
+                                    class="flex justify-between w-full"
+                                >
+                                    <div
+                                        class="w-full py-1 font-semibold border border-black"
+                                        v-for="i in 3"
+                                    >
+                                        <input
+                                            type="text"
+                                            class="max-w-[150px]"
+                                        />
+                                    </div>
+                                </div>
+                                <p class="self-start mt-5 font-semibold">
+                                    Total : 1.000.000
+                                </p>
+                            </div>
+                            <div
+                                class="flex flex-col items-center flex-1 text-center"
+                            >
+                                <div
+                                    class="w-full py-1 text-lg font-bold text-white bg-accent-1"
+                                >
+                                    STATUS BARU
+                                </div>
+                                <div
+                                    v-for="status in statusBaru"
+                                    :key="status"
+                                    class="w-full py-4 border border-l-0 border-black last:border-b-[2px] h-16"
+                                    :class="{ 'bg-gray-100': isDisabled }"
+                                >
+                                    <template
+                                        v-if="status?.type === `dropdown`"
+                                    >
+                                        <Dropdown
+                                            :dropdownOptions="status?.options"
+                                            :selectedOptionText="status?.value"
+                                            @update:selected-option-text="
+                                                status.value = $event
+                                            "
+                                            :disabled="isDisabled"
+                                        />
+                                    </template>
+                                    <template v-else>
+                                        <input
+                                            type="text"
+                                            class="w-full"
+                                            :placeholder="status?.label"
+                                            :disabled="isDisabled"
+                                            :style="{
+                                                background: isDisabled
+                                                    ? 'transparent'
+                                                    : '',
+                                            }"
+                                            :value="status?.value"
+                                            @input="
+                                                status.value =
+                                                    $event.target.value
+                                            "
+                                        />
+                                    </template>
+                                </div>
+
+                                <div
+                                    class="flex justify-between w-full mt-10 bg-accent-1"
+                                >
+                                    <div
+                                        v-for="header in headerTunjangan"
+                                        :key="header"
+                                        class="w-full py-1 font-semibold text-white border-black border-x"
+                                    >
+                                        {{ header }}
+                                    </div>
+                                </div>
+
+                                <div
+                                    v-for="(item, index) in columns"
+                                    :key="index"
+                                    class="flex justify-between w-full"
+                                >
+                                    <div
+                                        class="w-full py-1 font-semibold border border-black"
+                                        v-for="i in columnsData"
+                                    >
+                                        <input
+                                            :type="i.type"
+                                            class="max-w-[150px]"
+                                            :value="
+                                                columnsValue[index][i.property]
+                                            "
+                                            @input="
+                                                columnsValue[index][
+                                                    i.property
+                                                ] = $event.target.value
+                                            "
+                                        />
+                                    </div>
+                                    <div class="relative">
+                                        <div
+                                            v-if="index === columns - 1"
+                                            class="absolute top-2 -right-7"
                                         >
-                                            <div
-                                                class="p-1 bg-red-600 rounded-full"
+                                            <button
+                                                v-if="columns < 7"
+                                                @click="addColumn"
                                             >
-                                                <component
-                                                    :is="IconPlus"
-                                                    class="text-xs text-white"
-                                                />
-                                            </div>
-                                        </button>
-                                    </div>
-                                    <div
-                                        v-if="index === columns - 2"
-                                        class="absolute top-1 -right-5"
-                                    >
-                                        <button @click="removeColumn">-</button>
+                                                <div
+                                                    class="p-1 bg-red-600 rounded-full"
+                                                >
+                                                    <component
+                                                        :is="IconPlus"
+                                                        class="text-xs text-white"
+                                                    />
+                                                </div>
+                                            </button>
+                                        </div>
+                                        <div
+                                            v-if="index === columns - 2"
+                                            class="absolute top-1 -right-5"
+                                        >
+                                            <button @click="removeColumn">
+                                                -
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
+                                <p class="self-start mt-5 font-semibold">
+                                    Total : 1.000.000
+                                </p>
                             </div>
-                            <p class="self-start mt-5 font-semibold">
-                                Total : 1.000.000
-                            </p>
                         </div>
                     </div>
 
                     <UIDivider />
 
                     <!-- form radio  -->
-                    <div class="flex items-start justify-between w-full my-10">
+                    <div
+                        class="flex items-start justify-between w-full my-10 md:flex-row flex-col md:gap-0 gap-6"
+                    >
                         <div class="flex flex-col items-start">
                             <p class="font-semibold">Keluarga</p>
                             <p class="mb-3 text-xs italic">
@@ -318,8 +337,8 @@
                     <UIDivider />
 
                     <!-- form additional -->
-                    <div class="w-[900px] my-10">
-                        <div class="flex gap-x-7">
+                    <div class="w-full my-10">
+                        <div class="flex gap-x-7 md:flex-row flex-col">
                             <FormInputBasic
                                 label="Sisa Cuti"
                                 type="number"
@@ -331,7 +350,7 @@
                                 v-model="values.mutd_medical_bal"
                             />
                         </div>
-                        <div class="flex gap-x-7">
+                        <div class="flex gap-x-7 md:flex-row flex-col">
                             <FormInputBasic
                                 label="Hak Karyawan Belum Terbayar"
                                 type="number"
@@ -353,11 +372,13 @@
 
                     <!-- form upload  -->
                     <div
-                        class="flex items-start justify-between max-w-[500px] my-10"
+                        class="flex items-start justify-between md:max-w-[500px] my-10 w-full"
                     >
                         <div class="flex flex-col items-start">
                             <p class="font-semibold">Lampiran</p>
-                            <div class="flex items-center gap-x-5">
+                            <div
+                                class="flex md:items-center items-start gap-x-5 md:flex-row flex-col"
+                            >
                                 <UIButton
                                     variant="form"
                                     class="w-[200px]"
@@ -374,7 +395,9 @@
                     </div>
                 </div>
             </BasicCard>
-            <div class="flex items-center justify-start w-full mt-5 gap-x-4">
+            <div
+                class="flex items-center justify-start w-full mt-5 md:gap-x-4 gap-x-2"
+            >
                 <UIButton
                     variant="form"
                     class="w-[200px]"

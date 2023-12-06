@@ -55,8 +55,10 @@ function handlePageSizeChange(newPageSize) {
 </script>
 
 <template>
-    <div>
-        <table class="w-full mx-5 shadow-xl table-fixed text-start">
+    <div class="w-full">
+        <table
+            class="w-full mx-5 shadow-xl table-fixed text-start hidden md:table"
+        >
             <thead>
                 <tr>
                     <th
@@ -92,6 +94,32 @@ function handlePageSizeChange(newPageSize) {
                 </tr>
             </tbody>
         </table>
+
+        <!-- Mobile Version -->
+        <div class="md:hidden w-full">
+            <div
+                v-for="row in table.getRowModel().rows"
+                :key="row.id"
+                class="mb-4"
+            >
+                <div class="bg-white border shadow-md p-4 rounded-lg w-full">
+                    <div v-for="cell in row.getVisibleCells()" :key="cell.id">
+                        <strong @click="emit('onCellClick', cell)">{{
+                            cell.column.columnDef.header()
+                        }}</strong>
+                        <p class="text-black break-words cursor-pointer">
+                            {{
+                                cell.column.columnDef.cell({
+                                    ...cell.getContext(),
+                                    row,
+                                })
+                            }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="flex items-center justify-center w-full gap-2 mt-4">
             <!-- Previous Page Button -->
             <button

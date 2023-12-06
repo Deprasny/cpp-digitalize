@@ -3,7 +3,7 @@
     <div>
         <aside v-if="isSidebarOpen">
             <nav
-                class="w-72 h-[100vh] rounded-br-lg p-6 shadow-2xl fixed bg-white"
+                class="w-72 h-[100vh] rounded-br-lg p-6 shadow-2xl fixed bg-white z-20"
             >
                 <div class="flex items-start justify-between">
                     <div class="text-accent-1">
