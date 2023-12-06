@@ -85,7 +85,7 @@ const menu = ref([
     {
         name: "Approval",
         icon: IconCheck,
-        route: "/approval",
+        route: "/approval/mutasi",
     },
 ]);
 const toggleSidebar = () => {

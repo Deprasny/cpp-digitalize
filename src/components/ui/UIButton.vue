@@ -42,6 +42,8 @@ const buttonClasses = computed(() => {
             props.variant === "loginGoogle",
         "md:py-6 md:px-6 p-2 border-2 rounded-md w-[120px] md:w-[220px] border-[#0A70A9]":
             props.variant === "tab",
+        "md:py-6 md:px-6 p-2 border-2 rounded-md w-[120px] md:w-[220px] bg-[#0A70A9] text-white border-[#0A70A9]":
+            props.variant === "tab-active",
         "py-3 px-6 border rounded-xl text-accent-1 font-semibold w-[220px] border-accent-1":
             props.variant === "form",
         "py-3 px-6 border rounded-xl text-accent-1 font-semibold w-[220px] border-red-500 bg-red-500 text-white ":

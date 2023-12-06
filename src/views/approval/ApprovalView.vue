@@ -9,25 +9,26 @@
             </UIButton>
         </div>
         <div
-            class="flex justify-start w-full md:mb-7 mb-2 gap-x-4 text-[#0A70A9] text-xl md:ml-10 ml-0"
+            class="flex justify-start w-full md:-mb-6 mb-2 gap-x-4 text-[#0A70A9] text-xl md:ml-10 ml-0"
         >
-            <UIButton v-for="data in filter" variant="tab"
+            <UIButton
+                v-for="data in filter"
+                @click="$router.push(`/approval/${data.label}`)"
+                :variant="data.label === currentPath ? 'tab-active' : 'tab'"
                 ><div class="flex gap-2 text-sm md:gap-x-16 md:text-base">
-                    <span>{{ data.label }}</span>
-                    <span>{{ data.value }}</span>
+                    <span class="uppercase">{{ data.label }}</span>
+                    <template v-if="data.label === 'mutasi'">
+                        <span>
+                            {{ valueApproval.length }}
+                        </span>
+                    </template>
+                    <template v-else>
+                        <span>0</span>
+                    </template>
                 </div></UIButton
             >
         </div>
-        <template v-if="data.length > 0">
-            <Table
-                @onCellClick="handleDetail"
-                :columns="columns"
-                :data="data"
-            />
-        </template>
-        <template v-else>
-            <UILoader />
-        </template>
+        <router-view></router-view>
     </div>
 </template>
 
@@ -43,9 +44,7 @@ import { getFormattedDate } from "@/libs/util";
 import useFetch from "@/hooks/useFetch";
 import { getMutationApprovalList } from "@/services/approval.services";
 
-const router = useRouter();
-
-const data = ref([]);
+const valueApproval = ref([]);
 
 onBeforeMount(async () => {
     const { data: response } = await useFetch({
@@ -56,59 +55,22 @@ onBeforeMount(async () => {
         },
     });
 
-    data.value = response?.value?.data;
+    valueApproval.value = response?.value?.data;
 });
 
-const columnHelper = createColumnHelper();
-const columns = [
-    columnHelper.accessor((row) => row.no_mutasi, {
-        id: "no_mutasi",
-        cell: (info) => info.getValue(),
-        header: () => "No Mutasi",
-    }),
-    columnHelper.accessor((row) => row.jenis_mutasi, {
-        id: "jenis_mutasi",
-        cell: (info) => info.getValue(),
-        header: () => "Jenis Mutasi",
-    }),
-    columnHelper.accessor((row) => row.tgl_pengajuan, {
-        id: "tgl_pengajuan",
-        cell: (info) => info.getValue(),
-        header: () => "Tanggal Pengajuan",
-    }),
-    columnHelper.accessor((row) => row.due_date, {
-        id: "due_date",
-        cell: (info) => info.getValue(),
-        header: () => "Sampai Dengan",
-    }),
-    columnHelper.accessor((row) => row.status, {
-        id: "status",
-        cell: (info) => info.getValue(),
-        header: () => "Status",
-    }),
-    columnHelper.accessor((row) => row.karyawan, {
-        id: "karyawan",
-        cell: (info) => info.getValue(),
-        header: () => "Nama Karyawan",
-    }),
-    columnHelper.accessor((row) => row.date, {
-        id: "date",
-        cell: (info) => info.getValue(),
-        header: () => "-",
-    }),
-];
+const router = useRouter();
+const currentPath = ref(router.currentRoute.value.path.split("/")[2]);
 
-const handleDetail = (cell) => {
-    router.push({
-        name: "mutasi-detail",
-        params: { id: cell.row.original?.mut_id },
-        query: { type: "approval" },
-    });
-};
+watch(
+    () => router.currentRoute.value.path.split("/")[2],
+    (newPath) => {
+        currentPath.value = newPath;
+    }
+);
 
 const filter = ref([
-    { label: "Mutasi", value: 10 },
-    { label: "Evaluasi", value: 10 },
-    { label: "Pensiun", value: 10 },
+    { label: "mutasi", value: 10 },
+    { label: "evaluasi", value: 10 },
+    { label: "pensiun", value: 10 },
 ]);
 </script>
