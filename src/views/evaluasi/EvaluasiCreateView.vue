@@ -70,8 +70,9 @@
                                     (maximum score: 75)
                                 </p>
                             </div>
-                            <div>
-                                <p>download contoh</p>
+                            <div class="flex gap-x-5">
+                                <p>Download contoh</p>
+                                <IconDownload />
                             </div>
                         </div>
 
@@ -206,7 +207,7 @@
                             </div>
                         </div>
                         <div
-                            class="flex justify-end w-full mb-10 font-semibold gap-x-20"
+                            class="flex justify-end w-full my-10 font-semibold gap-x-20"
                         >
                             <p>Total Score:</p>
                             <p>-</p>
@@ -226,9 +227,6 @@
                                 <p class="text-[#0A70A9]">
                                     (maximum score: 25)
                                 </p>
-                            </div>
-                            <div>
-                                <p>download contoh</p>
                             </div>
                         </div>
                         <p class="mb-10">
@@ -400,6 +398,7 @@
 
 <script setup>
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
+import IconDownload from "@/components/icons/IconDownload.vue";
 import { ref } from "vue";
 import BasicCard from "../../components/BasicCard.vue";
 import BasicForm from "../../components/BasicForm.vue";

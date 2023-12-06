@@ -5,7 +5,7 @@
                 <div class="px-10 py-5">
                     <!-- form basic -->
                     <div>
-                        <div class="w-full flex gap-x-2">
+                        <div class="flex w-full gap-x-2">
                             <FormInputBasic
                                 label="Nama & NIK"
                                 :icon="IconMagnifier"
