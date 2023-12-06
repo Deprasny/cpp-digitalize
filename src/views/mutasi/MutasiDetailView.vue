@@ -1,275 +1,340 @@
 <template>
-    <div>
-        <a @click="$router.back()">
-            <UIButton :icon="IconChevronLeft" :variant="'secondary'">
-                Back
-            </UIButton>
-        </a>
+    <template v-if="data?.mut_id">
+        <div>
+            <a @click="$router.back()">
+                <UIButton :icon="IconChevronLeft" :variant="'secondary'">
+                    Back
+                </UIButton>
+            </a>
 
-        <UIDivider />
-        <div class="flex my-16">
-            <BasicCard
-                title="0001/MUTASI/INDIVIDU/X/2023"
-                variant="detail"
-                class="w-[95%]"
-            >
-                <div class="my-5">
-                    <div class="flex w-full py-4 px-7 text-start">
-                        <div class="flex w-full">
-                            <LabelForm
-                                label="Nama & NIK"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">Zavira Andini - 21900133</p>
+            <UIDivider />
+            <div class="flex my-16">
+                <BasicCard
+                    :title="data?.mut_req_no"
+                    variant="detail"
+                    class="w-[95%]"
+                >
+                    <div
+                        class="my-5"
+                        v-for="(item, index) in data?.employee"
+                        :key="index"
+                    >
+                        <div class="flex w-full py-4 px-7 text-start">
+                            <div class="flex w-full">
+                                <LabelForm
+                                    label="Nama & NIK"
+                                    value="John Doe"
+                                    class="w-full font-semibold"
+                                />
+                                <p class="w-full">
+                                    {{ item?.nama }} - {{ item?.nik }}
+                                </p>
+                            </div>
+                            <div class="flex w-full">
+                                <LabelForm
+                                    label="Tanggal Lahir"
+                                    value="John Doe"
+                                    class="w-full font-semibold"
+                                />
+                                <p class="w-full">{{ item.tgl_lahir }}</p>
+                            </div>
                         </div>
-                        <div class="flex w-full">
-                            <LabelForm
-                                label="Tanggal Lahir"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">28 Mei 1997</p>
+                        <div class="flex w-full py-4 px-7 text-start">
+                            <div class="flex w-full">
+                                <LabelForm
+                                    label="Tanggal Masuk"
+                                    value="John Doe"
+                                    class="w-full font-semibold"
+                                />
+                                <p class="w-full">{{ item.tgl_masuk }}</p>
+                            </div>
+                            <div class="flex w-full">
+                                <LabelForm
+                                    label="Pendidikan"
+                                    value="John Doe"
+                                    class="w-full font-semibold"
+                                />
+                                <p class="w-full">{{ item?.education }}</p>
+                            </div>
+                        </div>
+                        <div class="flex w-full py-4 px-7 text-start">
+                            <div class="flex w-1/2">
+                                <LabelForm
+                                    label="Home Base"
+                                    value="John Doe"
+                                    class="w-full font-semibold"
+                                />
+                                <p class="w-full">
+                                    {{ item?.homebase || "-" }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex w-full py-4 px-7 text-start">
+                            <div class="flex w-1/2">
+                                <LabelForm
+                                    label="Tanggal Efektif Mutasi"
+                                    value="John Doe"
+                                    class="w-full font-semibold"
+                                />
+                                <p class="w-full">-</p>
+                            </div>
+                        </div>
+                        <div class="flex w-full py-4 px-7 text-start">
+                            <div class="flex w-1/2">
+                                <LabelForm
+                                    label="Alasan Mutasi"
+                                    value="John Doe"
+                                    class="w-full font-semibold"
+                                />
+                                <p class="w-full">{{ data?.notes }}</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="flex w-full py-4 px-7 text-start">
-                        <div class="flex w-full">
-                            <LabelForm
-                                label="Tanggal Masuk"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">23/10/1999</p>
-                        </div>
-                        <div class="flex w-full">
-                            <LabelForm
-                                label="Pendidikan"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">S1</p>
-                        </div>
-                    </div>
-                    <div class="flex w-full py-4 px-7 text-start">
-                        <div class="flex w-1/2">
-                            <LabelForm
-                                label="Home Base"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">Jakarta</p>
-                        </div>
-                    </div>
-                    <div class="flex w-full py-4 px-7 text-start">
-                        <div class="flex w-1/2">
-                            <LabelForm
-                                label="Tanggal Efektif Mutasi"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">1 September 2023</p>
-                        </div>
-                    </div>
-                    <div class="flex w-full py-4 px-7 text-start">
-                        <div class="flex w-1/2">
-                            <LabelForm
-                                label="Alasan Mutasi"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">Keperluan Organisasi</p>
-                        </div>
-                    </div>
-                </div>
 
-                <UIDivider />
+                    <UIDivider />
 
-                <!-- form status -->
-                <div class="flex items-baseline justify-between mx-10 my-10">
-                    <div class="flex flex-col items-start w-[25%]">
-                        <div class="py-1">-</div>
+                    <!-- form status -->
+                    <div
+                        class="flex items-baseline justify-between mx-10 my-10"
+                    >
+                        <div class="flex flex-col items-start w-[25%]">
+                            <div class="py-1">-</div>
+                            <div
+                                v-for="list in listInfo"
+                                :key="list"
+                                class="w-full py-[17px] font-semibold"
+                            >
+                                <LabelForm :label="list" />
+                            </div>
+                        </div>
                         <div
-                            v-for="list in listInfo"
-                            :key="list"
-                            class="w-full py-[17px] font-semibold"
+                            class="flex flex-col items-center flex-1 text-center"
                         >
-                            <LabelForm :label="list" />
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-center flex-1 text-center">
-                        <div class="w-full py-1 text-lg font-bold bg-accent-2">
-                            STATUS LAMA
-                        </div>
-                        <div
-                            v-for="status in statusLama"
-                            :key="status"
-                            class="w-full py-4 border border-l-0 border-black last:border-b-[2px]"
-                        >
-                            <div v-if="Array.isArray(status)" class="mx-10">
-                                <div
-                                    v-for="(item, itemIndex) in status"
-                                    :key="itemIndex"
-                                >
-                                    <p>
-                                        {{
-                                            ` ${item.no}. ${item.tunjangan} : ${item.total}`
-                                        }}
-                                    </p>
+                            <div
+                                class="w-full py-1 text-lg font-bold bg-accent-2"
+                            >
+                                STATUS LAMA
+                            </div>
+                            <div
+                                v-for="status in statusLama"
+                                :key="status"
+                                class="w-full py-4 border border-l-0 border-black last:border-b-[2px]"
+                            >
+                                <div v-if="Array.isArray(status)" class="mx-10">
+                                    <div
+                                        v-for="(item, itemIndex) in status"
+                                        :key="itemIndex"
+                                    >
+                                        <p>
+                                            {{
+                                                ` ${item.no}. ${item.tunjangan} : ${item.total}`
+                                            }}
+                                        </p>
+                                    </div>
+                                    <UIDivider class="mt-5" />
+
+                                    <p>Total : 9000</p>
                                 </div>
-                                <UIDivider class="mt-5" />
-
-                                <p>Total : 9000</p>
-                            </div>
-                            <div v-else>
-                                {{ status }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-center flex-1 text-center">
-                        <div
-                            class="w-full py-1 text-lg font-bold text-white bg-accent-1"
-                        >
-                            STATUS BARU
-                        </div>
-                        <div
-                            v-for="status in statusBaru"
-                            :key="status"
-                            class="w-full py-4 border border-black border-r-2 last:border-b-[2px]"
-                        >
-                            <div v-if="Array.isArray(status)" class="mx-10">
-                                <div
-                                    v-for="(item, itemIndex) in status"
-                                    :key="itemIndex"
-                                >
-                                    <p>
-                                        {{
-                                            ` ${item.no}. ${item.tunjangan} : ${item.total}`
-                                        }}
-                                    </p>
+                                <div v-else>
+                                    {{ status }}
                                 </div>
-                                <UIDivider class="mt-5" />
-
-                                <p>Total : 9000</p>
                             </div>
-                            <div v-else>
-                                {{ status }}
+                        </div>
+                        <div
+                            class="flex flex-col items-center flex-1 text-center"
+                        >
+                            <div
+                                class="w-full py-1 text-lg font-bold text-white bg-accent-1"
+                            >
+                                STATUS BARU
+                            </div>
+                            <div
+                                v-for="status in statusBaru"
+                                :key="status"
+                                class="w-full py-4 border border-black border-r-2 last:border-b-[2px]"
+                            >
+                                <div v-if="Array.isArray(status)" class="mx-10">
+                                    <div
+                                        v-for="(item, itemIndex) in status"
+                                        :key="itemIndex"
+                                    >
+                                        <p>
+                                            {{
+                                                ` ${item.no}. ${item.tunjangan} : ${item.total}`
+                                            }}
+                                        </p>
+                                    </div>
+                                    <UIDivider class="mt-5" />
+
+                                    <p>Total : 9000</p>
+                                </div>
+                                <div v-else>
+                                    {{ status }}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <UIDivider />
+                    <UIDivider />
 
-                <!-- info-1 -->
-                <div class="flex flex-col mx-10 my-10 gap-y-5">
-                    <div class="flex w-1/2">
-                        <LabelForm
-                            label="Keluarga"
-                            value="John Doe"
-                            class="w-full font-semibold"
-                        />
-                        <p class="w-full">
-                            Tidak ikut pindah kelokasi kerja baru
-                        </p>
+                    <!-- info-1 -->
+                    <div class="flex flex-col mx-10 my-10 gap-y-5">
+                        <div class="flex w-1/2">
+                            <LabelForm
+                                label="Keluarga"
+                                value="John Doe"
+                                class="w-full font-semibold"
+                            />
+                            <p class="w-full">
+                                {{
+                                    data?.famMove === "YES"
+                                        ? "Ikut pindah kelokasi kerja baru"
+                                        : "Tidak Ikut pindah kelokasi kerja baru"
+                                }}
+                            </p>
+                        </div>
+                        <div class="flex w-1/2">
+                            <LabelForm
+                                label="Tunj Rumah"
+                                value="John Doe"
+                                class="w-full font-semibold"
+                            />
+                            <p class="w-full">
+                                {{
+                                    data?.houseAllow === "Yearly"
+                                        ? "Diambil per 1 Tahun"
+                                        : data?.houseAllow === "Monthly"
+                                        ? "Diambil Bulanan"
+                                        : "Diambil per 2 Tahun"
+                                }}
+                            </p>
+                        </div>
+                        <div class="flex w-1/2">
+                            <LabelForm
+                                label="Transportasi Barang"
+                                value="John Doe"
+                                class="w-full font-semibold"
+                            />
+                            <p class="w-full">
+                                {{
+                                    data?.transport === "Tunai"
+                                        ? "Ambil Tunai"
+                                        : "Difasilitasi Perusahaan"
+                                }}
+                            </p>
+                        </div>
                     </div>
-                    <div class="flex w-1/2">
-                        <LabelForm
-                            label="Tunj Rumah"
-                            value="John Doe"
-                            class="w-full font-semibold"
-                        />
-                        <p class="w-full">Diambil Bulanan</p>
-                    </div>
-                    <div class="flex w-1/2">
-                        <LabelForm
-                            label="Transportasi Barang"
-                            value="John Doe"
-                            class="w-full font-semibold"
-                        />
-                        <p class="w-full">-</p>
-                    </div>
-                </div>
 
-                <UIDivider />
+                    <UIDivider />
 
-                <!-- info-2 -->
-                <div class="flex flex-col mx-10 my-10 gap-y-5">
-                    <div class="flex w-1/2">
-                        <LabelForm
-                            label="Sisa Cuti"
-                            value="John Doe"
-                            class="w-full font-semibold"
-                        />
-                        <p class="w-full">-</p>
+                    <!-- info-2 -->
+                    <div class="flex flex-col mx-10 my-10 gap-y-5">
+                        <div class="flex w-1/2">
+                            <LabelForm
+                                label="Sisa Cuti"
+                                value="John Doe"
+                                class="w-full font-semibold"
+                            />
+                            <p class="w-full">{{ data?.leaveBal }}</p>
+                        </div>
+                        <div class="flex w-1/2">
+                            <LabelForm
+                                label="Sisa Plafon Berobat"
+                                value="John Doe"
+                                class="w-full font-semibold"
+                            />
+                            <p class="w-full">{{ data?.medBal }}</p>
+                        </div>
+                        <div class="flex w-1/2">
+                            <LabelForm
+                                label="Hak Karyawan Belum Terbayar"
+                                value="John Doe"
+                                class="w-full font-semibold"
+                            />
+                            <p class="w-full">{{ data?.creditAmount }}</p>
+                        </div>
+                        <div class="flex w-1/2">
+                            <LabelForm
+                                label="Hutang ke Perusahaan"
+                                value="John Doe"
+                                class="w-full font-semibold"
+                            />
+                            <p class="w-full">{{ data?.debitAmount }}</p>
+                        </div>
+                        <div class="flex w-1/2">
+                            <LabelForm
+                                label="Keterangan"
+                                value="John Doe"
+                                class="w-full font-semibold"
+                            />
+                            <p class="w-full">{{ data?.notes }}</p>
+                        </div>
                     </div>
-                    <div class="flex w-1/2">
-                        <LabelForm
-                            label="Sisa Plafon Berobat"
-                            value="John Doe"
-                            class="w-full font-semibold"
-                        />
-                        <p class="w-full">-</p>
-                    </div>
-                    <div class="flex w-1/2">
-                        <LabelForm
-                            label="Hak Karyawan Belum Terbayar"
-                            value="John Doe"
-                            class="w-full font-semibold"
-                        />
-                        <p class="w-full">-</p>
-                    </div>
-                    <div class="flex w-1/2">
-                        <LabelForm
-                            label="Hutang ke Perusahaan"
-                            value="John Doe"
-                            class="w-full font-semibold"
-                        />
-                        <p class="w-full">-</p>
-                    </div>
-                    <div class="flex w-1/2">
-                        <LabelForm
-                            label="Keterangan"
-                            value="John Doe"
-                            class="w-full font-semibold"
-                        />
-                        <p class="w-full">-</p>
-                    </div>
-                </div>
 
-                <UIDivider />
+                    <UIDivider />
 
-                <!-- info-3-->
-                <div class="flex flex-col mx-10 my-10 gap-y-5">
-                    <div class="flex w-1/2">
-                        <LabelForm
-                            label="Lampiran"
-                            value="John Doe"
-                            class="w-full font-semibold"
-                        />
-                        <p class="w-full">Lorem Ipsum.pdf</p>
+                    <!-- info-3-->
+                    <div class="flex flex-col mx-10 my-10 gap-y-5">
+                        <div class="flex w-1/2">
+                            <LabelForm
+                                label="Lampiran"
+                                value="John Doe"
+                                class="w-full font-semibold"
+                            />
+                            <p class="w-full">Lorem Ipsum.pdf</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="flex justify-end mx-10">
-                    <UIButton @click="$router.back()" variant="form">
-                        Kembali
-                    </UIButton>
-                </div>
-            </BasicCard>
+                    <div class="flex justify-end mx-10">
+                        <UIButton @click="$router.back()" variant="form">
+                            Kembali
+                        </UIButton>
+                    </div>
+                </BasicCard>
 
-            <Log :data="listLog" />
+                <Log :data="listLog" />
+            </div>
         </div>
-    </div>
+    </template>
+    <template v-else>
+        <div class="flex justify-center items-center h-screen">
+            <UILoader />
+        </div>
+    </template>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref, watchEffect } from "vue";
 import UIButton from "@/components/ui/UIButton.vue";
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
 import UIDivider from "@/components/ui/UIDivider.vue";
 import BasicCard from "../../components/BasicCard.vue";
 import LabelForm from "../../components/LabelForm.vue";
 import Log from "../../components/Log.vue";
+import { useRoute } from "vue-router";
+import useFetch from "../../hooks/useFetch";
+import UILoader from "../../components/ui/UILoader.vue";
+import { getMutationsDetailTable } from "../../services/mutation.services";
+
+const route = useRoute();
+const id = route.params.id;
+
+const data = ref({});
+
+const handleFetch = async () => {
+    const { data: response } = await useFetch({
+        services: getMutationsDetailTable,
+        options: {
+            id: id,
+        },
+    });
+
+    data.value = response.value;
+};
+
+onMounted(() => {
+    handleFetch();
+});
 
 const listLog = ref([
     { date: "7 Agustus 2023", description: "Approve by BU Head Penerima" },
@@ -336,4 +401,40 @@ const statusBaru = ref([
         },
     ],
 ]);
+
+watchEffect(() => {
+    if (data.value) {
+        statusLama.value[0] = data.value.companyFr;
+        statusBaru.value[0] = data.value.companyTo;
+
+        statusLama.value[1] = data.value.positionFr;
+        statusBaru.value[1] = data.value.positionTo;
+
+        statusLama.value[2] = data.value.levelFr;
+        statusBaru.value[2] = data.value.levelTo;
+
+        statusLama.value[3] = data.value.buFr;
+        statusBaru.value[3] = data.value.buTo;
+
+        statusLama.value[4] = data.value.ccFr;
+        statusBaru.value[4] = data.value.ccTo;
+
+        statusLama.value[5] = data.value.locFr;
+        statusBaru.value[5] = data.value.locTo;
+
+        statusLama.value[6] = data.value.spvFr;
+        statusBaru.value[6] = data.value.spvTo;
+
+        statusLama.value[7] = data.value.mgrFr;
+        statusBaru.value[7] = data.value.mgrTo;
+
+        listLog.value = data?.value?.progress?.map((item) => {
+            return {
+                date: item?.docstep_status,
+                description: item?.step_description,
+            };
+        });
+    }
+    console.log(data.value);
+});
 </script>
