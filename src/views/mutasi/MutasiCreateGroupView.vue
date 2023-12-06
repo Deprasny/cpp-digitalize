@@ -91,8 +91,8 @@
                                     class="w-full py-4 border border-black border-r-2 last:border-b-[2px] h-[60px]"
                                 >
                                     <Dropdown
-                                        :dropdownOptions="['1', '2']"
-                                        :selectedOptionText="status"
+                                        :dropdownOptions="status.options"
+                                        :selectedOptionText="status.value"
                                         @update:selectedOptionText="
                                             status = $event
                                         "
@@ -172,6 +172,11 @@ import LabelForm from "../../components/LabelForm.vue";
 import Modal from "../../components/Modal.vue";
 import { useModalStore } from "../../stores/index.js";
 import Dropdown from "../../components/Dropdown.vue";
+import {
+    formLabelTitle,
+    statusBaruDefaultValues,
+    statusLamaDefaultValues,
+} from "../../data/mutations.data";
 
 const store = useModalStore();
 
@@ -194,36 +199,9 @@ const removeName = (index) => {
     enteredNames.value.splice(index, 1);
 };
 
-const listInfo = ref([
-    "Perusahaan ",
-    "Jabatan ",
-    "Kelas Jabatan ",
-    "Business Units",
-    "Cost Center ",
-    "Lokasi Kerja ",
-    "Melapor Ke ",
-    "Immediate Manager",
-]);
+const listInfo = ref(formLabelTitle);
 
-const statusLama = ref([
-    "1450 CP Prima - Jakarta (HO)",
-    "Specialist Organization Development",
-    "4A",
-    "Organization Development",
-    "1450 145766 HR Corporate",
-    "DKI Jakarta_SCBD",
-    "Panca Dias Purnomo - 22000130",
-    "A.A Sagung Purnama Dewi Pata - 22200169",
-]);
+const statusLama = ref(statusLamaDefaultValues);
 
-const statusBaru = ref([
-    "1450 CP Prima - Jakarta 0401",
-    "-",
-    "4A",
-    "Center of Excellence",
-    "-",
-    "-",
-    "22200169 - A.A Sagung Purnama Dewi Pata",
-    "22000130 - Panca Dias Purnomo",
-]);
+const statusBaru = ref(statusBaruDefaultValues);
 </script>
