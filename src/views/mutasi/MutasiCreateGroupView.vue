@@ -96,19 +96,23 @@
                                     STATUS BARU
                                 </div>
                                 <div
-                                    v-for="status in statusBaru"
+                                    v-for="(status, index) in statusBaru"
                                     :key="status"
                                     class="w-full py-4 border border-black border-r-2 last:border-b-[2px] h-[60px]"
                                 >
-                                    <Dropdown
-                                        :dropdownOptions="status?.options"
-                                        :selectedOptionText="
-                                            status?.value.label
-                                        "
-                                        @update:selected-option-text="
-                                            status.value = $event
-                                        "
-                                    />
+                                    <template v-if="status.type === 'dropdown'">
+                                        <Dropdown
+                                            :dropdownOptions="status?.options"
+                                            :selectedOptionText="
+                                                status?.value.label
+                                            "
+                                            @update:selected-option-text="
+                                                status.value = $event
+                                            "
+                                    /></template>
+                                    <template v-else>{{
+                                        statusLama[index]
+                                    }}</template>
                                 </div>
                             </div>
                         </div>
