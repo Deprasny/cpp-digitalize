@@ -7,8 +7,19 @@ const apiService = axios.create({
     baseURL: BASE_URL,
     headers: {
         "Content-Type": "application/json",
-        user: "herman.ie@cpp.co.id",
     },
+});
+
+apiService.interceptors.request.use((config) => {
+    const getEmail = localStorage.getItem("user_email");
+
+    // Retrieve the current email from wherever it is stored in your application
+    const currentEmail = getEmail; // Replace this with your actual logic to get the email
+
+    // Set the 'user' header based on the current email
+    config.headers["user"] = currentEmail;
+
+    return config;
 });
 
 export default {
