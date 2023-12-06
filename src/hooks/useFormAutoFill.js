@@ -23,18 +23,32 @@ const useFormAutoFill = async () => {
         useFetch({ services: getAllWorkLocation, options: {} }),
     ]);
 
-    const companyValues = companyResponse?.data?.value.map(
-        (item) => item?.company_name
-    );
-    const positionValues = positionResponse?.data?.value.map(
-        (item) => item?.posisi
-    );
+    const companyValues = companyResponse?.data?.value.map((item) => {
+        return {
+            label: item?.company_name,
+            value: item?.company_name,
+        };
+    });
+    const positionValues = positionResponse?.data?.value.map((item) => {
+        return {
+            label: item?.posisi,
+            value: item?.posisi,
+        };
+    });
     const businessUnitValues = businessUnitsResponse?.data?.value.map(
-        (item) => item?.busunit
+        (item) => {
+            return {
+                label: item?.busunit,
+                value: item?.busunit,
+            };
+        }
     );
-    const costCenterValues = costCenterResponse?.data?.value.map(
-        (item) => item?.costcenter
-    );
+    const costCenterValues = costCenterResponse?.data?.value.map((item) => {
+        return {
+            label: item?.costcenter,
+            value: item?.costcenter,
+        };
+    });
     const workLocationValues = workLocationResponse?.data?.value.map((item) => {
         return {
             label: item?.worklocation_name,

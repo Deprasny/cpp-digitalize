@@ -574,7 +574,7 @@ const onSubmit = async () => {
                             mutd_to_division: values.value.mutd_to_division,
                             mutd_to_costcenter: values.value.mutd_to_costcenter,
                             mutd_to_work_location:
-                                values.value.mutd_to_work_location.value,
+                                values.value.mutd_to_work_location,
                             mutd_to_direct_spv: values.value.mutd_to_direct_spv,
                             mutd_to_immed_mgr: values.value.mutd_to_immed_mgr,
                             mutd_family_move: values.value.mutd_family_move,
@@ -678,7 +678,7 @@ const fetchAutoFillFormParams = async () => {
         services: getDirectSpv,
         options: {
             params: {
-                bu: statusBaru.value[3].value,
+                bu: statusBaru.value[3].value?.value,
             },
         },
     });
@@ -687,18 +687,24 @@ const fetchAutoFillFormParams = async () => {
         services: getImmediateManager,
         options: {
             params: {
-                bu: statusBaru.value[3].value,
+                bu: statusBaru.value[3].value?.value,
             },
         },
     });
 
     statusBaru.value[6].options = directSpvResponse?.value.map((item) => {
-        return `${item?.nik} - ${item?.nama}`;
+        return {
+            label: `${item?.nik} - ${item?.nama}`,
+            value: item?.nik,
+        };
     });
 
     statusBaru.value[7].options = immdieateManagerResponse?.value.map(
         (item) => {
-            return `${item?.nik} - ${item?.nama}`;
+            return {
+                label: `${item?.nik} - ${item?.nama}`,
+                value: item?.nik,
+            };
         }
     );
 };
@@ -759,7 +765,7 @@ watch(
     () => statusBaru.value[0].value,
     (newValue) => {
         if (newValue) {
-            values.value.mutd_to_company = newValue;
+            values.value.mutd_to_company = newValue?.value;
         }
     }
 );
@@ -768,7 +774,7 @@ watch(
     () => statusBaru.value[1].value,
     (newValue) => {
         if (newValue) {
-            values.value.mutd_to_position = newValue;
+            values.value.mutd_to_position = newValue?.value;
         }
     }
 );
@@ -778,7 +784,7 @@ watch(
     (newValue) => {
         if (newValue) {
             fetchAutoFillFormParams();
-            values.value.mutd_to_division = newValue;
+            values.value.mutd_to_division = newValue?.value;
         }
     }
 );
@@ -787,7 +793,7 @@ watch(
     () => statusBaru.value[4].value,
     (newValue) => {
         if (newValue) {
-            values.value.mutd_to_costcenter = newValue;
+            values.value.mutd_to_costcenter = newValue?.value;
         }
     }
 );
@@ -796,7 +802,7 @@ watch(
     () => statusBaru.value[5].value,
     (newValue) => {
         if (newValue) {
-            values.value.mutd_to_work_location = newValue;
+            values.value.mutd_to_work_location = newValue?.value;
         }
     }
 );
@@ -805,7 +811,7 @@ watch(
     () => statusBaru.value[6].value,
     (newValue) => {
         if (newValue) {
-            values.value.mutd_to_direct_spv = newValue;
+            values.value.mutd_to_direct_spv = newValue?.value;
         }
     }
 );
@@ -814,9 +820,8 @@ watch(
     () => statusBaru.value[7].value,
     (newValue) => {
         if (newValue) {
-            values.value.mutd_to_immed_mgr = newValue;
+            values.value.mutd_to_immed_mgr = newValue?.value;
         }
     }
 );
-console.log(statusBaru.value);
 </script>
