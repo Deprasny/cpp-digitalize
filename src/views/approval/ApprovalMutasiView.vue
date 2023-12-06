@@ -14,6 +14,9 @@ import { createColumnHelper } from "@tanstack/table-core";
 import useFetch from "../../hooks/useFetch";
 import UILoader from "../../components/ui/UILoader.vue";
 import { getMutationApprovalList } from "../../services/approval.services";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const data = ref([]);
 

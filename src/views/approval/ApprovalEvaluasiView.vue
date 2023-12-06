@@ -1,3 +1,3 @@
 <template>
-    <h1>TABEL EVALUASI KONTOL</h1>
+    <h1>TABEL EVALUASI</h1>
 </template>

@@ -1,3 +1,3 @@
 <template>
-    <h1>TABEL PENSIUN KONTOL</h1>
+    <h1>TABEL PENSIUN</h1>
 </template>

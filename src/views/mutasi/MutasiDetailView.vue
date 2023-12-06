@@ -8,11 +8,11 @@
             </a>
 
             <UIDivider />
-            <div class="flex my-16 md:flex-row flex-col w-full">
+            <div class="flex flex-col w-full my-16 md:flex-row">
                 <BasicCard
                     :title="data?.mut_req_no"
                     variant="detail"
-                    class="md:w-[750px] w-full"
+                    class="md:w-[75%] w-full"
                 >
                     <template v-if="formType === 'Group'">
                         <div class="my-5">
@@ -22,9 +22,9 @@
                                         label="Nama & NIK"
                                         class="w-full font-semibold"
                                     />
-                                    <div class="flex flex-col gap-2 w-full">
+                                    <div class="flex flex-col w-full gap-2">
                                         <div
-                                            class="w-full flex gap-2"
+                                            class="flex w-full gap-2"
                                             v-for="(
                                                 item, index
                                             ) in data?.employee"
@@ -37,7 +37,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="w-full hidden md:flex"></div>
+                                <div class="hidden w-full md:flex"></div>
                             </div>
 
                             <div class="flex w-full py-4 px-7 text-start">
@@ -46,11 +46,11 @@
                                         label="Tanggal Efektif Mutasi"
                                         class="w-full font-semibold"
                                     />
-                                    <div class="flex flex-col gap-2 w-full">
+                                    <div class="flex flex-col w-full gap-2">
                                         -
                                     </div>
                                 </div>
-                                <div class="w-full hidden md:flex"></div>
+                                <div class="hidden w-full md:flex"></div>
                             </div>
 
                             <div class="flex w-full py-4 px-7 text-start">
@@ -59,11 +59,11 @@
                                         label="Alasan Mutasi"
                                         class="w-full font-semibold"
                                     />
-                                    <div class="flex flex-col gap-2 w-full">
+                                    <div class="flex flex-col w-full gap-2">
                                         -
                                     </div>
                                 </div>
-                                <div class="w-full hidden md:flex"></div>
+                                <div class="hidden w-full md:flex"></div>
                             </div>
                         </div>
                     </template>
@@ -74,7 +74,7 @@
                             :key="index"
                         >
                             <div
-                                class="flex w-full py-4 px-7 text-start md:flex-row flex-col"
+                                class="flex flex-col w-full py-4 px-7 text-start md:flex-row"
                             >
                                 <div class="flex w-full">
                                     <LabelForm
@@ -96,7 +96,7 @@
                                 </div>
                             </div>
                             <div
-                                class="flex w-full py-4 px-7 text-start md:flex-row flex-col"
+                                class="flex flex-col w-full py-4 px-7 text-start md:flex-row"
                             >
                                 <div class="flex w-full">
                                     <LabelForm
@@ -116,7 +116,7 @@
                                 </div>
                             </div>
                             <div class="flex w-full py-4 px-7 text-start">
-                                <div class="flex md:w-1/2 w-full">
+                                <div class="flex w-full md:w-1/2">
                                     <LabelForm
                                         label="Home Base"
                                         value="John Doe"
@@ -128,7 +128,7 @@
                                 </div>
                             </div>
                             <div class="flex w-full py-4 px-7 text-start">
-                                <div class="flex md:w-1/2 w-full">
+                                <div class="flex w-full md:w-1/2">
                                     <LabelForm
                                         label="Tanggal Efektif Mutasi"
                                         value="John Doe"
@@ -138,7 +138,7 @@
                                 </div>
                             </div>
                             <div class="flex w-full py-4 px-7 text-start">
-                                <div class="flex md:w-1/2 w-full">
+                                <div class="flex w-full md:w-1/2">
                                     <LabelForm
                                         label="Alasan Mutasi"
                                         value="John Doe"
@@ -249,7 +249,7 @@
                     <template v-if="formType === 'Group'"></template>
                     <template v-else>
                         <div class="flex flex-col mx-10 my-10 gap-y-5">
-                            <div class="flex md:w-1/2 w-full">
+                            <div class="flex w-full md:w-1/2">
                                 <LabelForm
                                     label="Keluarga"
                                     value="John Doe"
@@ -263,7 +263,7 @@
                                     }}
                                 </p>
                             </div>
-                            <div class="flex md:w-1/2 w-full">
+                            <div class="flex w-full md:w-1/2">
                                 <LabelForm
                                     label="Tunj Rumah"
                                     value="John Doe"
@@ -279,7 +279,7 @@
                                     }}
                                 </p>
                             </div>
-                            <div class="flex md:w-1/2 w-full">
+                            <div class="flex w-full md:w-1/2">
                                 <LabelForm
                                     label="Transportasi Barang"
                                     value="John Doe"
@@ -299,7 +299,7 @@
 
                         <!-- info-2 -->
                         <div class="flex flex-col mx-10 my-10 gap-y-5">
-                            <div class="flex md:w-1/2 w-full">
+                            <div class="flex w-full md:w-1/2">
                                 <LabelForm
                                     label="Sisa Cuti"
                                     value="John Doe"
@@ -307,7 +307,7 @@
                                 />
                                 <p class="w-full">{{ data?.leaveBal }}</p>
                             </div>
-                            <div class="flex md:w-1/2 w-full">
+                            <div class="flex w-full md:w-1/2">
                                 <LabelForm
                                     label="Sisa Plafon Berobat"
                                     value="John Doe"
@@ -315,7 +315,7 @@
                                 />
                                 <p class="w-full">{{ data?.medBal }}</p>
                             </div>
-                            <div class="flex md:w-1/2 w-full">
+                            <div class="flex w-full md:w-1/2">
                                 <LabelForm
                                     label="Hak Karyawan Belum Terbayar"
                                     value="John Doe"
@@ -323,7 +323,7 @@
                                 />
                                 <p class="w-full">{{ data?.creditAmount }}</p>
                             </div>
-                            <div class="flex md:w-1/2 w-full">
+                            <div class="flex w-full md:w-1/2">
                                 <LabelForm
                                     label="Hutang ke Perusahaan"
                                     value="John Doe"
@@ -331,7 +331,7 @@
                                 />
                                 <p class="w-full">{{ data?.debitAmount }}</p>
                             </div>
-                            <div class="flex md:w-1/2 w-full">
+                            <div class="flex w-full md:w-1/2">
                                 <LabelForm
                                     label="Keterangan"
                                     value="John Doe"
@@ -344,14 +344,14 @@
                         <UIDivider />
                     </template>
 
-                    <div class="w-full md:hidden flex flex-col gap-2 mt-10">
+                    <div class="flex flex-col w-full gap-2 mt-10 md:hidden">
                         <Log :data="listLog" />
                         <UIDivider />
                     </div>
 
                     <!-- info-3-->
                     <div class="flex flex-col mx-10 my-10 gap-y-5">
-                        <div class="flex md:w-1/2 w-full">
+                        <div class="flex w-full md:w-1/2">
                             <LabelForm
                                 label="Lampiran"
                                 value="John Doe"
@@ -378,9 +378,8 @@
                         </UIButton>
                     </div>
                 </BasicCard>
-
-                <div class="w-full md:flex hidden">
-                    <Log :data="listLog" />
+                <div class="hidden md:block">
+                    <Log :data="listLog" class="hidden md:flex" />
                 </div>
             </div>
         </div>
