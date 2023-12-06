@@ -124,17 +124,18 @@
                                         class="flex justify-between w-full"
                                     >
                                         <div
-                                            class="w-full py-1 font-semibold border border-black"
+                                            class="w-full py-1 font-semibold border border-black bg-gray-100"
                                             v-for="i in 3"
                                         >
                                             <input
+                                                disabled
                                                 type="text"
-                                                class="max-w-[150px]"
+                                                class="max-w-[150px] bg-transparent"
                                             />
                                         </div>
                                     </div>
                                     <p class="self-start mt-5 font-semibold">
-                                        Total : 1.000.000
+                                        Total : 0
                                     </p>
                                 </div>
                                 <div
@@ -253,7 +254,7 @@
                                         </div>
                                     </div>
                                     <p class="self-start mt-5 font-semibold">
-                                        Total : 1.000.000
+                                        Total : {{ totalTunjangn }}
                                     </p>
                                 </div>
                             </div>
@@ -415,11 +416,15 @@
                     <UIButton
                         variant="form"
                         class="w-[200px]"
-                        @click="store.toggleModal()"
+                        @click="handleClickSubmit"
                     >
                         Submit
                     </UIButton>
-                    <UIButton variant="form" class="w-[200px]">
+                    <UIButton
+                        variant="form"
+                        class="w-[200px]"
+                        @click="handleClickDraft"
+                    >
                         Simpan ke Draft
                     </UIButton>
                 </div>
@@ -429,7 +434,7 @@
         <Modal
             :isModalOpen="store.isModalOpen"
             @toggleModal="store.toggleModal"
-            @submit="handleSubmit"
+            @submit="handleConditionalSubmit"
             modalTitle="Anda yakin untuk submit Form Mutasi berikut?"
         />
 
@@ -439,6 +444,14 @@
             @toggleModal="showSuccessModal = false"
             modalTitle="Form Mutasi Anda telah berhasil disubmit"
             modalType="success"
+        />
+
+        <Modal
+            v-if="showErrorModal"
+            :isModalOpen="showErrorModal"
+            @toggleModal="showErrorModal = false"
+            modalTitle="Form Mutasi Anda gagal disubmit"
+            modalType="danger"
         />
     </div>
 </template>
@@ -480,6 +493,7 @@ import { useRouter } from "vue-router";
 
 const store = useModalStore();
 const showSuccessModal = ref(false);
+const showErrorModal = ref(false);
 const headerTunjangan = ref(tunjanganLabelTitle);
 const listInfo = ref(formLabelTitle);
 const statusBaru = ref(statusBaruDefaultValues);
@@ -487,6 +501,7 @@ const statusLama = ref(statusLamaDefaultValues);
 const isDisabled = ref(true);
 const props = defineProps(["modelValue"]);
 const router = useRouter();
+const totalTunjangn = ref(0);
 
 const isLoading = ref(false);
 
@@ -542,57 +557,84 @@ const autofillForm = ref({
 
 const selectedValue = ref({});
 
+const isDraft = ref(false);
+
 const data = ref([]);
 
 const onSubmit = async () => {
-    const { data: response } = await useFetch({
-        services: createMutationsTable,
-        options: {
-            body: {
-                detail: [
-                    {
-                        nik: values.value.nik,
-                        mutd_to_company: values.value.mutd_to_company,
-                        mutd_to_position: values.value.mutd_to_position,
-                        mutd_to_division: values.value.mutd_to_division,
-                        mutd_to_costcenter: values.value.mutd_to_costcenter,
-                        mutd_to_work_location:
-                            values.value.mutd_to_work_location,
-                        mutd_to_direct_spv: values.value.mutd_to_direct_spv,
-                        mutd_to_immed_mgr: values.value.mutd_to_immed_mgr,
-                        mutd_family_move: values.value.mutd_family_move,
-                        mutd_house_allowance: values.value.mutd_house_allowance,
-                        mutd_transportation: values.value.mutd_transportation,
-                        mutd_leave_bal: values.value.mutd_leave_bal,
-                        mutd_medical_bal: values.value.mutd_medical_bal,
-                        mutd_debit_amount: values.value.mutd_debit_amount,
-                        mutd_credit_amount: values.value.mutd_credit_amount,
-                        mutd_notes: values.value.mutd_notes,
-                        allowance_now: values.value.allowance_now,
-                    },
-                ],
+    try {
+        const { data: response } = await useFetch({
+            services: createMutationsTable,
+            options: {
+                body: {
+                    detail: [
+                        {
+                            nik: values.value.nik,
+                            mutd_to_company: values.value.mutd_to_company,
+                            mutd_to_position: values.value.mutd_to_position,
+                            mutd_to_division: values.value.mutd_to_division,
+                            mutd_to_costcenter: values.value.mutd_to_costcenter,
+                            mutd_to_work_location:
+                                values.value.mutd_to_work_location,
+                            mutd_to_direct_spv: values.value.mutd_to_direct_spv,
+                            mutd_to_immed_mgr: values.value.mutd_to_immed_mgr,
+                            mutd_family_move: values.value.mutd_family_move,
+                            mutd_house_allowance:
+                                values.value.mutd_house_allowance,
+                            mutd_transportation:
+                                values.value.mutd_transportation,
+                            mutd_leave_bal: values.value.mutd_leave_bal,
+                            mutd_medical_bal: values.value.mutd_medical_bal,
+                            mutd_debit_amount: values.value.mutd_debit_amount,
+                            mutd_credit_amount: values.value.mutd_credit_amount,
+                            mutd_notes: values.value.mutd_notes,
+                            allowance_now: values.value.allowance_now,
+                        },
+                    ],
 
-                mut_type: values.value.mut_type,
-                mut_reason: values.value.mut_reason,
-                draft: values.value.draft,
+                    mut_type: values.value.mut_type,
+                    mut_reason: values.value.mut_reason,
+                    draft: values.value.draft,
+                },
             },
-        },
-    });
+        });
 
-    if (response.value.message === "Success") {
+        if (response.value.message === "Success") {
+            isLoading.value = false;
+            showSuccessModal.value = true;
+
+            setTimeout(() => {
+                router.push({ name: "mutasi" });
+            }, 1000);
+        }
+    } catch (error) {
+        showErrorModal.value = true;
         isLoading.value = false;
-        showSuccessModal.value = true;
-
-        setTimeout(() => {
-            router.push({ name: "mutasi" });
-        }, 1000);
     }
+};
+
+const handleClickSubmit = () => {
+    store.toggleModal();
+    isDraft.value = false;
+};
+
+const handleClickDraft = () => {
+    store.toggleModal();
+    isDraft.value = true;
 };
 
 const handleSubmit = () => {
     store.toggleModal();
     isLoading.value = true;
-    values.value = { ...values.value, draft: false };
+    values.value = { ...values.value, draft: isDraft.value };
+
+    onSubmit();
+};
+
+const handleDraft = () => {
+    store.toggleModal();
+    isLoading.value = true;
+    values.value = { ...values.value, draft: isDraft.value };
 
     onSubmit();
 };
@@ -696,9 +738,21 @@ watchEffect(() => {
     }
 
     if (columnsValue.value.length) {
+        totalTunjangn.value = columnsValue.value.reduce(
+            (acc, curr) => acc + Number(curr.muta_allow_amount),
+            0
+        );
         values.value.allowance_now = columnsValue.value;
     }
 });
+
+const handleConditionalSubmit = () => {
+    if (isDraft.value) {
+        handleDraft();
+    } else {
+        handleSubmit();
+    }
+};
 
 watch(
     () => statusBaru.value[0].value,

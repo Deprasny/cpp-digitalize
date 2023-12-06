@@ -30,7 +30,6 @@ const createMutationsTable = async ({ body }) => {
 
         return response;
     } catch (error) {
-        console.error("Error fetching data:", error);
         throw error;
     }
 };
