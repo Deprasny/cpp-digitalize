@@ -14,7 +14,7 @@
                     ></div>
                     <div
                         class="absolute bg-[#0A70A9] w-3 h-3 rounded-full top-[12px] right-[4px]"
-                        v-if="index !== 0"
+                        v-if="item?.date !== 'DONE'"
                     ></div>
                     <span
                         v-if="index !== data.length - 1"
@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
     data: {
         type: Array,
         default: () => [],
