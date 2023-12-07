@@ -490,6 +490,7 @@ const onApprove = async (id) => {
         showErrorModal.value = true;
     } finally {
         modalLoading.value = false;
+        store.toggleModal();
     }
 };
 const handleConditionalSubmit = () => {
