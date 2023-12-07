@@ -472,7 +472,7 @@ const onApprove = async (id) => {
                 id: id,
                 body: [
                     {
-                        statusApproval: statusApproval,
+                        statusApproval: statusApproval.value,
                     },
                 ],
             },
