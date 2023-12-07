@@ -386,7 +386,8 @@
     </template>
     <template v-else>
         <div class="flex items-center justify-center h-screen">
-            <UILoader />
+            <p v-if="!isLoading" class="text-2xl">Tidak ada data</p>
+            <UILoader v-if="isLoading" />
         </div>
     </template>
     <Modal
@@ -449,14 +450,23 @@ const data = ref({});
 const formType = routeName.currentRoute.value.query.form_type;
 
 const handleFetch = async () => {
-    const { data: response } = await useFetch({
-        services: getMutationsDetailTable,
-        options: {
-            id: id,
-        },
-    });
+    isLoading.value = true;
+    try {
+        const { data: response } = await useFetch({
+            services: getMutationsDetailTable,
+            options: {
+                id: id,
+            },
+        });
 
-    data.value = response.value;
+        data.value = response.value;
+    } catch (error) {
+        console.error(error);
+        showErrorModal.value = true;
+        errorMessages.value = "Failed to fetch data";
+    } finally {
+        isLoading.value = false;
+    }
 };
 
 onMounted(() => {

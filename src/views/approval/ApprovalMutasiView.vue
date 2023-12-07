@@ -3,7 +3,10 @@
         <Table @onCellClick="handleDetail" :columns="columns" :data="data" />
     </template>
     <template v-else>
-        <UILoader />
+        <div class="flex items-center justify-center my-20">
+            <p v-if="!isLoading" class="text-2xl">Tidak ada data</p>
+            <UILoader v-if="isLoading" />
+        </div>
     </template>
 </template>
 
@@ -17,6 +20,8 @@ import { getMutationApprovalList } from "../../services/approval.services";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+
+const isLoading = ref(false);
 
 const data = ref([]);
 
@@ -60,15 +65,22 @@ const columns = [
 ];
 
 onBeforeMount(async () => {
-    const { data: response } = await useFetch({
-        services: getMutationApprovalList,
-        options: {
-            page: 1,
-            limit: 10,
-        },
-    });
+    isLoading.value = true;
+    try {
+        const { data: response } = await useFetch({
+            services: getMutationApprovalList,
+            options: {
+                page: 1,
+                limit: 10,
+            },
+        });
 
-    data.value = response?.value?.data;
+        data.value = response?.value?.data;
+    } catch (error) {
+        console.error(error);
+    } finally {
+        isLoading.value = false;
+    }
 });
 
 const handleDetail = (cell) => {
