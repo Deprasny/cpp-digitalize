@@ -470,11 +470,9 @@ const onApprove = async (id) => {
             services: putMutationsTable,
             options: {
                 id: id,
-                body: [
-                    {
-                        statusApproval: statusApproval.value,
-                    },
-                ],
+                body: {
+                    statusApproval: statusApproval.value,
+                },
             },
         });
         if (response.value.message === "Success") {
