@@ -162,7 +162,7 @@
                                 <div
                                     v-for="list in listInfo"
                                     :key="list"
-                                    class="w-full py-[17px] font-semibold"
+                                    class="w-full py-[17px] font-semibold h-[140px] text-center"
                                 >
                                     <LabelForm :label="list" />
                                 </div>
@@ -178,7 +178,7 @@
                                 <div
                                     v-for="status in statusLama"
                                     :key="status"
-                                    class="w-full py-4 border border-l-0 border-black last:border-b-[2px]"
+                                    class="w-full py-4 border border-l-0 border-black last:border-b-[2px] h-[140px]"
                                 >
                                     <div
                                         v-if="Array.isArray(status)"
@@ -214,7 +214,7 @@
                                 <div
                                     v-for="status in statusBaru"
                                     :key="status"
-                                    class="w-full py-4 border border-black border-r-2 last:border-b-[2px]"
+                                    class="w-full py-4 border border-black border-r-2 last:border-b-[2px] h-[140px]"
                                 >
                                     <div
                                         v-if="Array.isArray(status)"

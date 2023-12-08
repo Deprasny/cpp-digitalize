@@ -494,7 +494,7 @@ const removeColumn = () => {
     columnsValue.value.pop();
 };
 
-const columnsData = ref(columnTunjanganDefaultValues);
+const columnsData = ref();
 
 const columnsValue = ref([columnTunjanganValues]);
 
