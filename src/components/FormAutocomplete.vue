@@ -20,6 +20,7 @@
                 :modelValue="modelValue"
                 @update:modelValue="updateModelValue"
                 :onSearch="onSearch"
+                :reduce="reduceOption"
             >
             </v-select>
         </div>
@@ -33,18 +34,25 @@ import IconMagnifier from "./icons/IconMagnifying.vue";
 import { defineProps } from "vue";
 import UILoader from "./ui/UILoader.vue";
 
-const { id, data, modelValue, isLoading, isSearchIcon, onSearch } = defineProps(
-    [
-        "id",
-        "data",
-        "modelValue",
-        "label",
-        "placeholder",
-        "isSearchIcon",
-        "isLoading",
-        "onSearch",
-    ]
-);
+const {
+    id,
+    data,
+    modelValue,
+    isLoading,
+    isSearchIcon,
+    onSearch,
+    reduceOption,
+} = defineProps([
+    "id",
+    "data",
+    "modelValue",
+    "label",
+    "placeholder",
+    "isSearchIcon",
+    "isLoading",
+    "onSearch",
+    "reduceOption",
+]);
 
 const emit = defineEmits(["update:modelValue"]);
 

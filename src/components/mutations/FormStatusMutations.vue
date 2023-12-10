@@ -1,7 +1,7 @@
 <template>
     <div class="overflow-x-auto h-full w-full">
-        <div class="flex my-10 w-[1000px]">
-            <div class="flex flex-col items-center text-center flex-1">
+        <div class="flex my-10 w-[900px]">
+            <div class="flex flex-col items-center text-center flex-1 w-48">
                 <div class="w-full h-10"></div>
                 <div
                     v-for="list in listInfo"
@@ -11,8 +11,10 @@
                     <LabelForm :label="list" />
                 </div>
             </div>
-            <div class="flex flex-col items-center text-center flex-1">
-                <div class="w-full py-1 text-lg font-bold bg-accent-2">
+            <div
+                class="flex flex-col items-center text-center flex-1 w-[450px]"
+            >
+                <div class="w-[450px] py-1 text-lg font-bold bg-accent-2">
                     STATUS LAMA
                 </div>
                 <div
@@ -46,16 +48,16 @@
                             <input
                                 disabled
                                 type="text"
-                                class="max-w-[150px] bg-transparent"
+                                class="bg-transparent w-full"
                             />
                         </div>
                     </div>
                     <p class="self-start mt-5 font-semibold">Total : 0</p>
                 </template>
             </div>
-            <div class="flex flex-col flex-1 text-center">
+            <div class="flex flex-col flex-1 text-center w-[450px]">
                 <div
-                    class="w-full py-1 text-lg font-bold text-white bg-accent-1"
+                    class="w-[450px] py-1 text-lg font-bold text-white bg-accent-1"
                 >
                     STATUS BARU
                 </div>
@@ -65,6 +67,8 @@
                         :data="options.company"
                         id="company-status"
                         :isLoading="options.isLoading"
+                        v-model="values.mutd_to_company"
+                        :reduceOption="onReduceOptions"
                     />
                 </FormStatusBaruItem>
                 <FormStatusBaruItem>
@@ -72,6 +76,8 @@
                         :data="options.position"
                         id="position-status"
                         :isLoading="options.isLoading"
+                        v-model="values.mutd_to_position"
+                        :reduceOption="onReduceOptions"
                     />
                 </FormStatusBaruItem>
                 <FormStatusBaruItem>
@@ -84,6 +90,8 @@
                         :data="options.bussunit"
                         id="bussunit-status"
                         :isLoading="options.isLoading"
+                        v-model="values.mutd_to_division"
+                        :reduceOption="onReduceOptions"
                     />
                 </FormStatusBaruItem>
                 <FormStatusBaruItem>
@@ -91,6 +99,8 @@
                         :data="options.costCenter"
                         id="costcenter-status"
                         :isLoading="options.isLoading"
+                        v-model="values.mutd_to_costcenter"
+                        :reduceOption="onReduceOptions"
                     />
                 </FormStatusBaruItem>
                 <FormStatusBaruItem>
@@ -98,14 +108,28 @@
                         :data="options.workLocation"
                         id="worklocation-status"
                         :isLoading="options.isLoading"
+                        v-model="values.mutd_to_work_location"
+                        :reduceOption="onReduceOptions"
                     />
                 </FormStatusBaruItem>
-                <!-- <FormStatusBaruItem>
-                    <FormAutocomplete :data="status?.options" />
+                <FormStatusBaruItem>
+                    <FormAutocomplete
+                        :data="options.directSPV"
+                        id="directspv-status"
+                        :isLoading="options.isLoading"
+                        v-model="values.mutd_to_direct_spv"
+                        :reduceOption="onReduceOptions"
+                    />
                 </FormStatusBaruItem>
                 <FormStatusBaruItem>
-                    <FormAutocomplete :data="status?.options" />
-                </FormStatusBaruItem> -->
+                    <FormAutocomplete
+                        :data="options.immedManager"
+                        id="immedmanager-status"
+                        :isLoading="options.isLoading"
+                        v-model="values.mutd_to_immed_mgr"
+                        :reduceOption="onReduceOptions"
+                    />
+                </FormStatusBaruItem>
 
                 <template v-if="!isGroup">
                     <div class="flex justify-between w-full mt-10 bg-accent-1">
@@ -129,7 +153,7 @@
                         >
                             <input
                                 :type="i.type"
-                                class="max-w-[150px]"
+                                class="w-full"
                                 :value="columnsValue[index][i.property]"
                                 @input="
                                     columnsValue[index][i.property] =
@@ -176,7 +200,12 @@ import IconPlus from "../../components/icons/IconPlus.vue";
 import FormAutocomplete from "../FormAutocomplete.vue";
 import FormStatusBaruItem from "./FormStatusBaruItem.vue";
 import useFormAutoFill from "../../hooks/useFormAutoFill";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
+import {
+    getDirectSpv,
+    getImmediateManager,
+} from "../../services/form.services";
+import useFetch from "../../hooks/useFetch";
 
 const props = defineProps([
     "listInfo",
@@ -199,6 +228,18 @@ const options = ref({
     bussunit: [],
     costCenter: [],
     workLocation: [],
+    directSPV: [],
+    immedManager: [],
+});
+
+const values = ref({
+    mutd_to_company: "",
+    mutd_to_position: "",
+    mutd_to_division: "",
+    mutd_to_costcenter: "",
+    mutd_to_work_location: "",
+    mutd_to_direct_spv: "",
+    mutd_to_immed_mgr: "",
 });
 
 const fetchAutoFillForms = async () => {
@@ -222,6 +263,53 @@ const fetchAutoFillForms = async () => {
     } finally {
         options.value.isLoading = false;
     }
+};
+
+const fetchAutoFillFormParams = async () => {
+    const { data: directSpvResponse } = await useFetch({
+        services: getDirectSpv,
+        options: {
+            params: {
+                bu: values.value.mutd_to_division,
+            },
+        },
+    });
+
+    const { data: immdieateManagerResponse } = await useFetch({
+        services: getImmediateManager,
+        options: {
+            params: {
+                bu: values.value.mutd_to_division,
+            },
+        },
+    });
+
+    options.value.directSPV = directSpvResponse?.value.map((item) => {
+        return {
+            label: `${item?.nik} - ${item?.nama}`,
+            value: item?.nik,
+        };
+    });
+
+    options.value.immedManager = immdieateManagerResponse?.value.map((item) => {
+        return {
+            label: `${item?.nik} - ${item?.nama}`,
+            value: item?.nik,
+        };
+    });
+};
+
+watch(
+    () => values.value.mutd_to_division,
+    async (newValue) => {
+        if (newValue) {
+            await fetchAutoFillFormParams();
+        }
+    }
+);
+
+const onReduceOptions = (option) => {
+    return option.value;
 };
 
 onMounted(() => {

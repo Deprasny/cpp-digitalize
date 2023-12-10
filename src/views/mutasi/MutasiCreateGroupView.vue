@@ -2,9 +2,9 @@
     <div class="mt-28">
         <BasicForm>
             <BasicCard title="FORM MUTASI">
-                <div class="px-10 py-5 w-full">
+                <div class="px-10 py-5 w-full h-full">
                     <!-- form basic -->
-                    <div class="w-full">
+                    <div class="w-full h-full">
                         <div class="flex w-full gap-x-2 md:flex-row flex-col">
                             <FormNIKAutocomplete v-model="selectedValue" />
 
