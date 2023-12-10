@@ -14,7 +14,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="flex justify-between pr-3">
+    <div class="flex justify-between px-2 flex-grow-0 w-full">
         <div>{{ props.label }}</div>
         <div>:</div>
     </div>

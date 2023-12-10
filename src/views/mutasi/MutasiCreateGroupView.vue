@@ -6,18 +6,7 @@
                     <!-- form basic -->
                     <div class="w-full">
                         <div class="flex w-full gap-x-2 md:flex-row flex-col">
-                            <FormAutocomplete>
-                                <v-select
-                                    :options="data"
-                                    class="style-chooser"
-                                    id="nik"
-                                    placeholder="Cari nama karyawan / NIK"
-                                    :onSearch="debounce(fetchData, 500)"
-                                    v-model="selectedValue"
-                                    @keydown.enter.prevent="addName"
-                                >
-                                </v-select>
-                            </FormAutocomplete>
+                            <FormNIKAutocomplete v-model="selectedValue" />
 
                             <UIButton
                                 variant="form"
@@ -167,6 +156,7 @@ import {
 import FormAutocomplete from "../../components/FormAutocomplete.vue";
 import { createMutationsTable } from "../../services/mutation.services";
 import FormStatusMutations from "../../components/mutations/FormStatusMutations.vue";
+import FormNIKAutocomplete from "../../components/FormNIKAutocomplete.vue";
 
 const store = useModalStore();
 const nama = ref("");
@@ -263,25 +253,6 @@ const handleDraft = () => {
     onSubmit();
 };
 
-const fetchData = async (searchValue) => {
-    const { data: response } = await useFetch({
-        services: getEmployeeByUser,
-        options: {
-            page: 1,
-            limit: 10,
-            cari: searchValue,
-        },
-    });
-
-    data.value = response?.value.map((item) => {
-        return {
-            label: `${item?.nik} - ${item?.nama}`,
-            value: item?.nik,
-            details: item,
-        };
-    });
-};
-
 const fetchAutoFillForms = async () => {
     const {
         businessUnitValues,
@@ -335,7 +306,6 @@ const fetchAutoFillFormParams = async () => {
 };
 
 onMounted(() => {
-    fetchData();
     fetchAutoFillForms();
 });
 

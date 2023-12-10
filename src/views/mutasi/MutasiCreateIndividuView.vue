@@ -5,17 +5,7 @@
                 <div class="w-full px-10 py-5">
                     <!-- form basic -->
                     <div class="w-full">
-                        <FormAutocomplete>
-                            <v-select
-                                :options="data"
-                                class="style-chooser"
-                                id="nik"
-                                placeholder="Cari nama karyawan / NIK"
-                                :onSearch="debounce(fetchData, 500)"
-                                v-model="selectedValue"
-                            >
-                            </v-select>
-                        </FormAutocomplete>
+                        <FormNIKAutocomplete v-model="selectedValue" />
 
                         <div class="flex flex-col gap-x-7 md:flex-row">
                             <FormInputBasic
@@ -265,6 +255,7 @@ import {
     keluargaOptions,
     tunjanganOptions,
 } from "../../data/mutations.data";
+import FormNIKAutocomplete from "../../components/FormNIKAutocomplete.vue";
 
 const store = useModalStore();
 const showSuccessModal = ref(false);
@@ -414,25 +405,6 @@ const handleDraft = () => {
     onSubmit();
 };
 
-const fetchData = async (searchValue) => {
-    const { data: response } = await useFetch({
-        services: getEmployeeByUser,
-        options: {
-            page: 1,
-            limit: 10,
-            cari: searchValue,
-        },
-    });
-
-    data.value = response?.value.map((item) => {
-        return {
-            label: `${item?.nik} - ${item?.nama}`,
-            value: item?.nik,
-            details: item,
-        };
-    });
-};
-
 const fetchAutoFillForms = async () => {
     const {
         businessUnitValues,
@@ -486,7 +458,6 @@ const fetchAutoFillFormParams = async () => {
 };
 
 onMounted(() => {
-    fetchData();
     fetchAutoFillForms();
 });
 

@@ -1,30 +1,56 @@
 <template>
     <div class="relative w-full mb-4">
         <label :for="id" class="text-base font-semibold leading-5 text-black">
-            Nama & NIK</label
+            {{ label }}</label
         >
         <div class="relative flex items-center mt-3 w-full border p-2">
             <div
-                class="h-full pr-2 text-lg cursor-pointer m-auto top-0 bottom-0 flex items-center justify-center pl-2"
+                class="h-full pr-2 text-lg cursor-pointer m-auto top-0 bottom-0 flex gap-2 items-center justify-center pl-2"
             >
-                <component :is="IconMagnifier" />
+                <component :is="IconMagnifier" v-if="isSearchIcon" />
+
+                <UILoader class="w-6 h-6" v-if="isLoading" />
             </div>
 
-            <slot> </slot>
+            <v-select
+                :options="data"
+                class="style-chooser"
+                :id="id"
+                :placeholder="placeholder"
+                :modelValue="modelValue"
+                @update:modelValue="updateModelValue"
+                :onSearch="onSearch"
+            >
+            </v-select>
         </div>
     </div>
-    {{ selectedItem }}
 </template>
 
 <script setup>
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import IconMagnifier from "./icons/IconMagnifying.vue";
-import { onMounted, ref, toRefs, watch, watchEffect, defineProps } from "vue";
-import useFetch from "../hooks/useFetch";
-import { getEmployeeByUser } from "../services/form.services";
-import debounce from "../utils/debounce";
-import { computed } from "@vue/reactivity";
+import { defineProps } from "vue";
+import UILoader from "./ui/UILoader.vue";
+
+const { id, data, modelValue, isLoading, isSearchIcon, onSearch } = defineProps(
+    [
+        "id",
+        "data",
+        "modelValue",
+        "label",
+        "placeholder",
+        "isSearchIcon",
+        "isLoading",
+        "onSearch",
+    ]
+);
+
+const emit = defineEmits(["update:modelValue"]);
+
+function updateModelValue(newValue) {
+    emit("update:modelValue", newValue);
+}
 </script>
 
 <style>
