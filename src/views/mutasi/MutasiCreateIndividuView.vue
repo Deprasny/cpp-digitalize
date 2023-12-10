@@ -67,171 +67,18 @@
                     </div>
 
                     <!-- form status -->
-                    <div class="overflow-x-auto">
-                        <div
-                            class="flex items-baseline justify-between my-10 w-[900px]"
-                        >
-                            <div
-                                class="flex flex-col items-start w-1/5 gap-[0.5px]"
-                            >
-                                <div class=""></div>
-                                <div
-                                    v-for="list in listInfo"
-                                    :key="list"
-                                    class="w-full py-[17px] font-semibold"
-                                >
-                                    <LabelForm :label="list" />
-                                </div>
-                            </div>
-                            <div
-                                class="flex flex-col items-center flex-1 text-center"
-                            >
-                                <div
-                                    class="w-full py-1 text-lg font-bold bg-accent-2"
-                                >
-                                    STATUS LAMA
-                                </div>
-                                <div
-                                    v-for="status in statusLama"
-                                    :key="status"
-                                    class="w-full h-16 py-4 border border-l-0 border-black"
-                                    :class="status === '-' ? 'bg-gray-100' : ''"
-                                >
-                                    {{ status }}
-                                </div>
-                                <div
-                                    class="flex justify-between w-full mt-10 bg-accent-2"
-                                >
-                                    <div
-                                        v-for="header in headerTunjangan"
-                                        :key="header"
-                                        class="w-full py-1 font-semibold border-black border-x"
-                                    >
-                                        {{ header }}
-                                    </div>
-                                </div>
-                                <div
-                                    v-for="(_, index) in columns"
-                                    :key="index"
-                                    class="flex justify-between w-full"
-                                >
-                                    <div
-                                        class="w-full py-1 font-semibold bg-gray-100 border border-black"
-                                        v-for="i in 3"
-                                    >
-                                        <input
-                                            disabled
-                                            type="text"
-                                            class="max-w-[150px] bg-transparent"
-                                        />
-                                    </div>
-                                </div>
-                                <p class="self-start mt-5 font-semibold">
-                                    Total : 0
-                                </p>
-                            </div>
-                            <div
-                                class="flex flex-col items-center flex-1 text-center"
-                            >
-                                <div
-                                    class="w-full py-1 text-lg font-bold text-white bg-accent-1"
-                                >
-                                    STATUS BARU
-                                </div>
-                                <div
-                                    v-for="(status, index) in statusBaru"
-                                    :key="status"
-                                    class="w-full py-4 border border-l-0 border-black last:border-b-[2px] h-16"
-                                    :class="{ 'bg-gray-100': isDisabled }"
-                                >
-                                    <template
-                                        v-if="status?.type === `dropdown`"
-                                    >
-                                        <Dropdown
-                                            :dropdownOptions="status?.options"
-                                            :selectedOptionText="
-                                                status?.value.label
-                                            "
-                                            @update:selected-option-text="
-                                                status.value = $event
-                                            "
-                                            :disabled="isDisabled"
-                                        />
-                                    </template>
-                                    <template v-else>
-                                        {{ statusLama[index] }}
-                                    </template>
-                                </div>
-
-                                <div
-                                    class="flex justify-between w-full mt-10 bg-accent-1"
-                                >
-                                    <div
-                                        v-for="header in headerTunjangan"
-                                        :key="header"
-                                        class="w-full py-1 font-semibold text-white border-black border-x"
-                                    >
-                                        {{ header }}
-                                    </div>
-                                </div>
-
-                                <div
-                                    v-for="(item, index) in columns"
-                                    :key="index"
-                                    class="flex justify-between w-full"
-                                >
-                                    <div
-                                        class="w-full py-1 font-semibold border border-black"
-                                        v-for="i in columnsData"
-                                    >
-                                        <input
-                                            :type="i.type"
-                                            class="max-w-[150px]"
-                                            :value="
-                                                columnsValue[index][i.property]
-                                            "
-                                            @input="
-                                                columnsValue[index][
-                                                    i.property
-                                                ] = $event.target.value
-                                            "
-                                        />
-                                    </div>
-                                    <div class="relative">
-                                        <div
-                                            v-if="index === columns - 1"
-                                            class="absolute top-2 -right-7"
-                                        >
-                                            <button
-                                                v-if="columns < 7"
-                                                @click="addColumn"
-                                            >
-                                                <div
-                                                    class="p-1 bg-red-600 rounded-full"
-                                                >
-                                                    <component
-                                                        :is="IconPlus"
-                                                        class="text-xs text-white"
-                                                    />
-                                                </div>
-                                            </button>
-                                        </div>
-                                        <div
-                                            v-if="index === columns - 2"
-                                            class="absolute top-1 -right-5"
-                                        >
-                                            <button @click="removeColumn">
-                                                -
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="self-start mt-5 font-semibold">
-                                    Total : {{ totalTunjangn }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <FormStatusMutations
+                        :listInfo="listInfo"
+                        :statusLama="statusLama"
+                        :statusBaru="statusBaru"
+                        :headerTunjangan="headerTunjangan"
+                        :columns="columns"
+                        :columnsData="columnsData"
+                        :columnsValue="columnsValue"
+                        :totalTunjangan="totalTunjangan"
+                        :addColumn="addColumn"
+                        :removeColumn="removeColumn"
+                    />
 
                     <UIDivider />
 
@@ -239,87 +86,35 @@
                     <div
                         class="flex flex-col items-start justify-between w-full gap-6 my-10 md:flex-row md:gap-0"
                     >
-                        <div class="flex flex-col items-start">
-                            <p class="font-semibold">Keluarga</p>
-                            <p class="mb-3 text-xs italic">
-                                (Pilih salah satu)
-                            </p>
-                            <div class="flex gap-x-2">
-                                <input
-                                    type="radio"
-                                    name="keluarga"
-                                    value="YES"
-                                    v-model="values.mutd_family_move"
-                                />
-                                <p>Ikut pindah kelokasi kerja baru</p>
-                            </div>
-                            <div class="flex gap-x-2">
-                                <input
-                                    type="radio"
-                                    name="keluarga"
-                                    value="NO"
-                                    v-model="values.mutd_family_move"
-                                />
-                                <p>Tidak Ikut pindah kelokasi kerja baru</p>
-                            </div>
-                        </div>
-                        <div class="flex flex-col items-start">
-                            <p class="font-semibold">Tunj. Perumahan</p>
-                            <p class="mb-3 text-xs italic">
-                                (Pilih salah satu)
-                            </p>
-                            <div class="flex gap-x-2">
-                                <input
-                                    type="radio"
-                                    name="tunjangan"
-                                    value="Monthly"
-                                    v-model="values.mutd_house_allowance"
-                                />
-                                <p>Diambil Bulanan</p>
-                            </div>
-                            <div class="flex gap-x-2">
-                                <input
-                                    type="radio"
-                                    name="tunjangan"
-                                    value="Yearly"
-                                    v-model="values.mutd_house_allowance"
-                                />
-                                <p>Diambil per 1 Tahun</p>
-                            </div>
-                            <div class="flex gap-x-2">
-                                <input
-                                    type="radio"
-                                    name="tunjangan"
-                                    value="2 Years"
-                                    v-model="values.mutd_house_allowance"
-                                />
-                                <p>Diambil per 2 Tahun</p>
-                            </div>
-                        </div>
-                        <div class="flex flex-col items-start">
-                            <p class="font-semibold">Transportasi Barang</p>
-                            <p class="mb-3 text-xs italic">
-                                (Pilih salah satu)
-                            </p>
-                            <div class="flex gap-x-2">
-                                <input
-                                    type="radio"
-                                    name="barang"
-                                    value="Tunai"
-                                    v-model="values.mutd_transportation"
-                                />
-                                <p>Ambil Tunai</p>
-                            </div>
-                            <div class="flex gap-x-2">
-                                <input
-                                    type="radio"
-                                    name="barang"
-                                    value="Perusahaan"
-                                    v-model="values.mutd_transportation"
-                                />
-                                <p>Difasilitasi Perusahaan</p>
-                            </div>
-                        </div>
+                        <FormRadio
+                            label="Keluarga"
+                            name="keluarga"
+                            :options="keluargaOptions"
+                            :modelValue="values.mutd_family_move"
+                            @update:modelValue="
+                                (value) => (values.mutd_family_move = value)
+                            "
+                        />
+
+                        <FormRadio
+                            label="Tunj. Perumahan"
+                            name="tunjangan"
+                            :options="tunjanganOptions"
+                            :modelValue="values.mutd_house_allowance"
+                            @update:modelValue="
+                                (value) => (values.mutd_house_allowance = value)
+                            "
+                        />
+
+                        <FormRadio
+                            label="Transportasi Barang"
+                            name="barang"
+                            :options="barangOptions"
+                            :modelValue="values.mutd_transportation"
+                            @update:modelValue="
+                                (value) => (values.mutd_transportation = value)
+                            "
+                        />
                     </div>
 
                     <UIDivider />
@@ -434,13 +229,13 @@ import BasicCard from "../../components/BasicCard.vue";
 import BasicForm from "../../components/BasicForm.vue";
 import FormInputBasic from "../../components/FormInputBasic.vue";
 import UILoader from "../../components/ui/UILoader.vue";
-import IconPlus from "../../components/icons/IconPlus.vue";
+
 import UIDivider from "../../components/ui/UIDivider.vue";
 import UIButton from "../../components/ui/UIButton.vue";
 import LabelForm from "../../components/LabelForm.vue";
 import Modal from "../../components/Modal.vue";
 import { useModalStore } from "../../stores/index.js";
-import Dropdown from "../../components/Dropdown.vue";
+
 import FormAutocomplete from "../../components/FormAutocomplete.vue";
 import vSelect from "vue-select";
 import useFetch from "../../hooks/useFetch";
@@ -463,6 +258,14 @@ import {
     columnTunjanganValues,
 } from "../../data/mutations.data";
 import { useRouter } from "vue-router";
+import FormStatusMutations from "../../components/mutations/FormStatusMutations.vue";
+import FormRadio from "../../components/FormRadio.vue";
+import {
+    barangOptions,
+    keluargaOptions,
+    tunjanganOptions,
+} from "../../data/mutations.data";
+
 const store = useModalStore();
 const showSuccessModal = ref(false);
 const showErrorModal = ref(false);
@@ -473,7 +276,7 @@ const statusLama = ref(statusLamaDefaultValues);
 const isDisabled = ref(true);
 const props = defineProps(["modelValue"]);
 const router = useRouter();
-const totalTunjangn = ref(0);
+const totalTunjangan = ref(0);
 
 const isLoading = ref(false);
 
@@ -494,7 +297,7 @@ const removeColumn = () => {
     columnsValue.value.pop();
 };
 
-const columnsData = ref();
+const columnsData = ref(columnTunjanganDefaultValues);
 
 const columnsValue = ref([columnTunjanganValues]);
 
@@ -716,7 +519,7 @@ watchEffect(() => {
     }
 
     if (columnsValue.value.length) {
-        totalTunjangn.value = columnsValue.value.reduce(
+        totalTunjangan.value = columnsValue.value.reduce(
             (acc, curr) => acc + Number(curr.muta_allow_amount),
             0
         );
@@ -731,8 +534,6 @@ const handleConditionalSubmit = () => {
         handleSubmit();
     }
 };
-
-console.log(statusBaru.value);
 
 watch(
     () => statusBaru.value[0].value,

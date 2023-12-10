@@ -485,6 +485,7 @@ const onApprove = async (id) => {
                 },
             },
         });
+
         if (response.value.message === "Success") {
             store.toggleModal();
             isLoading.value = false;

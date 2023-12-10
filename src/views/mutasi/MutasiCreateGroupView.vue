@@ -57,66 +57,13 @@
                     </div>
 
                     <!-- form status -->
-                    <div class="overflow-x-auto">
-                        <div
-                            class="flex items-baseline justify-between my-10 w-[900px]"
-                        >
-                            <div class="flex flex-col items-start w-1/5">
-                                <div class="py-1"></div>
-                                <div
-                                    v-for="list in listInfo"
-                                    :key="list"
-                                    class="w-full py-[17px] font-semibold"
-                                >
-                                    <LabelForm :label="list" />
-                                </div>
-                            </div>
-                            <div
-                                class="flex flex-col items-center flex-1 text-center"
-                            >
-                                <div
-                                    class="w-full py-1 text-lg font-bold text-black bg-accent-2"
-                                >
-                                    STATUS LAMA
-                                </div>
-                                <div
-                                    v-for="status in statusLama"
-                                    :key="status"
-                                    class="w-full py-4 border border-l-0 border-black last:border-b-[2px] h-[60px]"
-                                >
-                                    {{ status }}
-                                </div>
-                            </div>
-                            <div
-                                class="flex flex-col items-center flex-1 text-center"
-                            >
-                                <div
-                                    class="w-full py-1 text-lg font-bold text-white bg-accent-1"
-                                >
-                                    STATUS BARU
-                                </div>
-                                <div
-                                    v-for="(status, index) in statusBaru"
-                                    :key="status"
-                                    class="w-full py-4 border border-black border-r-2 last:border-b-[2px] h-[60px]"
-                                >
-                                    <template v-if="status.type === 'dropdown'">
-                                        <Dropdown
-                                            :dropdownOptions="status?.options"
-                                            :selectedOptionText="
-                                                status?.value.label
-                                            "
-                                            @update:selected-option-text="
-                                                status.value = $event
-                                            "
-                                    /></template>
-                                    <template v-else>{{
-                                        statusLama[index]
-                                    }}</template>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <FormStatusMutations
+                        :listInfo="listInfo"
+                        :statusLama="statusLama"
+                        :statusBaru="statusBaru"
+                        :headerTunjangan="headerTunjangan"
+                        isGroup="true"
+                    />
 
                     <UIDivider />
 
@@ -219,6 +166,7 @@ import {
 } from "../../services/form.services";
 import FormAutocomplete from "../../components/FormAutocomplete.vue";
 import { createMutationsTable } from "../../services/mutation.services";
+import FormStatusMutations from "../../components/mutations/FormStatusMutations.vue";
 
 const store = useModalStore();
 const nama = ref("");
