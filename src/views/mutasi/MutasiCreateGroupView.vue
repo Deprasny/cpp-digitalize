@@ -47,10 +47,8 @@
 
                     <!-- form status -->
                     <FormStatusMutations
-                        :listInfo="listInfo"
                         :statusLama="statusLama"
-                        :statusBaru="statusBaru"
-                        :headerTunjangan="headerTunjangan"
+                        :values="formStatusValues"
                         isGroup="true"
                     />
 
@@ -165,21 +163,13 @@ const showErrorModal = ref(false);
 const isDisabled = ref(true);
 const router = useRouter();
 const isLoading = ref(false);
-const listInfo = ref(formLabelTitle);
 const statusLama = ref(statusLamaDefaultValues);
-const statusBaru = ref(statusBaruDefaultValues);
+const formStatusValues = ref({});
 
 const values = ref({
     detail: [
         {
             nik: "",
-            mutd_to_company: "",
-            mutd_to_position: "",
-            mutd_to_division: "",
-            mutd_to_costcenter: "",
-            mutd_to_work_location: "",
-            mutd_to_direct_spv: "",
-            mutd_to_immed_mgr: "",
             mutd_family_move: "",
             mutd_house_allowance: "",
             mutd_transportation: "",
@@ -202,7 +192,6 @@ const selectedValue = ref({});
 const isDraft = ref(false);
 
 const showSuccessModal = ref(false);
-const data = ref([]);
 
 const onSubmit = async () => {
     try {
@@ -253,62 +242,6 @@ const handleDraft = () => {
     onSubmit();
 };
 
-const fetchAutoFillForms = async () => {
-    const {
-        businessUnitValues,
-        companyValues,
-        costCenterValues,
-        positionValues,
-        workLocationValues,
-    } = await useFormAutoFill();
-
-    statusBaru.value[0].options = companyValues;
-    statusBaru.value[1].options = positionValues;
-    statusBaru.value[3].options = businessUnitValues;
-    statusBaru.value[4].options = costCenterValues;
-    statusBaru.value[5].options = workLocationValues;
-};
-
-const fetchAutoFillFormParams = async () => {
-    const { data: directSpvResponse } = await useFetch({
-        services: getDirectSpv,
-        options: {
-            params: {
-                bu: statusBaru.value[3].value?.value,
-            },
-        },
-    });
-
-    const { data: immdieateManagerResponse } = await useFetch({
-        services: getImmediateManager,
-        options: {
-            params: {
-                bu: statusBaru.value[3].value?.value,
-            },
-        },
-    });
-
-    statusBaru.value[6].options = directSpvResponse?.value.map((item) => {
-        return {
-            label: `${item?.nik} - ${item?.nama}`,
-            value: item?.nik,
-        };
-    });
-
-    statusBaru.value[7].options = immdieateManagerResponse?.value.map(
-        (item) => {
-            return {
-                label: `${item?.nik} - ${item?.nama}`,
-                value: item?.nik,
-            };
-        }
-    );
-};
-
-onMounted(() => {
-    fetchAutoFillForms();
-});
-
 watchEffect(() => {
     if (selectedValue.value?.details) {
         statusLama.value = [
@@ -325,13 +258,6 @@ watchEffect(() => {
         const transformArrayValues = enteredNames.value.map((item) => {
             return {
                 nik: item?.details?.nik,
-                mutd_to_company: statusBaru.value[0].value?.value,
-                mutd_to_position: statusBaru.value[1].value?.value,
-                mutd_to_division: statusBaru.value[3].value?.value,
-                mutd_to_costcenter: statusBaru.value[4].value?.value,
-                mutd_to_work_location: statusBaru.value[5].value?.value,
-                mutd_to_direct_spv: statusBaru.value[6].value?.value,
-                mutd_to_immed_mgr: statusBaru.value[7].value?.value,
                 mutd_family_move: "YES",
                 mutd_house_allowance: "Monthly",
                 mutd_transportation: "Tunai",
@@ -341,6 +267,7 @@ watchEffect(() => {
                 mutd_credit_amount: "0",
                 mutd_notes: "-",
                 allowance_now: [],
+                ...formStatusValues.value.value,
             };
         });
 
@@ -361,15 +288,6 @@ const handleConditionalSubmit = () => {
         handleSubmit();
     }
 };
-
-watch(
-    () => statusBaru.value[3].value,
-    (newValue) => {
-        if (newValue) {
-            fetchAutoFillFormParams();
-        }
-    }
-);
 
 const addName = () => {
     enteredNames.value.push(selectedValue.value);
