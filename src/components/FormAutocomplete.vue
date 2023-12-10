@@ -3,7 +3,13 @@
         <label :for="id" class="text-base font-semibold leading-5 text-black">
             {{ label }}</label
         >
-        <div class="relative flex items-center mt-3 w-full border p-2">
+        <div
+            class="relative flex items-center mt-3 w-full border p-2"
+            :class="{
+                border: !noBorder,
+                'border-transparent': noBorder,
+            }"
+        >
             <div
                 class="h-full pr-2 text-lg cursor-pointer m-auto top-0 bottom-0 flex gap-2 items-center justify-center pl-2"
             >
@@ -21,6 +27,7 @@
                 @update:modelValue="updateModelValue"
                 :onSearch="onSearch"
                 :reduce="reduceOption"
+                :disabled="isDisabled"
             >
             </v-select>
         </div>
@@ -52,6 +59,8 @@ const {
     "isLoading",
     "onSearch",
     "reduceOption",
+    "noBorder",
+    "isDisabled",
 ]);
 
 const emit = defineEmits(["update:modelValue"]);
@@ -66,6 +75,14 @@ function updateModelValue(newValue) {
 .style-chooser .vs__dropdown-toggle,
 .style-chooser .vs__dropdown-menu {
     border: none;
+}
+
+.style-chooser .vs__dropdown-toggle {
+    border-radius: 0;
+
+    height: 40px;
+    padding: 0 10px;
+    width: 100%;
 }
 
 .style-chooser .vs__search::placeholder {

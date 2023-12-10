@@ -64,6 +64,7 @@
 
                 <FormStatusBaruItem>
                     <FormAutocomplete
+                        noBorder="true"
                         :data="options.company"
                         id="company-status"
                         :isLoading="options.isLoading"
@@ -73,6 +74,7 @@
                 </FormStatusBaruItem>
                 <FormStatusBaruItem>
                     <FormAutocomplete
+                        noBorder="true"
                         :data="options.position"
                         id="position-status"
                         :isLoading="options.isLoading"
@@ -87,6 +89,7 @@
                 </FormStatusBaruItem>
                 <FormStatusBaruItem>
                     <FormAutocomplete
+                        noBorder="true"
                         :data="options.bussunit"
                         id="bussunit-status"
                         :isLoading="options.isLoading"
@@ -96,6 +99,7 @@
                 </FormStatusBaruItem>
                 <FormStatusBaruItem>
                     <FormAutocomplete
+                        noBorder="true"
                         :data="options.costCenter"
                         id="costcenter-status"
                         :isLoading="options.isLoading"
@@ -105,6 +109,7 @@
                 </FormStatusBaruItem>
                 <FormStatusBaruItem>
                     <FormAutocomplete
+                        noBorder="true"
                         :data="options.workLocation"
                         id="worklocation-status"
                         :isLoading="options.isLoading"
@@ -112,22 +117,30 @@
                         :reduceOption="onReduceOptions"
                     />
                 </FormStatusBaruItem>
-                <FormStatusBaruItem>
+                <FormStatusBaruItem
+                    :isDisabled="values.mutd_to_division === ''"
+                >
                     <FormAutocomplete
-                        :data="options.directSPV"
+                        noBorder="true"
+                        :data="conditionalOptions.directSPV"
                         id="directspv-status"
-                        :isLoading="options.isLoading"
+                        :isLoading="conditionalOptions.isLoading"
                         v-model="values.mutd_to_direct_spv"
                         :reduceOption="onReduceOptions"
+                        :isDisabled="values.mutd_to_division === ''"
                     />
                 </FormStatusBaruItem>
-                <FormStatusBaruItem>
+                <FormStatusBaruItem
+                    :isDisabled="values.mutd_to_division === ''"
+                >
                     <FormAutocomplete
-                        :data="options.immedManager"
+                        noBorder="true"
+                        :data="conditionalOptions.immedManager"
                         id="immedmanager-status"
-                        :isLoading="options.isLoading"
+                        :isLoading="conditionalOptions.isLoading"
                         v-model="values.mutd_to_immed_mgr"
                         :reduceOption="onReduceOptions"
+                        :isDisabled="values.mutd_to_division === ''"
                     />
                 </FormStatusBaruItem>
 
@@ -200,26 +213,41 @@ import IconPlus from "../../components/icons/IconPlus.vue";
 import FormAutocomplete from "../FormAutocomplete.vue";
 import FormStatusBaruItem from "./FormStatusBaruItem.vue";
 import useFormAutoFill from "../../hooks/useFormAutoFill";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, watchEffect } from "vue";
 import {
     getDirectSpv,
     getImmediateManager,
 } from "../../services/form.services";
 import useFetch from "../../hooks/useFetch";
+import {
+    columnTunjanganDefaultValues,
+    columnTunjanganValues,
+    formLabelTitle,
+    statusLamaDefaultValues,
+    tunjanganLabelTitle,
+} from "../../data/mutations.data";
 
-const props = defineProps([
-    "listInfo",
-    "statusLama",
-    "statusBaru",
-    "headerTunjangan",
-    "columns",
-    "columnsData",
-    "columnsValue",
-    "isGroup",
-    "totalTunjangan",
-    "addColumn",
-    "removeColumn",
-]);
+const listInfo = ref(formLabelTitle);
+const headerTunjangan = ref(tunjanganLabelTitle);
+const columns = ref(1);
+const columnsData = ref(columnTunjanganDefaultValues);
+const columnsValue = ref([columnTunjanganValues]);
+const totalTunjangan = ref(0);
+const props = defineProps(["statusLama", "isGroup", "values"]);
+
+const addColumn = () => {
+    columns.value++;
+    columnsValue.value.push({
+        muta_type: "NEW",
+        muta_allow_amount: "",
+        muta_allow_grossnet: "",
+        muta_allow_code: "",
+    });
+};
+const removeColumn = () => {
+    columns.value--;
+    columnsValue.value.pop();
+};
 
 const options = ref({
     isLoading: false,
@@ -230,6 +258,12 @@ const options = ref({
     workLocation: [],
     directSPV: [],
     immedManager: [],
+});
+
+const conditionalOptions = ref({
+    directSPV: [],
+    immedManager: [],
+    isLoading: false,
 });
 
 const values = ref({
@@ -265,38 +299,60 @@ const fetchAutoFillForms = async () => {
     }
 };
 
+watchEffect(() => {
+    props.values.value = values.value;
+
+    if (columnsValue.value.length) {
+        totalTunjangan.value = columnsValue.value.reduce(
+            (acc, curr) => acc + Number(curr.muta_allow_amount),
+            0
+        );
+        props.values.value.allowance_now = columnsValue.value;
+    }
+});
+
 const fetchAutoFillFormParams = async () => {
-    const { data: directSpvResponse } = await useFetch({
-        services: getDirectSpv,
-        options: {
-            params: {
-                bu: values.value.mutd_to_division,
+    conditionalOptions.value.isLoading = true;
+    try {
+        const { data: directSpvResponse } = await useFetch({
+            services: getDirectSpv,
+            options: {
+                params: {
+                    bu: values.value.mutd_to_division,
+                },
             },
-        },
-    });
+        });
 
-    const { data: immdieateManagerResponse } = await useFetch({
-        services: getImmediateManager,
-        options: {
-            params: {
-                bu: values.value.mutd_to_division,
+        const { data: immdieateManagerResponse } = await useFetch({
+            services: getImmediateManager,
+            options: {
+                params: {
+                    bu: values.value.mutd_to_division,
+                },
             },
-        },
-    });
+        });
 
-    options.value.directSPV = directSpvResponse?.value.map((item) => {
-        return {
-            label: `${item?.nik} - ${item?.nama}`,
-            value: item?.nik,
-        };
-    });
+        conditionalOptions.value.directSPV = directSpvResponse?.value.map(
+            (item) => {
+                return {
+                    label: `${item?.nik} - ${item?.nama}`,
+                    value: item?.nik,
+                };
+            }
+        );
 
-    options.value.immedManager = immdieateManagerResponse?.value.map((item) => {
-        return {
-            label: `${item?.nik} - ${item?.nama}`,
-            value: item?.nik,
-        };
-    });
+        conditionalOptions.value.immedManager =
+            immdieateManagerResponse?.value.map((item) => {
+                return {
+                    label: `${item?.nik} - ${item?.nama}`,
+                    value: item?.nik,
+                };
+            });
+    } catch (error) {
+        console.log(error);
+    } finally {
+        conditionalOptions.value.isLoading = false;
+    }
 };
 
 watch(

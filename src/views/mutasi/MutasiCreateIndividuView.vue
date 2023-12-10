@@ -58,21 +58,12 @@
 
                     <!-- form status -->
                     <FormStatusMutations
-                        :listInfo="listInfo"
                         :statusLama="statusLama"
-                        :statusBaru="statusBaru"
-                        :headerTunjangan="headerTunjangan"
-                        :columns="columns"
-                        :columnsData="columnsData"
-                        :columnsValue="columnsValue"
-                        :totalTunjangan="totalTunjangan"
-                        :addColumn="addColumn"
-                        :removeColumn="removeColumn"
+                        :values="formStatusValues"
                     />
 
                     <UIDivider />
 
-                    <!-- form radio  -->
                     <div
                         class="flex flex-col items-start justify-between w-full gap-6 my-10 md:flex-row md:gap-0"
                     >
@@ -214,38 +205,25 @@
     </div>
 </template>
 <script setup>
-import { onBeforeMount, onMounted, ref, watch, watchEffect } from "vue";
+import { ref, watchEffect } from "vue";
 import BasicCard from "../../components/BasicCard.vue";
 import BasicForm from "../../components/BasicForm.vue";
 import FormInputBasic from "../../components/FormInputBasic.vue";
-import UILoader from "../../components/ui/UILoader.vue";
 
 import UIDivider from "../../components/ui/UIDivider.vue";
 import UIButton from "../../components/ui/UIButton.vue";
-import LabelForm from "../../components/LabelForm.vue";
+
 import Modal from "../../components/Modal.vue";
 import { useModalStore } from "../../stores/index.js";
 
-import FormAutocomplete from "../../components/FormAutocomplete.vue";
-import vSelect from "vue-select";
 import useFetch from "../../hooks/useFetch";
-import {
-    getDirectSpv,
-    getEmployeeByUser,
-    getImmediateManager,
-} from "../../services/form.services";
+
 import { createMutationsTable } from "../../services/mutation.services";
 import debounce from "../../utils/debounce";
 
-import useFormAutoFill from "../../hooks/useFormAutoFill";
-
 import {
-    formLabelTitle,
     statusLamaDefaultValues,
-    statusBaruDefaultValues,
     tunjanganLabelTitle,
-    columnTunjanganDefaultValues,
-    columnTunjanganValues,
 } from "../../data/mutations.data";
 import { useRouter } from "vue-router";
 import FormStatusMutations from "../../components/mutations/FormStatusMutations.vue";
@@ -260,37 +238,14 @@ import FormNIKAutocomplete from "../../components/FormNIKAutocomplete.vue";
 const store = useModalStore();
 const showSuccessModal = ref(false);
 const showErrorModal = ref(false);
-const headerTunjangan = ref(tunjanganLabelTitle);
-const listInfo = ref(formLabelTitle);
-const statusBaru = ref(statusBaruDefaultValues);
+
 const statusLama = ref(statusLamaDefaultValues);
 const isDisabled = ref(true);
 const props = defineProps(["modelValue"]);
 const router = useRouter();
-const totalTunjangan = ref(0);
+const formStatusValues = ref({});
 
 const isLoading = ref(false);
-
-const columns = ref(1);
-
-const addColumn = () => {
-    columns.value++;
-    columnsValue.value.push({
-        muta_type: "NEW",
-        muta_allow_amount: "",
-        muta_allow_grossnet: "",
-        muta_allow_code: "",
-    });
-};
-
-const removeColumn = () => {
-    columns.value--;
-    columnsValue.value.pop();
-};
-
-const columnsData = ref(columnTunjanganDefaultValues);
-
-const columnsValue = ref([columnTunjanganValues]);
 
 const values = ref({
     nik: null,
@@ -325,51 +280,41 @@ const selectedValue = ref({});
 
 const isDraft = ref(false);
 
-const data = ref([]);
-
 const onSubmit = async () => {
+    const transformValues = {
+        body: {
+            detail: [
+                {
+                    nik: values.value.nik,
+                    mutd_family_move: values.value.mutd_family_move,
+                    mutd_house_allowance: values.value.mutd_house_allowance,
+                    mutd_transportation: values.value.mutd_transportation,
+                    mutd_leave_bal: values.value.mutd_leave_bal,
+                    mutd_medical_bal: values.value.mutd_medical_bal,
+                    mutd_debit_amount: values.value.mutd_debit_amount,
+                    mutd_credit_amount: values.value.mutd_credit_amount,
+                    mutd_notes: values.value.mutd_notes,
+                    ...formStatusValues.value?.value,
+                },
+            ],
+
+            mut_type: values.value.mut_type,
+            mut_reason: values.value.mut_reason,
+            draft: values.value.draft,
+        },
+    };
+
     try {
         const { data: response } = await useFetch({
             services: createMutationsTable,
             options: {
-                body: {
-                    detail: [
-                        {
-                            nik: values.value.nik,
-                            mutd_to_company: values.value.mutd_to_company,
-                            mutd_to_position: values.value.mutd_to_position,
-                            mutd_to_division: values.value.mutd_to_division,
-                            mutd_to_costcenter: values.value.mutd_to_costcenter,
-                            mutd_to_work_location:
-                                values.value.mutd_to_work_location,
-                            mutd_to_direct_spv: values.value.mutd_to_direct_spv,
-                            mutd_to_immed_mgr: values.value.mutd_to_immed_mgr,
-                            mutd_family_move: values.value.mutd_family_move,
-                            mutd_house_allowance:
-                                values.value.mutd_house_allowance,
-                            mutd_transportation:
-                                values.value.mutd_transportation,
-                            mutd_leave_bal: values.value.mutd_leave_bal,
-                            mutd_medical_bal: values.value.mutd_medical_bal,
-                            mutd_debit_amount: values.value.mutd_debit_amount,
-                            mutd_credit_amount: values.value.mutd_credit_amount,
-                            mutd_notes: values.value.mutd_notes,
-                            allowance_now: values.value.allowance_now,
-                        },
-                    ],
-
-                    mut_type: values.value.mut_type,
-                    mut_reason: values.value.mut_reason,
-                    draft: values.value.draft,
-                },
+                ...transformValues,
             },
         });
-
         if (response.value.message === "Success") {
             isLoading.value = false;
             showSuccessModal.value = true;
             store.toggleModal();
-
             setTimeout(() => {
                 router.push({ name: "mutasi" });
             }, 1000);
@@ -405,62 +350,6 @@ const handleDraft = () => {
     onSubmit();
 };
 
-const fetchAutoFillForms = async () => {
-    const {
-        businessUnitValues,
-        companyValues,
-        costCenterValues,
-        positionValues,
-        workLocationValues,
-    } = await useFormAutoFill();
-
-    statusBaru.value[0].options = companyValues;
-    statusBaru.value[1].options = positionValues;
-    statusBaru.value[3].options = businessUnitValues;
-    statusBaru.value[4].options = costCenterValues;
-    statusBaru.value[5].options = workLocationValues;
-};
-
-const fetchAutoFillFormParams = async () => {
-    const { data: directSpvResponse } = await useFetch({
-        services: getDirectSpv,
-        options: {
-            params: {
-                bu: statusBaru.value[3].value?.value,
-            },
-        },
-    });
-
-    const { data: immdieateManagerResponse } = await useFetch({
-        services: getImmediateManager,
-        options: {
-            params: {
-                bu: statusBaru.value[3].value?.value,
-            },
-        },
-    });
-
-    statusBaru.value[6].options = directSpvResponse?.value.map((item) => {
-        return {
-            label: `${item?.nik} - ${item?.nama}`,
-            value: item?.nik,
-        };
-    });
-
-    statusBaru.value[7].options = immdieateManagerResponse?.value.map(
-        (item) => {
-            return {
-                label: `${item?.nik} - ${item?.nama}`,
-                value: item?.nik,
-            };
-        }
-    );
-};
-
-onMounted(() => {
-    fetchAutoFillForms();
-});
-
 watchEffect(() => {
     if (selectedValue.value?.details) {
         autofillForm.value.joindate = selectedValue.value?.details?.joindate;
@@ -488,14 +377,6 @@ watchEffect(() => {
     } else {
         isDisabled.value = true;
     }
-
-    if (columnsValue.value.length) {
-        totalTunjangan.value = columnsValue.value.reduce(
-            (acc, curr) => acc + Number(curr.muta_allow_amount),
-            0
-        );
-        values.value.allowance_now = columnsValue.value;
-    }
 });
 
 const handleConditionalSubmit = () => {
@@ -505,68 +386,4 @@ const handleConditionalSubmit = () => {
         handleSubmit();
     }
 };
-
-watch(
-    () => statusBaru.value[0].value,
-    (newValue) => {
-        if (newValue) {
-            values.value.mutd_to_company = newValue?.value;
-        }
-    }
-);
-
-watch(
-    () => statusBaru.value[1].value,
-    (newValue) => {
-        if (newValue) {
-            values.value.mutd_to_position = newValue?.value;
-        }
-    }
-);
-
-watch(
-    () => statusBaru.value[3].value,
-    (newValue) => {
-        if (newValue) {
-            fetchAutoFillFormParams();
-            values.value.mutd_to_division = newValue?.value;
-        }
-    }
-);
-
-watch(
-    () => statusBaru.value[4].value,
-    (newValue) => {
-        if (newValue) {
-            values.value.mutd_to_costcenter = newValue?.value;
-        }
-    }
-);
-
-watch(
-    () => statusBaru.value[5].value,
-    (newValue) => {
-        if (newValue) {
-            values.value.mutd_to_work_location = newValue?.value;
-        }
-    }
-);
-
-watch(
-    () => statusBaru.value[6].value,
-    (newValue) => {
-        if (newValue) {
-            values.value.mutd_to_direct_spv = newValue?.value;
-        }
-    }
-);
-
-watch(
-    () => statusBaru.value[7].value,
-    (newValue) => {
-        if (newValue) {
-            values.value.mutd_to_immed_mgr = newValue?.value;
-        }
-    }
-);
 </script>
