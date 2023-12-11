@@ -1,13 +1,13 @@
-const formLabelTitle = [
-    "Perusahaan ",
-    "Jabatan ",
-    "Kelas Jabatan ",
-    "Business Units",
-    "Cost Center ",
-    "Lokasi Kerja ",
-    "Melapor Ke ",
-    "Immediate Manager",
-];
+const formLabelTitle = {
+    Perusahaan: "Perusahaan ",
+    Jabatan: "Jabatan ",
+    KelasJabatan: "Kelas Jabatan ",
+    BussinessUnits: "Business Units",
+    CostCenter: "Cost Center ",
+    LokasiKerja: "Lokasi Kerja ",
+    MelaporKe: "Melapor Ke ",
+    ImmediateManager: "Immediate Manager",
+};
 
 const statusLamaDefaultValues = ["-", "-", "-", "-", "-", "-", "-", "-"];
 

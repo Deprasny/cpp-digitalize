@@ -11,12 +11,12 @@
                             <FormInputBasic
                                 label="Tanggal Masuk"
                                 type="date"
-                                v-model="autofillForm.joindate"
+                                :modelValue="selectedValue?.details?.joindate"
                                 disabled
                             />
                             <FormInputBasic
                                 label="Home Base"
-                                v-model="autofillForm.homebase"
+                                :modelValue="selectedValue?.details?.homebase"
                                 disabled
                                 placeholder="-"
                             />
@@ -25,18 +25,18 @@
                             <FormInputBasic
                                 label="Tanggal Lahir"
                                 :type="
-                                    autofillForm.birth_date === null
+                                    selectedValue?.details?.birth_date === null
                                         ? `text`
                                         : `date`
                                 "
-                                v-model="autofillForm.birth_date"
+                                :modelValue="selectedValue?.details?.birth_date"
                                 placeholder="-"
                                 disabled
                             />
 
                             <FormInputBasic
                                 label="Pendidikan"
-                                v-model="autofillForm.education"
+                                :modelValue="selectedValue.details?.education"
                                 disabled
                                 placeholder="-"
                             />
@@ -58,8 +58,8 @@
 
                     <!-- form status -->
                     <FormStatusMutations
-                        :statusLama="statusLama"
                         :values="formStatusValues"
+                        :statusLamaData="selectedValue?.details"
                     />
 
                     <UIDivider />
@@ -239,7 +239,6 @@ const store = useModalStore();
 const showSuccessModal = ref(false);
 const showErrorModal = ref(false);
 
-const statusLama = ref(statusLamaDefaultValues);
 const isDisabled = ref(true);
 const props = defineProps(["modelValue"]);
 const router = useRouter();
@@ -267,13 +266,6 @@ const values = ref({
     mutd_credit_amount: "",
     mutd_notes: "",
     allowance_now: "",
-});
-
-const autofillForm = ref({
-    joindate: "",
-    homebase: "",
-    birth_date: "",
-    education: "",
 });
 
 const selectedValue = ref({});
@@ -352,24 +344,7 @@ const handleDraft = () => {
 
 watchEffect(() => {
     if (selectedValue.value?.details) {
-        autofillForm.value.joindate = selectedValue.value?.details?.joindate;
-        autofillForm.value.homebase = selectedValue.value?.details?.homebase;
-        autofillForm.value.birth_date =
-            selectedValue.value?.details?.birth_date;
-        autofillForm.value.education = selectedValue.value?.details?.education;
-
         values.value.nik = selectedValue.value?.details?.nik;
-
-        statusLama.value = [
-            selectedValue.value?.details?.persarea,
-            selectedValue.value?.details?.posisi,
-            selectedValue?.value?.details?.level,
-            selectedValue.value?.details?.busunit,
-            selectedValue.value?.details?.costcenter,
-            selectedValue.value?.details?.office,
-            selectedValue.value?.details?.empl_nik_spv,
-            selectedValue.value?.details?.immedmgr,
-        ];
     }
 
     if (selectedValue.value?.details?.nik) {
