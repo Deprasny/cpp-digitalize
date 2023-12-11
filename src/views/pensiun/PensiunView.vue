@@ -1,11 +1,14 @@
 <template>
     <div class="flex flex-col items-center justify-center">
         <div class="flex items-center justify-between w-full my-5">
-            <UIButton :icon="IconChevronLeft" :variant="'secondary'"
+            <UIButton
+                @click="$router.back()"
+                :icon="IconChevronLeft"
+                :variant="'secondary'"
                 >Pensiun
             </UIButton>
             <router-link to="/pensiun/create">
-                <UIButton :icon="IconPlus">Buat form evaluasi baru </UIButton>
+                <UIButton :icon="IconPlus">Buat form pensiun baru </UIButton>
             </router-link>
         </div>
         <Table @onCellClick="handleDetail" :columns="columns" :data="data" />
@@ -20,19 +23,33 @@ import UIButton from "@/components/ui/UIButton.vue";
 import IconPlus from "@/components/icons/IconPlus.vue";
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
 import { useRouter } from "vue-router";
+import { getFormattedDate } from "@/libs/util";
 
 const router = useRouter();
+
+const getRandomName = () => {
+    const names = [
+        "WANI MULYANI",
+        "PAULIN FARIDA",
+        "FEBI SURYATMI",
+        "KAJEN BUDIMAN",
+        "HANI UTAMI",
+    ];
+
+    const randomIndex = Math.floor(Math.random() * names.length);
+    return names[randomIndex];
+};
 
 const makeData = (count) => {
     const data = [];
     for (let i = 0; i < count; i++) {
         data.push({
-            mutasi: `000${i}/MUTASI/INDIVIDU/X/2023`,
-            nama: `User ${i}`,
-            tanggal: new Date().toISOString(),
+            mutasi: `000${i}/PENSIUN/X/2023`,
+            nama: getRandomName(),
+            tanggal: getFormattedDate(new Date()),
             status: "Approved",
             jenis: "Individu",
-            date: new Date().toISOString(),
+            date: getFormattedDate(new Date()),
         });
     }
     return data;

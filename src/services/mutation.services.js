@@ -12,13 +12,9 @@ const getMutationsTable = async ({ params }) => {
     }
 };
 
-const createMutationsTable = async ({ params, body }) => {
+const getMutationsDetailTable = async ({ id }) => {
     try {
-        const response = await apiServices.postData("/mutations", {
-            params: params,
-            body: body,
-        });
-
+        const response = await apiServices.fetchData(`/mutations/${id}`);
         return response.data;
     } catch (error) {
         console.error("Error fetching data:", error);
@@ -26,4 +22,33 @@ const createMutationsTable = async ({ params, body }) => {
     }
 };
 
-export { getMutationsTable, createMutationsTable };
+const createMutationsTable = async ({ body }) => {
+    try {
+        const response = await apiServices.postData("/mutations", {
+            ...body,
+        });
+
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const putMutationsTable = async ({ id, body }) => {
+    try {
+        const response = await apiServices.putData(`/mutations/${id}`, {
+            ...body,
+        });
+
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export {
+    getMutationsTable,
+    createMutationsTable,
+    getMutationsDetailTable,
+    putMutationsTable,
+};

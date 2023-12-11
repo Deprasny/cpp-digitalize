@@ -9,81 +9,68 @@
             </UIButton>
         </div>
         <div
-            class="flex justify-start w-full -mb-7 gap-x-4 text-[#0A70A9] text-xl ml-10"
+            class="flex justify-start w-full md:-mb-6 mb-2 gap-x-4 text-[#0A70A9] text-xl md:ml-10 ml-0"
         >
-            <UIButton v-for="data in filter" variant="tab"
-                ><div class="flex gap-x-16">
-                    <span>{{ data.label }}</span>
-                    <span>{{ data.value }}</span>
+            <UIButton
+                v-for="data in filter"
+                @click="$router.push(`/approval/${data.label}`)"
+                :variant="data.label === currentPath ? 'tab-active' : 'tab'"
+                ><div class="flex gap-2 text-sm md:gap-x-16 md:text-base">
+                    <span class="uppercase">{{ data.label }}</span>
+                    <template v-if="data.label === 'mutasi'">
+                        <span>
+                            {{ valueApproval.length }}
+                        </span>
+                    </template>
+                    <template v-else>
+                        <span>0</span>
+                    </template>
                 </div></UIButton
             >
         </div>
-        <Table @onCellClick="handleDetail" :columns="columns" :data="data" />
+        <router-view></router-view>
     </div>
 </template>
 
 <script setup>
+import { ref, onBeforeMount, watch } from "vue";
 import Table from "@/components/BasicTable.vue";
 import { createColumnHelper } from "@tanstack/table-core";
-import { ref } from "vue";
 import UIButton from "@/components/ui/UIButton.vue";
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
 import { useRouter } from "vue-router";
+import UILoader from "@/components/ui/UILoader.vue";
+import { getFormattedDate } from "@/libs/util";
+import useFetch from "@/hooks/useFetch";
+import { getMutationApprovalList } from "@/services/approval.services";
+
+const valueApproval = ref([]);
+
+onBeforeMount(async () => {
+    const { data: response } = await useFetch({
+        services: getMutationApprovalList,
+        options: {
+            page: 1,
+            limit: 10,
+        },
+    });
+
+    valueApproval.value = response?.value?.data;
+});
 
 const router = useRouter();
+const currentPath = ref(router.currentRoute.value.path.split("/")[2]);
 
-const makeData = (count) => {
-    const data = [];
-    for (let i = 0; i < count; i++) {
-        data.push({
-            mutasi: `000${i}/MUTASI/INDIVIDU/X/2023`,
-            nama: `User ${i}`,
-            tanggal: new Date().toISOString(),
-            status: "Approved",
-            jenis: "Individu",
-            date: "New",
-        });
+watch(
+    () => router.currentRoute.value.path.split("/")[2],
+    (newPath) => {
+        currentPath.value = newPath;
     }
-    return data;
-};
-const data = ref(makeData(4));
-
-const columnHelper = createColumnHelper();
-const columns = [
-    columnHelper.accessor((row) => row.mutasi, {
-        id: "mutasi",
-        cell: (info) => info.getValue(),
-        header: () => "No Mutasi",
-    }),
-    columnHelper.accessor((row) => row.nama, {
-        id: "nama",
-        cell: (info) => info.getValue(),
-        header: () => "Nama Karyawan",
-    }),
-    columnHelper.accessor((row) => row.tanggal, {
-        id: "tanggal",
-        cell: (info) => info.getValue(),
-        header: () => "Tanggal Pengajuan",
-    }),
-    columnHelper.accessor((row) => row.status, {
-        id: "status",
-        cell: (info) => info.getValue(),
-        header: () => "Status",
-    }),
-    columnHelper.accessor((row) => row.date, {
-        id: "date",
-        cell: (info) => info.getValue(),
-        header: () => "-",
-    }),
-];
-
-const handleDetail = (cell) => {
-    router.push({ name: "pensiun-detail", params: { id: cell.row.id } });
-};
+);
 
 const filter = ref([
-    { label: "Mutasi", value: 10 },
-    { label: "Evaluasi", value: 10 },
-    { label: "Pensiun", value: 10 },
+    { label: "mutasi", value: 10 },
+    { label: "evaluasi", value: 10 },
+    { label: "pensiun", value: 10 },
 ]);
 </script>

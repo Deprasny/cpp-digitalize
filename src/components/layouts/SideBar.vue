@@ -1,40 +1,30 @@
 <!-- Sidebar.vue -->
 <template>
     <div>
-        <button v-if="!isSidebarOpen" @click="toggleSidebar">
-            Open Sidebar
-        </button>
         <aside v-if="isSidebarOpen">
             <nav
-                class="w-72 h-[100vh] rounded-br-lg p-6 shadow-2xl fixed bg-white"
+                class="w-72 h-[100vh] rounded-br-lg p-6 shadow-2xl fixed bg-white z-20"
             >
                 <div class="flex items-start justify-between">
                     <div class="text-accent-1">
                         <h3 class="text-xl font-bold">HR</h3>
                         <p>Digitalize Document</p>
                     </div>
-                    <!-- <button @click="toggleSidebar">X</button> -->
+                    <button class="sm:hidden" @click="toggleSidebar">X</button>
                 </div>
                 <div class="flex flex-col justify-between h-[90%] mt-5">
                     <ul>
                         <div v-for="item in menu" :key="item.name">
-                            <router-link :to="item.route">
+                            <router-link :to="item.route" exact>
                                 <li
-                                    class="p-3 my-5 rounded-full hover:bg-accent-1 group hover:text-white hover:font-semibold"
+                                    class="p-3 my-5 rounded-full hover:bg-accent-1 hover:text-white hover:font-semibold"
                                     :class="{
                                         'bg-accent-1 text-white font-semibold':
-                                            $route.path === item.route,
+                                            $route.path.startsWith(item.route),
                                     }"
                                 >
                                     <div class="flex items-center gap-x-5">
-                                        <component
-                                            :is="item.icon"
-                                            class="group-hover:text-white"
-                                            :class="{
-                                                'text-white':
-                                                    $route.path === item.route,
-                                            }"
-                                        />
+                                        <component :is="item.icon" />
                                         {{ item.name }}
                                     </div>
                                 </li>
@@ -50,6 +40,12 @@
                 </div>
             </nav>
         </aside>
+        <div
+            v-else
+            class="fixed flex items-center justify-start w-full bg-white h-[40px] px-4"
+        >
+            <button @click="toggleSidebar"><IconHamburger /></button>
+        </div>
     </div>
 </template>
 
@@ -60,6 +56,7 @@ import IconChange from "@/components/icons/IconChange.vue";
 import IconEvaluation from "@/components/icons/IconEvaluation.vue";
 import IconPensiun from "@/components/icons/IconPensiun.vue";
 import IconCheck from "../icons/IconCheck.vue";
+import IconHamburger from "../icons/IconHamburger.vue";
 
 import IconLogo from "@/components/icons/IconLogo.vue";
 const isSidebarOpen = ref(true);
@@ -88,7 +85,7 @@ const menu = ref([
     {
         name: "Approval",
         icon: IconCheck,
-        route: "/approval",
+        route: "/approval/mutasi",
     },
 ]);
 const toggleSidebar = () => {

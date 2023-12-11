@@ -1,285 +1,389 @@
 <template>
     <div class="mt-28">
-        <BasicCard title="FORM MUTASI">
-            <BasicForm class="px-10 py-5">
-                <!-- form basic -->
-                <div class="w-[900px]">
-                    <FormInputBasic
-                        label="Nama & NIK"
-                        :icon="IconMagnifier"
-                        v-model="values.nik"
+        <BasicForm>
+            <BasicCard title="FORM MUTASI">
+                <div class="w-full px-10 py-5">
+                    <!-- form basic -->
+                    <div class="w-full">
+                        <FormNIKAutocomplete v-model="selectedValue" />
+
+                        <div class="flex flex-col gap-x-7 md:flex-row">
+                            <FormInputBasic
+                                label="Tanggal Masuk"
+                                type="date"
+                                v-model="autofillForm.joindate"
+                                disabled
+                            />
+                            <FormInputBasic
+                                label="Home Base"
+                                v-model="autofillForm.homebase"
+                                disabled
+                                placeholder="-"
+                            />
+                        </div>
+                        <div class="flex flex-col gap-x-7 md:flex-row">
+                            <FormInputBasic
+                                label="Tanggal Lahir"
+                                :type="
+                                    autofillForm.birth_date === null
+                                        ? `text`
+                                        : `date`
+                                "
+                                v-model="autofillForm.birth_date"
+                                placeholder="-"
+                                disabled
+                            />
+
+                            <FormInputBasic
+                                label="Pendidikan"
+                                v-model="autofillForm.education"
+                                disabled
+                                placeholder="-"
+                            />
+                        </div>
+                        <div class="flex flex-col gap-x-7 md:flex-row">
+                            <FormInputBasic
+                                label="Tanggal Efektif Mutasi"
+                                type="date"
+                                :disabled="isDisabled"
+                            />
+                            <FormInputBasic
+                                label="Alasan Mutasi"
+                                v-model="values.mut_reason"
+                                placeholder="Masukan Alasan Mutasi"
+                                :disabled="isDisabled"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- form status -->
+                    <FormStatusMutations
+                        :statusLama="statusLama"
+                        :values="formStatusValues"
                     />
 
-                    <div class="flex gap-x-7">
-                        <FormInputBasic label="Tanggal Masuk" type="date" />
-                        <FormInputBasic label="Home Base" />
-                    </div>
-                    <div class="flex gap-x-7">
-                        <FormInputBasic label="Tanggal Lahir" type="date" />
-                        <FormInputBasic label="Pendidikan" />
-                    </div>
-                    <div class="flex gap-x-7">
-                        <FormInputBasic
-                            label="Tanggal Efektif Mutasi"
-                            type="date"
+                    <UIDivider />
+
+                    <div
+                        class="flex flex-col items-start justify-between w-full gap-6 my-10 md:flex-row md:gap-0"
+                    >
+                        <FormRadio
+                            label="Keluarga"
+                            name="keluarga"
+                            :options="keluargaOptions"
+                            :modelValue="values.mutd_family_move"
+                            @update:modelValue="
+                                (value) => (values.mutd_family_move = value)
+                            "
                         />
-                        <FormInputBasic
-                            label="Alasan Mutasi"
-                            v-model="values.mut_reason"
+
+                        <FormRadio
+                            label="Tunj. Perumahan"
+                            name="tunjangan"
+                            :options="tunjanganOptions"
+                            :modelValue="values.mutd_house_allowance"
+                            @update:modelValue="
+                                (value) => (values.mutd_house_allowance = value)
+                            "
+                        />
+
+                        <FormRadio
+                            label="Transportasi Barang"
+                            name="barang"
+                            :options="barangOptions"
+                            :modelValue="values.mutd_transportation"
+                            @update:modelValue="
+                                (value) => (values.mutd_transportation = value)
+                            "
                         />
                     </div>
-                </div>
 
-                <!-- form status -->
-                <div class="flex items-baseline justify-between my-10">
-                    <div class="flex flex-col items-start w-1/5">
-                        <div class="py-1">-</div>
-                        <div
-                            v-for="list in listInfo"
-                            :key="list"
-                            class="w-full py-[17px] font-semibold"
-                        >
-                            <LabelForm :label="list" />
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-center flex-1 text-center">
-                        <div class="w-full py-1 text-lg font-bold bg-accent-2">
-                            STATUS LAMA
-                        </div>
-                        <div
-                            v-for="status in statusLama"
-                            :key="status"
-                            class="w-full py-4 border border-l-0 border-black"
-                        >
-                            {{ status }}
-                        </div>
-                        <div
-                            class="flex justify-between w-full mt-10 bg-accent-2"
-                        >
-                            <div
-                                v-for="header in headerTunjangan"
-                                :key="header"
-                                class="w-full py-1 font-semibold border-black border-x"
-                            >
-                                {{ header }}
-                            </div>
-                        </div>
-                        <div class="flex justify-between w-full">
-                            <div
-                                class="w-full py-1 font-semibold border border-black"
-                            >
-                                <input type="text" class="max-w-[150px]" />
-                            </div>
-                            <div
-                                class="w-full py-1 font-semibold border border-black"
-                            >
-                                <input type="text" class="max-w-[150px]" />
-                            </div>
-                            <div
-                                class="w-full py-1 font-semibold border border-black"
-                            >
-                                <input type="text" class="max-w-[150px]" />
-                            </div>
-                        </div>
-                        <p class="self-start mt-5 font-semibold">
-                            Total : 1.000.000
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-1 text-center">
-                        <div
-                            class="w-full py-1 text-lg font-bold text-white bg-accent-1"
-                        >
-                            STATUS BARU
-                        </div>
-                        <div
-                            v-for="status in statusBaru"
-                            :key="status"
-                            class="w-full py-4 border border-l-0 border-black last:border-b-[2px]"
-                        >
-                            {{ status }}
-                        </div>
+                    <UIDivider />
 
-                        <div
-                            class="flex justify-between w-full mt-10 bg-accent-1"
-                        >
-                            <div
-                                v-for="header in headerTunjangan"
-                                :key="header"
-                                class="w-full py-1 font-semibold text-white border-black border-x"
-                            >
-                                {{ header }}
-                            </div>
+                    <!-- form additional -->
+                    <div class="w-full my-10">
+                        <div class="flex flex-col gap-x-7 md:flex-row">
+                            <FormInputBasic
+                                label="Sisa Cuti"
+                                type="number"
+                                v-model="values.mutd_leave_bal"
+                            />
+                            <FormInputBasic
+                                label="Sisa Plafon Berobat"
+                                type="number"
+                                v-model="values.mutd_medical_bal"
+                            />
                         </div>
-                        <div class="flex justify-between w-full">
-                            <div
-                                class="w-full py-1 font-semibold border border-black"
-                            >
-                                <input type="text" class="max-w-[150px]" />
-                            </div>
-                            <div
-                                class="w-full py-1 font-semibold border border-black"
-                            >
-                                <input type="text" class="max-w-[150px]" />
-                            </div>
-                            <div
-                                class="w-full py-1 font-semibold border border-black"
-                            >
-                                <input type="text" class="max-w-[150px]" />
-                            </div>
+                        <div class="flex flex-col gap-x-7 md:flex-row">
+                            <FormInputBasic
+                                label="Hak Karyawan Belum Terbayar"
+                                type="number"
+                                v-model="values.mutd_debit_amount"
+                            />
+                            <FormInputBasic
+                                label="Hutang ke Perusahaan"
+                                type="number"
+                                v-model="values.mutd_credit_amount"
+                            />
                         </div>
-                        <p class="self-start mt-5 font-semibold">
-                            Total : 1.000.000
-                        </p>
+                        <FormInputBasic
+                            label="Keterangan"
+                            v-model="values.mutd_notes"
+                        />
                     </div>
-                </div>
 
-                <UIDivider />
+                    <UIDivider />
 
-                <!-- form radio  -->
-                <div class="flex items-start justify-between w-full my-10">
-                    <div class="flex flex-col items-start">
-                        <p class="font-semibold">Keluarga</p>
-                        <p class="mb-3 text-xs italic">(Pilih salah satu)</p>
-                        <div class="flex gap-x-2">
-                            <input type="radio" name="keluarga" />
-                            <p>Ikut pindah kelokasi kerja baru</p>
-                        </div>
-                        <div class="flex gap-x-2">
-                            <input type="radio" name="keluarga" />
-                            <p>Ikut pindah kelokasi kerja baru</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-start">
-                        <p class="font-semibold">Tunj. Perumahan</p>
-                        <p class="mb-3 text-xs italic">(Pilih salah satu)</p>
-                        <div class="flex gap-x-2">
-                            <input type="radio" name="tunjangan" />
-                            <p>Diambil Bulanan</p>
-                        </div>
-                        <div class="flex gap-x-2">
-                            <input type="radio" name="tunjangan" />
-                            <p>Diambil per 1 Tahun</p>
-                        </div>
-                        <div class="flex gap-x-2">
-                            <input type="radio" name="tunjangan" />
-                            <p>Diambil per 2 Tahun</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-start">
-                        <p class="font-semibold">Transportasi Barang</p>
-                        <p class="mb-3 text-xs italic">(Pilih salah satu)</p>
-                        <div class="flex gap-x-2">
-                            <input type="radio" name="barang" />
-                            <p>Ambil Tunai</p>
-                        </div>
-                        <div class="flex gap-x-2">
-                            <input type="radio" name="barang" />
-                            <p>Difasilitasi Perusahaan</p>
+                    <!-- form upload  -->
+                    <div
+                        class="flex items-start justify-between md:max-w-[500px] my-10 w-full"
+                    >
+                        <div class="flex flex-col items-start">
+                            <p class="font-semibold">Lampiran</p>
+                            <div
+                                class="flex flex-col items-start md:items-center gap-x-5 md:flex-row"
+                            >
+                                <UIButton
+                                    variant="form"
+                                    class="w-[200px]"
+                                    type="file"
+                                >
+                                    Upload File
+                                </UIButton>
+                                <p class="text-xs">
+                                    Mohon melampirkan struktur organisasi
+                                    sebelum dan sesudah
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <UIDivider />
-
-                <!-- form additional -->
-                <div class="w-[900px] my-10">
-                    <div class="flex gap-x-7">
-                        <FormInputBasic label="Sisa Cuti" />
-                        <FormInputBasic label="Sisa Plafon Berobat" />
-                    </div>
-                    <div class="flex gap-x-7">
-                        <FormInputBasic label="Hak Karyawan Belum Terbayar" />
-                        <FormInputBasic label="Hutang ke Perusahaan" />
-                    </div>
-                    <FormInputBasic label="Keterangan" />
-                </div>
-
-                <UIDivider />
-
-                <!-- form upload  -->
-                <div
-                    class="flex items-start justify-between max-w-[500px] my-10"
+            </BasicCard>
+            <div
+                class="flex items-center justify-start w-full mt-5 md:gap-x-4 gap-x-2"
+            >
+                <UIButton
+                    variant="form"
+                    class="w-[200px]"
+                    @click="handleClickSubmit"
                 >
-                    <div class="flex flex-col items-start">
-                        <p class="font-semibold">Lampiran</p>
-                        <div class="flex items-center gap-x-5">
-                            <UIButton
-                                variant="form"
-                                class="w-[200px]"
-                                type="file"
-                            >
-                                Upload File
-                            </UIButton>
-                            <p class="text-xs">
-                                Mohon melampirkan struktur organisasi sebelum
-                                dan sesudah
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                    Submit
+                </UIButton>
+                <UIButton
+                    variant="form"
+                    class="w-[200px]"
+                    @click="handleClickDraft"
+                >
+                    Simpan ke Draft
+                </UIButton>
+            </div>
+        </BasicForm>
 
-                <div class="flex items-center justify-end w-full mt-5 gap-x-4">
-                    <UIButton variant="form" class="w-[200px]">
-                        Submit
-                    </UIButton>
-                    <UIButton variant="form" class="w-[200px]">
-                        Simpan ke Draft
-                    </UIButton>
-                </div>
-            </BasicForm>
-        </BasicCard>
+        <Modal
+            :isModalOpen="store.isModalOpen"
+            @toggleModal="store.toggleModal"
+            @submit="handleConditionalSubmit"
+            modalTitle="Anda yakin untuk submit Form Mutasi berikut?"
+            :isLoading="isLoading"
+        />
+
+        <Modal
+            v-if="showSuccessModal"
+            :isModalOpen="showSuccessModal"
+            @toggleModal="showSuccessModal = false"
+            modalTitle="Form Mutasi Anda telah berhasil disubmit"
+            modalType="success"
+        />
+
+        <Modal
+            v-if="showErrorModal"
+            :isModalOpen="showErrorModal"
+            @toggleModal="showErrorModal = false"
+            modalTitle="Form Mutasi Anda gagal disubmit"
+            modalType="danger"
+        />
     </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 import BasicCard from "../../components/BasicCard.vue";
 import BasicForm from "../../components/BasicForm.vue";
 import FormInputBasic from "../../components/FormInputBasic.vue";
-import IconMagnifier from "../../components/icons/IconMagnifying.vue";
+
 import UIDivider from "../../components/ui/UIDivider.vue";
 import UIButton from "../../components/ui/UIButton.vue";
-import LabelForm from "../../components/LabelForm.vue";
 
-const listInfo = ref([
-    "Perusahaan ",
-    "Jabatan ",
-    "Kelas Jabatan ",
-    "Divisi / Departemen ",
-    "Cost Center ",
-    "Lokasi Kerja ",
-    "Melapor Ke ",
-    "Immediate Manager",
-]);
+import Modal from "../../components/Modal.vue";
+import { useModalStore } from "../../stores/index.js";
 
-const statusLama = ref([
-    "1450 CP Prima - Jakarta (HO)",
-    "Specialist Organization Development",
-    "4A",
-    "Organization Development",
-    "1450 145766 HR Corporate",
-    "DKI Jakarta_SCBD",
-    "Panca Dias Purnomo - 22000130",
-    "22001234 - Panca Dias Purnomo",
-]);
+import useFetch from "../../hooks/useFetch";
 
-const statusBaru = ref([
-    "1450 CP Prima - Jakarta 0401",
-    "-",
-    "4A",
-    "Center of Excellence",
-    "-",
-    "-",
-    "22200169 - A.A Sagung Purnama Dewi Pata",
-    "22001234 - Panca Dias Purnomo",
-]);
+import { createMutationsTable } from "../../services/mutation.services";
+import debounce from "../../utils/debounce";
+
+import {
+    statusLamaDefaultValues,
+    tunjanganLabelTitle,
+} from "../../data/mutations.data";
+import { useRouter } from "vue-router";
+import FormStatusMutations from "../../components/mutations/FormStatusMutations.vue";
+import FormRadio from "../../components/FormRadio.vue";
+import {
+    barangOptions,
+    keluargaOptions,
+    tunjanganOptions,
+} from "../../data/mutations.data";
+import FormNIKAutocomplete from "../../components/FormNIKAutocomplete.vue";
+
+const store = useModalStore();
+const showSuccessModal = ref(false);
+const showErrorModal = ref(false);
+
+const statusLama = ref(statusLamaDefaultValues);
+const isDisabled = ref(true);
+const props = defineProps(["modelValue"]);
+const router = useRouter();
+const formStatusValues = ref({});
+
+const isLoading = ref(false);
 
 const values = ref({
-    nik: "",
+    nik: null,
     mut_type: "Individu",
     mut_reason: "",
+    mutd_to_company: "",
+    mutd_to_position: "",
+    mutd_to_division: "",
+    mutd_to_costcenter: "",
+    mutd_to_work_location: "",
+    mutd_to_direct_spv: "",
+    mutd_to_immed_mgr: "",
+    mutd_family_move: "",
+    mutd_house_allowance: "",
+    mutd_transportation: "",
+    mutd_leave_bal: "",
+    mutd_medical_bal: "",
+    mutd_debit_amount: "",
+    mutd_credit_amount: "",
+    mutd_notes: "",
+    allowance_now: "",
 });
 
-console.log({ values: values.value });
+const autofillForm = ref({
+    joindate: "",
+    homebase: "",
+    birth_date: "",
+    education: "",
+});
 
-const headerTunjangan = ref(["Nama Tunjangan", "Nilai Tunjangan", "Net"]);
+const selectedValue = ref({});
+
+const isDraft = ref(false);
+
+const onSubmit = async () => {
+    const transformValues = {
+        body: {
+            detail: [
+                {
+                    nik: values.value.nik,
+                    mutd_family_move: values.value.mutd_family_move,
+                    mutd_house_allowance: values.value.mutd_house_allowance,
+                    mutd_transportation: values.value.mutd_transportation,
+                    mutd_leave_bal: values.value.mutd_leave_bal,
+                    mutd_medical_bal: values.value.mutd_medical_bal,
+                    mutd_debit_amount: values.value.mutd_debit_amount,
+                    mutd_credit_amount: values.value.mutd_credit_amount,
+                    mutd_notes: values.value.mutd_notes,
+                    ...formStatusValues.value?.value,
+                },
+            ],
+
+            mut_type: values.value.mut_type,
+            mut_reason: values.value.mut_reason,
+            draft: values.value.draft,
+        },
+    };
+
+    try {
+        const { data: response } = await useFetch({
+            services: createMutationsTable,
+            options: {
+                ...transformValues,
+            },
+        });
+        if (response.value.message === "Success") {
+            isLoading.value = false;
+            showSuccessModal.value = true;
+            store.toggleModal();
+            setTimeout(() => {
+                router.push({ name: "mutasi" });
+            }, 1000);
+        }
+    } catch (error) {
+        store.toggleModal();
+        showErrorModal.value = true;
+        isLoading.value = false;
+    }
+};
+
+const handleClickSubmit = () => {
+    store.toggleModal();
+    isDraft.value = false;
+};
+
+const handleClickDraft = () => {
+    store.toggleModal();
+    isDraft.value = true;
+};
+
+const handleSubmit = () => {
+    isLoading.value = true;
+    values.value = { ...values.value, draft: isDraft.value };
+
+    onSubmit();
+};
+
+const handleDraft = () => {
+    isLoading.value = true;
+    values.value = { ...values.value, draft: isDraft.value };
+
+    onSubmit();
+};
+
+watchEffect(() => {
+    if (selectedValue.value?.details) {
+        autofillForm.value.joindate = selectedValue.value?.details?.joindate;
+        autofillForm.value.homebase = selectedValue.value?.details?.homebase;
+        autofillForm.value.birth_date =
+            selectedValue.value?.details?.birth_date;
+        autofillForm.value.education = selectedValue.value?.details?.education;
+
+        values.value.nik = selectedValue.value?.details?.nik;
+
+        statusLama.value = [
+            selectedValue.value?.details?.persarea,
+            selectedValue.value?.details?.posisi,
+            selectedValue?.value?.details?.level,
+            selectedValue.value?.details?.busunit,
+            selectedValue.value?.details?.costcenter,
+            selectedValue.value?.details?.office,
+            selectedValue.value?.details?.empl_nik_spv,
+            selectedValue.value?.details?.immedmgr,
+        ];
+    }
+
+    if (selectedValue.value?.details?.nik) {
+        isDisabled.value = false;
+    } else {
+        isDisabled.value = true;
+    }
+});
+
+const handleConditionalSubmit = () => {
+    if (isDraft.value) {
+        handleDraft();
+    } else {
+        handleSubmit();
+    }
+};
 </script>

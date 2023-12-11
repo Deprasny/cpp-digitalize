@@ -26,6 +26,9 @@ import PensiunDetail from "../views/pensiun/PensiunDetailView.vue";
 
 //Approval
 import Approval from "../views/approval/ApprovalView.vue";
+import ApprovalMutasi from "../views/approval/ApprovalMutasiView.vue";
+import ApprovalEvaluasi from "../views/approval/ApprovalEvaluasiView.vue";
+import ApprovalPensiun from "../views/approval/ApprovalPensiunView.vue";
 
 const routes = [
     {
@@ -95,6 +98,23 @@ const routes = [
                 path: "/approval",
                 component: Approval,
                 name: "approval",
+                children: [
+                    {
+                        path: "/approval/mutasi",
+                        component: ApprovalMutasi,
+                        name: "approval-mutasi",
+                    },
+                    {
+                        path: "/approval/evaluasi",
+                        component: ApprovalEvaluasi,
+                        name: "approval-evaluasi",
+                    },
+                    {
+                        path: "/approval/pensiun",
+                        component: ApprovalPensiun,
+                        name: "approval-pensiun",
+                    },
+                ],
             },
         ],
     },

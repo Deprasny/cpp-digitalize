@@ -2,82 +2,182 @@
     <div>
         <a @click="$router.back()">
             <UIButton :icon="IconChevronLeft" :variant="'secondary'">
-                Buat form mutasi baru
+                Buat form pensiun baru
             </UIButton>
         </a>
 
         <UIDivider />
 
         <div class="mt-10">
-            <BasicCard title="FORM PENSIUN">
-                <BasicForm class="px-10 py-5">
-                    <!-- form basic -->
-                    <div class="w-[900px] my-10">
-                        <FormInputBasic
-                            label="Nama & NIK"
-                            :icon="IconMagnifier"
-                        />
+            <BasicForm>
+                <BasicCard title="FORM PENSIUN">
+                    <div class="px-10 py-5">
+                        <!-- form basic -->
+                        <div class="w-[900px] mb -10">
+                            <FormInputBasic
+                                label="Nama & NIK"
+                                :icon="IconMagnifier"
+                            />
 
-                        <div class="flex gap-x-7">
-                            <FormInputBasic label="Jabatan" />
-                            <FormInputBasic label="Level" />
+                            <div class="flex gap-x-7">
+                                <FormInputBasic label="Jabatan" />
+                                <FormInputBasic label="Level" />
+                            </div>
+                            <div class="flex gap-x-7">
+                                <FormInputBasic label="BU Head" />
+                                <FormInputBasic label="Divisi" />
+                            </div>
+                            <div class="flex gap-x-7">
+                                <FormInputBasic label="Personal Area" />
+                                <FormInputBasic label="Usia" />
+                            </div>
+                            <div class="flex gap-x-7">
+                                <FormInputBasic label="Status" />
+                                <FormInputBasic label="Tanggal Pensiun" />
+                            </div>
+                            <div class="flex gap-x-7">
+                                <FormInputBasic label="Year of Service" />
+                                <FormInputBasic label="-" />
+                            </div>
                         </div>
-                        <div class="flex gap-x-7">
-                            <FormInputBasic label="BU Head" />
-                            <FormInputBasic label="Divisi" />
+
+                        <UIDivider />
+                        <!-- section 2  -->
+                        <div class="flex gap-x-10">
+                            <div class="flex flex-col mt-10 mb-20">
+                                <p class="font-semibold mb-9">KEPUTUSAN</p>
+                                <div class="flex items-center gap-x-10">
+                                    <!-- dropdown  -->
+                                    <FormDropdown
+                                        class="w-[300px]"
+                                        :dropdownOptions="[
+                                            'Pensiun, Diganti',
+                                            'Pensiun, Tidak diganti',
+                                            'Diperpanjang Kontrak',
+                                        ]"
+                                        :selectedOptionText="
+                                            selectedOptionKeputusan
+                                        "
+                                        @update:selectedOptionText="
+                                            handleSelectedKeputusan
+                                        "
+                                    />
+                                    <FormDropdown
+                                        v-if="
+                                            selectedOptionKeputusan ===
+                                            'Diperpanjang Kontrak'
+                                        "
+                                        classes="min-w-[100px]"
+                                        :dropdownOptions="[
+                                            '1',
+                                            '2',
+                                            '3',
+                                            '4',
+                                            '5',
+                                            '6',
+                                            '7',
+                                            '8',
+                                            '9',
+                                            '10',
+                                            '11',
+                                            '12',
+                                        ]"
+                                        :selectedOptionText="
+                                            selectedOptionPeriode
+                                        "
+                                        @update:selectedOptionText="
+                                            handleSelectedPeriode
+                                        "
+                                    />
+                                    <p
+                                        v-if="
+                                            selectedOptionKeputusan ===
+                                            'Diperpanjang Kontrak'
+                                        "
+                                        class="ml-[70px] font-semibold"
+                                    >
+                                        Bulan
+                                    </p>
+                                </div>
+                            </div>
+                            <div
+                                class="flex flex-col mt-10"
+                                v-if="
+                                    selectedOptionKeputusan ===
+                                    'Pensiun, Diganti'
+                                "
+                            >
+                                <div class="flex flex-col gap-x-5">
+                                    <!-- dropdown  -->
+                                    <div class="w-[285px]">
+                                        <FormInputBasic
+                                            label="CALON PENGGANTI"
+                                            :icon="IconMagnifier"
+                                            v-model="nama"
+                                            @addName="addName"
+                                            placeholder="Isi nama pengganti"
+                                        />
+                                    </div>
+                                    <div
+                                        v-if="enteredNames.length > 0"
+                                        class="flex flex-wrap w-full my-5 gap-x-4 gap-y-4"
+                                    >
+                                        <div
+                                            v-for="(
+                                                name, index
+                                            ) in enteredNames"
+                                            :key="name"
+                                            class="text-black w-[270px] p-3 rounded-2xl shadow-xl px-6 flex justify-between relative overflow-hidden"
+                                        >
+                                            {{ name }}
+                                            <button
+                                                :key="name"
+                                                @click="() => removeName(index)"
+                                                class="absolute top-0 right-0 p-2 text-white bg-[#FB6255] cursor-pointer rounded-bl-full text-xs"
+                                            >
+                                                X
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flex gap-x-7">
-                            <FormInputBasic label="Personal Area" />
-                            <FormInputBasic label="Usia" />
-                        </div>
-                        <div class="flex gap-x-7">
-                            <FormInputBasic label="Status" />
-                            <FormInputBasic label="Tanggal Pensiun" />
-                        </div>
-                        <div class="flex gap-x-7">
-                            <FormInputBasic label="Year of Service" />
-                            <FormInputBasic label="-" />
+
+                        <UIDivider />
+
+                        <!-- section 3 -->
+                        <div class="my-10">
+                            <FormTextArea label="Catatan" v-model="catatan" />
                         </div>
                     </div>
-
-                    <UIDivider />
-                    <!-- section 2  -->
-                    <div class="flex flex-col mt-10 mb-20">
-                        <p class="mb-10 font-semibold">KEPUTUSAN</p>
-                        <!-- dropdown  -->
-                        <FormDropdown
-                            class="w-[300px]"
-                            :dropdownOptions="[
-                                'Option 1',
-                                'Option 2',
-                                'Option 3',
-                            ]"
-                            :selectedOptionText="selectedOption"
-                            @update:selectedOptionText="
-                                handleSelectedOptionUpdate
-                            "
-                        />
-                    </div>
-
-                    <UIDivider />
-
-                    <!-- section 3 -->
-                    <div class="my-10">
-                        <FormTextArea label="Catatan" v-model="catatan" />
-                    </div>
-
-                    <div
-                        class="flex items-center justify-end w-full mt-5 gap-x-4"
+                </BasicCard>
+                <div
+                    class="flex items-center justify-start w-full mt-5 gap-x-4"
+                >
+                    <UIButton
+                        @click="store.toggleModal"
+                        variant="form"
+                        class="w-[200px]"
                     >
-                        <UIButton variant="form" class="w-[200px]">
-                            Submit
-                        </UIButton>
-                        <UIButton variant="form" class="w-[200px]">
-                            Simpan ke Draft
-                        </UIButton>
-                    </div>
-                </BasicForm>
-            </BasicCard>
+                        Submit
+                    </UIButton>
+                    <UIButton variant="form" class="w-[200px]">
+                        Simpan ke Draft
+                    </UIButton>
+                </div>
+            </BasicForm>
+            <Modal
+                :isModalOpen="store.isModalOpen"
+                @toggleModal="store.toggleModal"
+                @submit="handleSubmit"
+                modalTitle="Anda yakin untuk submit Form Pensiun berikut?"
+            />
+            <Modal
+                :isModalOpen="showSuccessModal"
+                @toggleModal="showSuccessModal = false"
+                modalTitle="Form Pensiun Anda telah berhasil disubmit"
+                modalType="success"
+            />
         </div>
     </div>
 </template>
@@ -93,10 +193,35 @@ import UIDivider from "../../components/ui/UIDivider.vue";
 import UIButton from "../../components/ui/UIButton.vue";
 import FormDropdown from "../../components/FormDropdown.vue";
 import FormTextArea from "../../components/FormTextArea.vue";
+import Modal from "../../components/Modal.vue";
+import { useModalStore } from "../../stores/index.js";
 
-const selectedOption = ref("Pilih 1");
+const showSuccessModal = ref(false);
+const store = useModalStore();
 
-const handleSelectedOptionUpdate = (value) => {
-    selectedOption.value = value;
+const handleSubmit = () => {
+    store.toggleModal();
+    showSuccessModal.value = true;
+};
+
+const nama = ref("");
+const enteredNames = ref([]);
+
+const addName = () => {
+    enteredNames.value.push(nama.value);
+    nama.value = "";
+};
+const removeName = (index) => {
+    enteredNames.value.splice(index, 1);
+};
+
+const selectedOptionKeputusan = ref("Pilih salah satu");
+const selectedOptionPeriode = ref("Pilih");
+
+const handleSelectedKeputusan = (value) => {
+    selectedOptionKeputusan.value = value;
+};
+const handleSelectedPeriode = (value) => {
+    selectedOptionPeriode.value = value;
 };
 </script>

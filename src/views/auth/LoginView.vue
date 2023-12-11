@@ -20,7 +20,9 @@
                 <p class="text-white">Maintain & Develop by CP Prima</p>
             </div>
         </div>
-        <div class="h-screen p-4 bg-background shadow-md md:w-[450px] w-full">
+        <div
+            class="h-screen p-4 bg-background shadow-md md:w-[450px] w-full backdrop-blur-sm"
+        >
             <div class="flex flex-col px-1 mt-20 sm:px-5 gap-y-5">
                 <div class="mb-5">
                     <h1 class="mb-5 text-white">LOG IN</h1>
@@ -95,6 +97,9 @@ const login = async () => {
     isLoading.value = true;
     try {
         await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        localStorage.setItem("user_email", email.value);
+
         router.push({ name: "dashboard" });
     } catch (err) {
         console.error("Login error:", err.message);

@@ -97,7 +97,7 @@ const chartOptions = ref({
 </script>
 
 <template>
-    <div class="w-[70%]">
+    <div class="sm:w-[70%]">
         <Bar :options="chartOptions" :data="chartData" />
     </div>
 </template>

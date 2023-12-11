@@ -1,6 +1,6 @@
 <!-- ReusableForm.vue -->
 <template>
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="submitForm" class="w-full">
         <slot></slot>
     </form>
 </template>

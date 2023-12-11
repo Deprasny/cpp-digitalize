@@ -7,8 +7,19 @@ const apiService = axios.create({
     baseURL: BASE_URL,
     headers: {
         "Content-Type": "application/json",
-        user: "julius.prasetyorumanto@cpp.co.id",
     },
+});
+
+apiService.interceptors.request.use((config) => {
+    const getEmail = localStorage.getItem("user_email");
+
+    // Retrieve the current email from wherever it is stored in your application
+    const currentEmail = getEmail; // Replace this with your actual logic to get the email
+
+    // Set the 'user' header based on the current email
+    config.headers["user"] = currentEmail;
+
+    return config;
 });
 
 export default {
@@ -32,6 +43,16 @@ export default {
             return response.data;
         } catch (error) {
             console.error("Error posting data:", error);
+            throw error;
+        }
+    },
+
+    // Example PUT request
+    async putData(endpoint, data) {
+        try {
+            const response = await apiService.put(endpoint, data);
+            return response.data;
+        } catch (error) {
             throw error;
         }
     },

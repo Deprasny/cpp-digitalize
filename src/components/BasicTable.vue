@@ -23,8 +23,8 @@ const props = defineProps({
 });
 
 const table = useVueTable({
-    columns: props.columns,
-    data: props.data,
+    columns: props?.columns,
+    data: props?.data,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
@@ -55,8 +55,10 @@ function handlePageSizeChange(newPageSize) {
 </script>
 
 <template>
-    <div>
-        <table class="w-full mx-5 shadow-xl table-fixed text-start">
+    <div class="w-full">
+        <table
+            class="hidden w-full mx-5 shadow-xl table-fixed text-start md:table"
+        >
             <thead>
                 <tr>
                     <th
@@ -79,7 +81,7 @@ function handlePageSizeChange(newPageSize) {
                     class="border-b border-black last:border-b-0"
                 >
                     <td
-                        class="py-8 pl-5 text-base font-light leading-4 text-black break-words"
+                        class="py-8 pl-5 text-base font-light leading-4 text-black break-words cursor-pointer"
                         v-for="cell in row.getVisibleCells()"
                         :key="cell.id"
                         @click="emit('onCellClick', cell)"
@@ -92,6 +94,32 @@ function handlePageSizeChange(newPageSize) {
                 </tr>
             </tbody>
         </table>
+
+        <!-- Mobile Version -->
+        <div class="w-full md:hidden">
+            <div
+                v-for="row in table.getRowModel().rows"
+                :key="row.id"
+                class="mb-4"
+            >
+                <div class="w-full p-4 bg-white border rounded-lg shadow-md">
+                    <div v-for="cell in row.getVisibleCells()" :key="cell.id">
+                        <strong @click="emit('onCellClick', cell)">{{
+                            cell.column.columnDef.header()
+                        }}</strong>
+                        <p class="text-black break-words cursor-pointer">
+                            {{
+                                cell.column.columnDef.cell({
+                                    ...cell.getContext(),
+                                    row,
+                                })
+                            }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="flex items-center justify-center w-full gap-2 mt-4">
             <!-- Previous Page Button -->
             <button
