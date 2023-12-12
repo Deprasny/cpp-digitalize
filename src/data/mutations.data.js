@@ -7,6 +7,7 @@ const formLabelTitle = {
     LokasiKerja: "Lokasi Kerja ",
     MelaporKe: "Melapor Ke ",
     ImmediateManager: "Immediate Manager",
+    Tunjangan: "Tunjangan",
 };
 
 const statusLamaDefaultValues = ["-", "-", "-", "-", "-", "-", "-", "-"];

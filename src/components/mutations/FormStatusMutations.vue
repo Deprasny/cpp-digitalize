@@ -27,6 +27,10 @@
                 <FormStatusInfo>
                     <LabelForm :label="formLabelTitle.ImmediateManager" />
                 </FormStatusInfo>
+
+                <FormStatusInfo v-if="formType === 'detail'">
+                    <LabelForm :label="formLabelTitle.Tunjangan" />
+                </FormStatusInfo>
             </div>
             <div
                 class="flex flex-col items-center text-center flex-1 w-[450px]"

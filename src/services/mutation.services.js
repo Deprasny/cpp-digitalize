@@ -24,9 +24,17 @@ const getMutationsDetailTable = async ({ id }) => {
 
 const createMutationsTable = async ({ body }) => {
     try {
-        const response = await apiServices.postData("/mutations", {
-            ...body,
-        });
+        const response = await apiServices.postData(
+            "/mutations",
+            {
+                ...body,
+            },
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            }
+        );
 
         return response;
     } catch (error) {
