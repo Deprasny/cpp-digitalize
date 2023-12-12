@@ -47,7 +47,7 @@
 
                     <!-- form status -->
                     <FormStatusMutations
-                        :statusLama="statusLama"
+                        :statusLamaData="selectedValue.details"
                         :values="formStatusValues"
                         isGroup="true"
                     />

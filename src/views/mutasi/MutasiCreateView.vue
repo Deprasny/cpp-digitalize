@@ -52,7 +52,7 @@ const router = useRouter();
 
 const isDropdownOpen = ref(false);
 const selectedOption = ref(null);
-const dropdownOptions = ref(["Individu", "Group"]);
+const dropdownOptions = ref(["Individu", "Kolektif"]);
 
 const toggleDropdown = () => {
     isDropdownOpen.value = !isDropdownOpen.value;

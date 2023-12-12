@@ -11,32 +11,36 @@
                             <FormInputBasic
                                 label="Tanggal Masuk"
                                 type="date"
-                                v-model="autofillForm.joindate"
+                                id="join_date"
+                                :modelValue="selectedValue?.details?.joindate"
                                 disabled
                             />
                             <FormInputBasic
                                 label="Home Base"
-                                v-model="autofillForm.homebase"
+                                id="homebase"
+                                :modelValue="selectedValue?.details?.homebase"
                                 disabled
                                 placeholder="-"
                             />
                         </div>
                         <div class="flex flex-col gap-x-7 md:flex-row">
                             <FormInputBasic
+                                id="birth_date"
                                 label="Tanggal Lahir"
                                 :type="
-                                    autofillForm.birth_date === null
+                                    selectedValue?.details?.birth_date === null
                                         ? `text`
                                         : `date`
                                 "
-                                v-model="autofillForm.birth_date"
+                                :modelValue="selectedValue?.details?.birth_date"
                                 placeholder="-"
                                 disabled
                             />
 
                             <FormInputBasic
+                                id="education"
                                 label="Pendidikan"
-                                v-model="autofillForm.education"
+                                :modelValue="selectedValue.details?.education"
                                 disabled
                                 placeholder="-"
                             />
@@ -48,6 +52,7 @@
                                 :disabled="isDisabled"
                             />
                             <FormInputBasic
+                                id="mut_reason"
                                 label="Alasan Mutasi"
                                 v-model="values.mut_reason"
                                 placeholder="Masukan Alasan Mutasi"
@@ -58,8 +63,9 @@
 
                     <!-- form status -->
                     <FormStatusMutations
-                        :statusLama="statusLama"
+                        id="status"
                         :values="formStatusValues"
+                        :statusLamaData="selectedValue?.details"
                     />
 
                     <UIDivider />
@@ -68,6 +74,7 @@
                         class="flex flex-col items-start justify-between w-full gap-6 my-10 md:flex-row md:gap-0"
                     >
                         <FormRadio
+                            id="mut_type"
                             label="Keluarga"
                             name="keluarga"
                             :options="keluargaOptions"
@@ -78,6 +85,7 @@
                         />
 
                         <FormRadio
+                            id="tunjangan_perumahan"
                             label="Tunj. Perumahan"
                             name="tunjangan"
                             :options="tunjanganOptions"
@@ -88,6 +96,7 @@
                         />
 
                         <FormRadio
+                            id="tunjangan_transportasi"
                             label="Transportasi Barang"
                             name="barang"
                             :options="barangOptions"
@@ -104,11 +113,13 @@
                     <div class="w-full my-10">
                         <div class="flex flex-col gap-x-7 md:flex-row">
                             <FormInputBasic
+                                id="mutd_leave_bal"
                                 label="Sisa Cuti"
                                 type="number"
                                 v-model="values.mutd_leave_bal"
                             />
                             <FormInputBasic
+                                id="mutd_medical_bal"
                                 label="Sisa Plafon Berobat"
                                 type="number"
                                 v-model="values.mutd_medical_bal"
@@ -116,17 +127,20 @@
                         </div>
                         <div class="flex flex-col gap-x-7 md:flex-row">
                             <FormInputBasic
+                                id="mutd_debit_amount"
                                 label="Hak Karyawan Belum Terbayar"
                                 type="number"
                                 v-model="values.mutd_debit_amount"
                             />
                             <FormInputBasic
+                                id="mutd_credit_amount"
                                 label="Hutang ke Perusahaan"
                                 type="number"
                                 v-model="values.mutd_credit_amount"
                             />
                         </div>
                         <FormInputBasic
+                            id="mutd_notes"
                             label="Keterangan"
                             v-model="values.mutd_notes"
                         />
@@ -143,13 +157,8 @@
                             <div
                                 class="flex flex-col items-start md:items-center gap-x-5 md:flex-row"
                             >
-                                <UIButton
-                                    variant="form"
-                                    class="w-[200px]"
-                                    type="file"
-                                >
-                                    Upload File
-                                </UIButton>
+                                <FormUploadFile v-model="values.files" />
+
                                 <p class="text-xs">
                                     Mohon melampirkan struktur organisasi
                                     sebelum dan sesudah
@@ -234,12 +243,12 @@ import {
     tunjanganOptions,
 } from "../../data/mutations.data";
 import FormNIKAutocomplete from "../../components/FormNIKAutocomplete.vue";
+import FormUploadFile from "../../components/FormUploadFile.vue";
 
 const store = useModalStore();
 const showSuccessModal = ref(false);
 const showErrorModal = ref(false);
 
-const statusLama = ref(statusLamaDefaultValues);
 const isDisabled = ref(true);
 const props = defineProps(["modelValue"]);
 const router = useRouter();
@@ -267,13 +276,7 @@ const values = ref({
     mutd_credit_amount: "",
     mutd_notes: "",
     allowance_now: "",
-});
-
-const autofillForm = ref({
-    joindate: "",
-    homebase: "",
-    birth_date: "",
-    education: "",
+    files: [],
 });
 
 const selectedValue = ref({});
@@ -352,24 +355,7 @@ const handleDraft = () => {
 
 watchEffect(() => {
     if (selectedValue.value?.details) {
-        autofillForm.value.joindate = selectedValue.value?.details?.joindate;
-        autofillForm.value.homebase = selectedValue.value?.details?.homebase;
-        autofillForm.value.birth_date =
-            selectedValue.value?.details?.birth_date;
-        autofillForm.value.education = selectedValue.value?.details?.education;
-
         values.value.nik = selectedValue.value?.details?.nik;
-
-        statusLama.value = [
-            selectedValue.value?.details?.persarea,
-            selectedValue.value?.details?.posisi,
-            selectedValue?.value?.details?.level,
-            selectedValue.value?.details?.busunit,
-            selectedValue.value?.details?.costcenter,
-            selectedValue.value?.details?.office,
-            selectedValue.value?.details?.empl_nik_spv,
-            selectedValue.value?.details?.immedmgr,
-        ];
     }
 
     if (selectedValue.value?.details?.nik) {

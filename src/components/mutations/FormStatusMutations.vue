@@ -3,13 +3,34 @@
         <div class="flex my-10 w-[900px]">
             <div class="flex flex-col items-center text-center flex-1 w-48">
                 <div class="w-full h-10"></div>
-                <div
-                    v-for="list in listInfo"
-                    :key="list"
-                    class="w-48 font-semibold h-20 flex items-center"
-                >
-                    <LabelForm :label="list" />
-                </div>
+                <FormStatusInfo>
+                    <LabelForm :label="formLabelTitle.Perusahaan" />
+                </FormStatusInfo>
+                <FormStatusInfo>
+                    <LabelForm :label="formLabelTitle.Jabatan" />
+                </FormStatusInfo>
+                <FormStatusInfo>
+                    <LabelForm :label="formLabelTitle.KelasJabatan" />
+                </FormStatusInfo>
+                <FormStatusInfo>
+                    <LabelForm :label="formLabelTitle.BussinessUnits" />
+                </FormStatusInfo>
+                <FormStatusInfo>
+                    <LabelForm :label="formLabelTitle.CostCenter" />
+                </FormStatusInfo>
+                <FormStatusInfo>
+                    <LabelForm :label="formLabelTitle.LokasiKerja" />
+                </FormStatusInfo>
+                <FormStatusInfo>
+                    <LabelForm :label="formLabelTitle.MelaporKe" />
+                </FormStatusInfo>
+                <FormStatusInfo>
+                    <LabelForm :label="formLabelTitle.ImmediateManager" />
+                </FormStatusInfo>
+
+                <FormStatusInfo v-if="formType === 'detail'">
+                    <LabelForm :label="formLabelTitle.Tunjangan" />
+                </FormStatusInfo>
             </div>
             <div
                 class="flex flex-col items-center text-center flex-1 w-[450px]"
@@ -17,16 +38,55 @@
                 <div class="w-[450px] py-1 text-lg font-bold bg-accent-2">
                     STATUS LAMA
                 </div>
-                <div
-                    v-for="status in statusLama"
-                    :key="status"
-                    class="w-full h-20 py-2 border border-l-0 text-left border-black flex items-center"
-                    :class="status === '-' ? 'bg-gray-100' : ''"
-                >
-                    {{ status }}
-                </div>
+                <FormStatusLamaItem>
+                    {{ statusLamaData?.persarea || detailData?.companyFr }}
+                </FormStatusLamaItem>
 
-                <template v-if="!isGroup">
+                <FormStatusLamaItem>
+                    {{ statusLamaData?.posisi || detailData?.positionFr }}
+                </FormStatusLamaItem>
+
+                <FormStatusLamaItem>
+                    {{ statusLamaData?.level || detailData?.levelFr }}
+                </FormStatusLamaItem>
+
+                <FormStatusLamaItem>
+                    {{ statusLamaData?.busunit || detailData?.buFr }}
+                </FormStatusLamaItem>
+
+                <FormStatusLamaItem>
+                    {{ statusLamaData?.costcenter || detailData?.ccFr }}
+                </FormStatusLamaItem>
+
+                <FormStatusLamaItem>
+                    {{ statusLamaData?.office || detailData?.locFr }}
+                </FormStatusLamaItem>
+
+                <FormStatusLamaItem>
+                    {{ statusLamaData?.empl_nik_spv || detailData?.spvFr }}
+                </FormStatusLamaItem>
+
+                <FormStatusLamaItem>
+                    {{ statusLamaData?.immedmgr || detailData?.mgrFr }}
+                </FormStatusLamaItem>
+
+                <FormStatusLamaItem v-if="formType === 'detail'" class="h-40">
+                    <div class="h-full" v-if="statusLamaTunjangan.length > 0">
+                        <div v-for="(item, index) in statusLamaTunjangan">
+                            <p>
+                                {{
+                                    ` ${item.muta_allow_code} : ${item.muta_allow_amount}`
+                                }}
+                            </p>
+                        </div>
+                        <UIDivider class="mt-2" />
+
+                        <p>Total : 9000</p>
+                    </div>
+                    <div v-else>-</div>
+                </FormStatusLamaItem>
+
+                <template v-if="isShowTunjangan">
                     <div class="flex justify-between w-full mt-10 bg-accent-2">
                         <div
                             v-for="header in headerTunjangan"
@@ -62,89 +122,125 @@
                     STATUS BARU
                 </div>
 
-                <FormStatusBaruItem>
-                    <FormAutocomplete
-                        noBorder="true"
-                        :data="options.company"
-                        id="company-status"
-                        :isLoading="options.isLoading"
-                        v-model="values.mutd_to_company"
-                        :reduceOption="onReduceOptions"
-                    />
-                </FormStatusBaruItem>
-                <FormStatusBaruItem>
-                    <FormAutocomplete
-                        noBorder="true"
-                        :data="options.position"
-                        id="position-status"
-                        :isLoading="options.isLoading"
-                        v-model="values.mutd_to_position"
-                        :reduceOption="onReduceOptions"
-                    />
-                </FormStatusBaruItem>
-                <FormStatusBaruItem>
-                    <div class="px-4 h-full py-2 flex items-center">
-                        {{ statusLama[2] }}
-                    </div>
-                </FormStatusBaruItem>
-                <FormStatusBaruItem>
-                    <FormAutocomplete
-                        noBorder="true"
-                        :data="options.bussunit"
-                        id="bussunit-status"
-                        :isLoading="options.isLoading"
-                        v-model="values.mutd_to_division"
-                        :reduceOption="onReduceOptions"
-                    />
-                </FormStatusBaruItem>
-                <FormStatusBaruItem>
-                    <FormAutocomplete
-                        noBorder="true"
-                        :data="options.costCenter"
-                        id="costcenter-status"
-                        :isLoading="options.isLoading"
-                        v-model="values.mutd_to_costcenter"
-                        :reduceOption="onReduceOptions"
-                    />
-                </FormStatusBaruItem>
-                <FormStatusBaruItem>
-                    <FormAutocomplete
-                        noBorder="true"
-                        :data="options.workLocation"
-                        id="worklocation-status"
-                        :isLoading="options.isLoading"
-                        v-model="values.mutd_to_work_location"
-                        :reduceOption="onReduceOptions"
-                    />
-                </FormStatusBaruItem>
-                <FormStatusBaruItem
-                    :isDisabled="values.mutd_to_division === ''"
-                >
-                    <FormAutocomplete
-                        noBorder="true"
-                        :data="conditionalOptions.directSPV"
-                        id="directspv-status"
-                        :isLoading="conditionalOptions.isLoading"
-                        v-model="values.mutd_to_direct_spv"
-                        :reduceOption="onReduceOptions"
-                        :isDisabled="values.mutd_to_division === ''"
-                    />
-                </FormStatusBaruItem>
-                <FormStatusBaruItem
-                    :isDisabled="values.mutd_to_division === ''"
-                >
-                    <FormAutocomplete
-                        noBorder="true"
-                        :data="conditionalOptions.immedManager"
-                        id="immedmanager-status"
-                        :isLoading="conditionalOptions.isLoading"
-                        v-model="values.mutd_to_immed_mgr"
-                        :reduceOption="onReduceOptions"
-                        :isDisabled="values.mutd_to_division === ''"
-                    />
-                </FormStatusBaruItem>
+                <template v-if="formType === 'detail'">
+                    <FormStatusLamaItem>
+                        {{ detailData?.companyTo }}
+                    </FormStatusLamaItem>
 
-                <template v-if="!isGroup">
+                    <FormStatusLamaItem>
+                        {{ detailData?.positionTo }}
+                    </FormStatusLamaItem>
+
+                    <FormStatusLamaItem>
+                        {{ detailData?.levelTo }}
+                    </FormStatusLamaItem>
+
+                    <FormStatusLamaItem>
+                        {{ detailData?.buTo }}
+                    </FormStatusLamaItem>
+
+                    <FormStatusLamaItem>
+                        {{ detailData?.ccTo }}
+                    </FormStatusLamaItem>
+
+                    <FormStatusLamaItem>
+                        {{ detailData?.locTo }}
+                    </FormStatusLamaItem>
+
+                    <FormStatusLamaItem>
+                        {{ detailData?.spvTo }}
+                    </FormStatusLamaItem>
+
+                    <FormStatusLamaItem>
+                        {{ detailData?.mgrTo }}
+                    </FormStatusLamaItem>
+                </template>
+
+                <template v-else>
+                    <FormStatusBaruItem>
+                        <FormAutocomplete
+                            noBorder="true"
+                            :data="options.company"
+                            id="company-status"
+                            :isLoading="options.isLoading"
+                            v-model="values.mutd_to_company"
+                            :reduceOption="onReduceOptions"
+                        />
+                    </FormStatusBaruItem>
+                    <FormStatusBaruItem>
+                        <FormAutocomplete
+                            noBorder="true"
+                            :data="options.position"
+                            id="position-status"
+                            :isLoading="options.isLoading"
+                            v-model="values.mutd_to_position"
+                            :reduceOption="onReduceOptions"
+                        />
+                    </FormStatusBaruItem>
+                    <FormStatusBaruItem>
+                        <div class="px-4 h-full py-2 flex items-center">
+                            {{ statusLamaData?.level }}
+                        </div>
+                    </FormStatusBaruItem>
+                    <FormStatusBaruItem>
+                        <FormAutocomplete
+                            noBorder="true"
+                            :data="options.bussunit"
+                            id="bussunit-status"
+                            :isLoading="options.isLoading"
+                            v-model="values.mutd_to_division"
+                            :reduceOption="onReduceOptions"
+                        />
+                    </FormStatusBaruItem>
+                    <FormStatusBaruItem>
+                        <FormAutocomplete
+                            noBorder="true"
+                            :data="options.costCenter"
+                            id="costcenter-status"
+                            :isLoading="options.isLoading"
+                            v-model="values.mutd_to_costcenter"
+                            :reduceOption="onReduceOptions"
+                        />
+                    </FormStatusBaruItem>
+                    <FormStatusBaruItem>
+                        <FormAutocomplete
+                            noBorder="true"
+                            :data="options.workLocation"
+                            id="worklocation-status"
+                            :isLoading="options.isLoading"
+                            v-model="values.mutd_to_work_location"
+                            :reduceOption="onReduceOptions"
+                        />
+                    </FormStatusBaruItem>
+                    <FormStatusBaruItem
+                        :isDisabled="values.mutd_to_division === ''"
+                    >
+                        <FormAutocomplete
+                            noBorder="true"
+                            :data="conditionalOptions.directSPV"
+                            id="directspv-status"
+                            :isLoading="conditionalOptions.isLoading"
+                            v-model="values.mutd_to_direct_spv"
+                            :reduceOption="onReduceOptions"
+                            :isDisabled="values.mutd_to_division === ''"
+                        />
+                    </FormStatusBaruItem>
+                    <FormStatusBaruItem
+                        :isDisabled="values.mutd_to_division === ''"
+                    >
+                        <FormAutocomplete
+                            noBorder="true"
+                            :data="conditionalOptions.immedManager"
+                            id="immedmanager-status"
+                            :isLoading="conditionalOptions.isLoading"
+                            v-model="values.mutd_to_immed_mgr"
+                            :reduceOption="onReduceOptions"
+                            :isDisabled="values.mutd_to_division === ''"
+                        />
+                    </FormStatusBaruItem>
+                </template>
+
+                <template v-if="isShowTunjangan">
                     <div class="flex justify-between w-full mt-10 bg-accent-1">
                         <div
                             v-for="header in headerTunjangan"
@@ -226,14 +322,26 @@ import {
     statusLamaDefaultValues,
     tunjanganLabelTitle,
 } from "../../data/mutations.data";
+import FormStatusLamaItem from "./FormStatusLamaItem.vue";
+import FormStatusInfo from "./FormStatusInfo.vue";
+import UIDivider from "../ui/UIDivider.vue";
 
-const listInfo = ref(formLabelTitle);
+const props = defineProps([
+    "isShowTunjangan",
+    "values",
+    "statusBaruData",
+    "statusLamaData",
+    "detailData",
+    "formType",
+]);
+
 const headerTunjangan = ref(tunjanganLabelTitle);
 const columns = ref(1);
 const columnsData = ref(columnTunjanganDefaultValues);
 const columnsValue = ref([columnTunjanganValues]);
 const totalTunjangan = ref(0);
-const props = defineProps(["statusLama", "isGroup", "values"]);
+const statusLamaTunjangan = ref([]);
+const statusBaruTunjangan = ref([]);
 
 const addColumn = () => {
     columns.value++;
@@ -308,6 +416,23 @@ watchEffect(() => {
             0
         );
         props.values.value.allowance_now = columnsValue.value;
+    }
+
+    if (
+        props?.detailData?.allowance.length > 0 &&
+        props.formType === "detail"
+    ) {
+        statusLamaTunjangan.value = props.detailData.allowance.filter(
+            (item) => {
+                return item.muta_type === "PAST";
+            }
+        );
+
+        statusBaruTunjangan.value = props.detailData.allowance.filter(
+            (item) => {
+                return item.muta_type === "NEW";
+            }
+        );
     }
 });
 

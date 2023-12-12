@@ -37,9 +37,11 @@ export default {
     },
 
     // Example POST request
-    async postData(endpoint, data) {
+    async postData(endpoint, data, config) {
         try {
-            const response = await apiService.post(endpoint, data);
+            const response = await apiService.post(endpoint, data, {
+                ...config,
+            });
             return response.data;
         } catch (error) {
             console.error("Error posting data:", error);

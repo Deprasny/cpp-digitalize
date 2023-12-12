@@ -153,93 +153,15 @@
                     <UIDivider />
 
                     <!-- form status -->
-                    <div class="overflow-x-auto">
-                        <div
-                            class="flex items-baseline justify-between mx-10 my-10 w-[900px]"
-                        >
-                            <div class="flex flex-col items-start w-[25%]">
-                                <div class="py-1"></div>
-                                <div
-                                    v-for="list in listInfo"
-                                    :key="list"
-                                    class="w-full py-[17px] font-semibold h-[140px] text-center"
-                                >
-                                    <LabelForm :label="list" />
-                                </div>
-                            </div>
-                            <div
-                                class="flex flex-col items-center flex-1 text-center"
-                            >
-                                <div
-                                    class="w-full py-1 text-lg font-bold bg-accent-2"
-                                >
-                                    STATUS LAMA
-                                </div>
-                                <div
-                                    v-for="status in statusLama"
-                                    :key="status"
-                                    class="w-full py-4 border border-l-0 border-black last:border-b-[2px] h-[140px]"
-                                >
-                                    <div
-                                        v-if="Array.isArray(status)"
-                                        class="mx-10"
-                                    >
-                                        <div
-                                            v-for="(item, itemIndex) in status"
-                                            :key="itemIndex"
-                                        >
-                                            <p>
-                                                {{
-                                                    ` ${item.no}. ${item.tunjangan} : ${item.total}`
-                                                }}
-                                            </p>
-                                        </div>
-                                        <UIDivider class="mt-5" />
 
-                                        <p>Total : 9000</p>
-                                    </div>
-                                    <div v-else>
-                                        {{ status }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="flex flex-col items-center flex-1 text-center"
-                            >
-                                <div
-                                    class="w-full py-1 text-lg font-bold text-white bg-accent-1"
-                                >
-                                    STATUS BARU
-                                </div>
-                                <div
-                                    v-for="status in statusBaru"
-                                    :key="status"
-                                    class="w-full py-4 border border-black border-r-2 last:border-b-[2px] h-[140px]"
-                                >
-                                    <div
-                                        v-if="Array.isArray(status)"
-                                        class="mx-10"
-                                    >
-                                        <div
-                                            v-for="(item, itemIndex) in status"
-                                            :key="itemIndex"
-                                        >
-                                            <p>
-                                                {{
-                                                    ` ${item.no}. ${item.tunjangan} : ${item.total}`
-                                                }}
-                                            </p>
-                                        </div>
-                                        <UIDivider class="mt-5" />
-
-                                        <p>Total : 9000</p>
-                                    </div>
-                                    <div v-else>
-                                        {{ status }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div>
+                        <FormStatus
+                            :values="formStatusValues"
+                            :isGroup="formType === 'Group'"
+                            isDetail="true"
+                            :detailData="data"
+                            formType="detail"
+                        />
                     </div>
 
                     <UIDivider />
@@ -432,6 +354,7 @@ import {
     putMutationsTable,
 } from "../../services/mutation.services";
 import { useModalStore } from "../../stores/index.js";
+import FormStatus from "../../components/mutations/FormStatusMutations.vue";
 
 const store = useModalStore();
 
@@ -448,6 +371,8 @@ const statusApproval = ref("");
 const data = ref({});
 
 const formType = routeName.currentRoute.value.query.form_type;
+
+const formStatusValues = ref({});
 
 const handleFetch = async () => {
     isLoading.value = true;
@@ -520,25 +445,7 @@ const handleReject = () => {
     isLoading.value = true;
 };
 
-const listLog = ref([
-    { date: "7 Agustus 2023", description: "Approve by BU Head Penerima" },
-    { date: "8 Agustus 2023", description: "Approve by HRD" },
-    { date: "9 Agustus 2023", description: "Approve by HRD" },
-    { date: "10 Agustus 2023", description: "Approve by HRD" },
-    { date: "11 Agustus 2023", description: "Approve by HRD" },
-]);
-
-const listInfo = ref([
-    "Perusahaan ",
-    "Jabatan ",
-    "Kelas Jabatan ",
-    "Business Units",
-    "Cost Center ",
-    "Lokasi Kerja ",
-    "Melapor Ke ",
-    "Immediate Manager",
-    "Tunjangan",
-]);
+const listLog = ref([]);
 
 const statusLama = ref([
     "1450 CP Prima - Jakarta (HO)",
