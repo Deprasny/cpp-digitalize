@@ -71,19 +71,7 @@
                 </FormStatusLamaItem>
 
                 <FormStatusLamaItem v-if="formType === 'detail'" class="h-40">
-                    <div class="h-full" v-if="statusLamaTunjangan.length > 0">
-                        <div v-for="(item, index) in statusLamaTunjangan">
-                            <p>
-                                {{
-                                    ` ${item.muta_allow_code} : ${item.muta_allow_amount}`
-                                }}
-                            </p>
-                        </div>
-                        <UIDivider class="mt-2" />
-
-                        <p>Total : 9000</p>
-                    </div>
-                    <div v-else>-</div>
+                    <FormItemTunjangan :data="statusLamaTunjangan" />
                 </FormStatusLamaItem>
 
                 <template v-if="isShowTunjangan">
@@ -153,6 +141,13 @@
 
                     <FormStatusLamaItem>
                         {{ detailData?.mgrTo }}
+                    </FormStatusLamaItem>
+
+                    <FormStatusLamaItem
+                        v-if="formType === 'detail'"
+                        class="h-40"
+                    >
+                        <FormItemTunjangan :data="statusBaruTunjangan" />
                     </FormStatusLamaItem>
                 </template>
 
@@ -325,6 +320,7 @@ import {
 import FormStatusLamaItem from "./FormStatusLamaItem.vue";
 import FormStatusInfo from "./FormStatusInfo.vue";
 import UIDivider from "../ui/UIDivider.vue";
+import FormItemTunjangan from "./FormItemTunjangan.vue";
 
 const props = defineProps([
     "isShowTunjangan",
