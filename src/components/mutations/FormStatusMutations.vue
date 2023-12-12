@@ -406,12 +406,16 @@ const fetchAutoFillForms = async () => {
 watchEffect(() => {
     props.values.value = values.value;
 
-    if (columnsValue.value.length) {
+    if (columnsValue.value.length > 0) {
         totalTunjangan.value = columnsValue.value.reduce(
             (acc, curr) => acc + Number(curr.muta_allow_amount),
             0
         );
         props.values.value.allowance_now = columnsValue.value;
+    }
+
+    if (columnsValue.value.length === 0) {
+        props.values.value.allowance_now = [];
     }
 
     if (

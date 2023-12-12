@@ -49,6 +49,8 @@
                             <FormInputBasic
                                 label="Tanggal Efektif Mutasi"
                                 type="date"
+                                id="mut_date"
+                                v-model="values.mut_date"
                                 :disabled="isDisabled"
                             />
                             <FormInputBasic
@@ -168,6 +170,7 @@
                     </div>
                 </div>
             </BasicCard>
+
             <div
                 class="flex items-center justify-start w-full mt-5 md:gap-x-4 gap-x-2"
             >
@@ -275,7 +278,8 @@ const values = ref({
     mutd_debit_amount: "",
     mutd_credit_amount: "",
     mutd_notes: "",
-    allowance_now: "",
+    allowance_now: [],
+    mut_date: "",
     files: [],
 });
 
@@ -285,30 +289,33 @@ const isDraft = ref(false);
 
 const onSubmit = async () => {
     const transformValues = {
-        detail: [
-            {
-                nik: values.value.nik,
-                mutd_family_move: values.value.mutd_family_move,
-                mutd_house_allowance: values.value.mutd_house_allowance,
-                mutd_transportation: values.value.mutd_transportation,
-                mutd_leave_bal: values.value.mutd_leave_bal,
-                mutd_medical_bal: values.value.mutd_medical_bal,
-                mutd_debit_amount: values.value.mutd_debit_amount,
-                mutd_credit_amount: values.value.mutd_credit_amount,
-                mutd_notes: values.value.mutd_notes,
-                ...formStatusValues.value?.value,
-            },
-        ],
-
-        mut_type: values.value.mut_type,
-        mut_reason: values.value.mut_reason,
-        draft: values.value.draft,
+        data: {
+            detail: [
+                {
+                    nik: values.value.nik,
+                    mutd_family_move: values.value.mutd_family_move,
+                    mutd_house_allowance: values.value.mutd_house_allowance,
+                    mutd_transportation: values.value.mutd_transportation,
+                    mutd_leave_bal: values.value.mutd_leave_bal,
+                    mutd_medical_bal: values.value.mutd_medical_bal,
+                    mutd_debit_amount: values.value.mutd_debit_amount,
+                    mutd_credit_amount: values.value.mutd_credit_amount,
+                    mutd_notes: values.value.mutd_notes,
+                    ...formStatusValues.value?.value,
+                },
+            ],
+            mut_date: values.value.mut_date,
+            mut_type: values.value.mut_type,
+            mut_reason: values.value.mut_reason,
+            draft: values.value.draft,
+        },
+        lampiran: values.value.files[0],
     };
 
     const formData = new FormData();
 
-    formData.append("data", JSON.stringify(transformValues));
-    formData.append("files", values.value.files[0]);
+    formData.append("data", JSON.stringify(transformValues.data));
+    formData.append("lampiran", transformValues.lampiran || []);
 
     try {
         const { data: response } = await useFetch({
@@ -318,7 +325,7 @@ const onSubmit = async () => {
                 config: {
                     headers: {
                         Accept: "multipart/form-data",
-                        // "Content-Type": "multipart/form-data",
+                        "Content-Type": "multipart/form-data",
                     },
                 },
             },

@@ -24,15 +24,7 @@ const getMutationsDetailTable = async ({ id }) => {
 
 const createMutationsTable = async ({ body, config }) => {
     try {
-        const response = await apiServices.postData(
-            "/mutations",
-            {
-                ...body,
-            },
-            {
-                ...config,
-            }
-        );
+        const response = await apiServices.postData("/mutations", body, config);
 
         return response;
     } catch (error) {
