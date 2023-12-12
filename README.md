@@ -1,7 +1,35 @@
-# Vue 3 + Vite
+# Vite + Vue 3 Application Deployment and Environment Setup Guide
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Table of Contents
 
-## Recommended IDE Setup
+-   [Setting Up Environment Variables](#setting-up-environment-variables)
+-   [Development](#development)
+-   [Deployment](#deployment)
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+---
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+-   [Node.js](https://nodejs.org/) (v14.17.0 or later recommended)
+-   [npm](https://www.npmjs.com/) (v6.14.0 or later recommended)
+
+## Setting Up Environment Variables
+
+Create a `.env` file in the root of your project to manage environment-specific configurations. Use the `.env.example` file as a starting point.
+
+```bash
+VITE_API_BASE_URL= your-url
+```
+
+## Deployment
+
+### Deploying to a Server
+
+1. **Build the Project for Production:**
+
+    ```bash
+    npm install
+    npm run build
+    ```
