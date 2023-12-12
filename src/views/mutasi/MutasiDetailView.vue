@@ -47,7 +47,7 @@
                                         class="w-full font-semibold"
                                     />
                                     <div class="flex flex-col w-full gap-2">
-                                        -
+                                        {{ data.mut_date }}
                                     </div>
                                 </div>
                                 <div class="hidden w-full md:flex"></div>
@@ -134,7 +134,7 @@
                                         value="John Doe"
                                         class="w-full font-semibold"
                                     />
-                                    <p class="w-full">-</p>
+                                    <p class="w-full">{{ data?.mut_date }}</p>
                                 </div>
                             </div>
                             <div class="flex w-full py-4 px-7 text-start">
