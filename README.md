@@ -20,8 +20,7 @@ Before you begin, ensure you have the following installed:
 Create a `.env` file in the root of your project to manage environment-specific configurations. Use the `.env.example` file as a starting point.
 
 ```bash
-# .env.example
-VUE_APP_API_BASE_URL= your-url
+VITE_API_BASE_URL= your-url
 ```
 
 ## Deployment
