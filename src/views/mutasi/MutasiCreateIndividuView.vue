@@ -285,33 +285,42 @@ const isDraft = ref(false);
 
 const onSubmit = async () => {
     const transformValues = {
-        body: {
-            detail: [
-                {
-                    nik: values.value.nik,
-                    mutd_family_move: values.value.mutd_family_move,
-                    mutd_house_allowance: values.value.mutd_house_allowance,
-                    mutd_transportation: values.value.mutd_transportation,
-                    mutd_leave_bal: values.value.mutd_leave_bal,
-                    mutd_medical_bal: values.value.mutd_medical_bal,
-                    mutd_debit_amount: values.value.mutd_debit_amount,
-                    mutd_credit_amount: values.value.mutd_credit_amount,
-                    mutd_notes: values.value.mutd_notes,
-                    ...formStatusValues.value?.value,
-                },
-            ],
+        detail: [
+            {
+                nik: values.value.nik,
+                mutd_family_move: values.value.mutd_family_move,
+                mutd_house_allowance: values.value.mutd_house_allowance,
+                mutd_transportation: values.value.mutd_transportation,
+                mutd_leave_bal: values.value.mutd_leave_bal,
+                mutd_medical_bal: values.value.mutd_medical_bal,
+                mutd_debit_amount: values.value.mutd_debit_amount,
+                mutd_credit_amount: values.value.mutd_credit_amount,
+                mutd_notes: values.value.mutd_notes,
+                ...formStatusValues.value?.value,
+            },
+        ],
 
-            mut_type: values.value.mut_type,
-            mut_reason: values.value.mut_reason,
-            draft: values.value.draft,
-        },
+        mut_type: values.value.mut_type,
+        mut_reason: values.value.mut_reason,
+        draft: values.value.draft,
     };
+
+    const formData = new FormData();
+
+    formData.append("data", JSON.stringify(transformValues));
+    formData.append("files", values.value.files[0]);
 
     try {
         const { data: response } = await useFetch({
             services: createMutationsTable,
             options: {
-                ...transformValues,
+                body: formData,
+                config: {
+                    headers: {
+                        Accept: "multipart/form-data",
+                        // "Content-Type": "multipart/form-data",
+                    },
+                },
             },
         });
         if (response.value.message === "Success") {

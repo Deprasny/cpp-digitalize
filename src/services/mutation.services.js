@@ -22,7 +22,7 @@ const getMutationsDetailTable = async ({ id }) => {
     }
 };
 
-const createMutationsTable = async ({ body }) => {
+const createMutationsTable = async ({ body, config }) => {
     try {
         const response = await apiServices.postData(
             "/mutations",
@@ -30,9 +30,7 @@ const createMutationsTable = async ({ body }) => {
                 ...body,
             },
             {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
+                ...config,
             }
         );
 
