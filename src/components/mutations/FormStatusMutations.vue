@@ -70,6 +70,22 @@
                     {{ statusLamaData?.immedmgr || detailData?.mgrFr }}
                 </FormStatusLamaItem>
 
+                <FormStatusLamaItem v-if="formType === 'detail'" class="h-40">
+                    <div class="h-full" v-if="statusLamaTunjangan.length > 0">
+                        <div v-for="(item, index) in statusLamaTunjangan">
+                            <p>
+                                {{
+                                    ` ${item.muta_allow_code} : ${item.muta_allow_amount}`
+                                }}
+                            </p>
+                        </div>
+                        <UIDivider class="mt-2" />
+
+                        <p>Total : 9000</p>
+                    </div>
+                    <div v-else>-</div>
+                </FormStatusLamaItem>
+
                 <template v-if="isShowTunjangan">
                     <div class="flex justify-between w-full mt-10 bg-accent-2">
                         <div
@@ -308,6 +324,7 @@ import {
 } from "../../data/mutations.data";
 import FormStatusLamaItem from "./FormStatusLamaItem.vue";
 import FormStatusInfo from "./FormStatusInfo.vue";
+import UIDivider from "../ui/UIDivider.vue";
 
 const props = defineProps([
     "isShowTunjangan",
@@ -323,6 +340,8 @@ const columns = ref(1);
 const columnsData = ref(columnTunjanganDefaultValues);
 const columnsValue = ref([columnTunjanganValues]);
 const totalTunjangan = ref(0);
+const statusLamaTunjangan = ref([]);
+const statusBaruTunjangan = ref([]);
 
 const addColumn = () => {
     columns.value++;
@@ -397,6 +416,23 @@ watchEffect(() => {
             0
         );
         props.values.value.allowance_now = columnsValue.value;
+    }
+
+    if (
+        props?.detailData?.allowance.length > 0 &&
+        props.formType === "detail"
+    ) {
+        statusLamaTunjangan.value = props.detailData.allowance.filter(
+            (item) => {
+                return item.muta_type === "PAST";
+            }
+        );
+
+        statusBaruTunjangan.value = props.detailData.allowance.filter(
+            (item) => {
+                return item.muta_type === "NEW";
+            }
+        );
     }
 });
 

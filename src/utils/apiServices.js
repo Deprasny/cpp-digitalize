@@ -1,7 +1,7 @@
 // api.js
 import axios from "axios";
 
-const BASE_URL = "https://dev.hrd.ipnusantara.com/api/v1";
+const BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
 const apiService = axios.create({
     baseURL: BASE_URL,
