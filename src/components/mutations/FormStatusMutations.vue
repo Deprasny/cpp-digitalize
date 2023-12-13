@@ -510,6 +510,10 @@ watchEffect(() => {
             props.values.value.allowance_now = [];
         }
     }
+
+    if (!props.isShowTunjangan) {
+        props.values.value.allowance_now = [];
+    }
 });
 
 const fetchAutoFillFormParams = async () => {
