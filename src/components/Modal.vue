@@ -6,7 +6,7 @@
             class="fixed top-0 right-0 z-50 flex items-center justify-center w-full h-full bg-white bg-opacity-50 backdrop-blur-sm"
         >
             <div
-                class="w-[full] h-[full] p-4 border border-accent-1 rounded-3xl flex-col flex justify-center items-center bg-white relative space-y-2"
+                class="w-[450px] h-[220px] p-4 border border-accent-1 rounded-3xl flex-col flex justify-center items-center bg-white relative space-y-2"
             >
                 <span
                     @click="toggleModal"
@@ -22,7 +22,7 @@
                         <IconCheck class="text-green-600 text-7xl" />
                     </div>
 
-                    <p class="w-1/2 text-lg font-semibold text-center">
+                    <p class="text-lg font-semibold text-center">
                         {{ modalTitle }}
                     </p>
                     <div

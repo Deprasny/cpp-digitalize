@@ -15,138 +15,101 @@
                     class="md:w-[75%] w-full"
                 >
                     <template v-if="formType === 'Group'">
-                        <div class="my-5">
-                            <div class="flex w-full py-4 px-7 text-start">
-                                <div class="flex w-full">
-                                    <LabelForm
-                                        label="Nama & NIK"
-                                        class="w-full font-semibold"
-                                    />
-                                    <div class="flex flex-col w-full gap-2">
-                                        <div
-                                            class="flex w-full gap-2"
-                                            v-for="(
-                                                item, index
-                                            ) in data?.employee"
-                                        >
-                                            <p class="w-4">{{ index + 1 }}</p>
-                                            <p>
-                                                {{ item?.nama }} -
-                                                {{ item?.nik }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="hidden w-full md:flex"></div>
-                            </div>
-
-                            <div class="flex w-full py-4 px-7 text-start">
-                                <div class="flex w-full">
-                                    <LabelForm
-                                        label="Tanggal Efektif Mutasi"
-                                        class="w-full font-semibold"
-                                    />
-
+                        <FormDetailLabelContainer>
+                            <LabelForm label="Nama & NIK">
+                                <div class="flex flex-col w-full gap-2">
                                     <div
-                                        class="flex flex-col w-full gap-2"
-                                        v-if="isODStatuses"
+                                        class="flex w-full gap-2"
+                                        v-for="(item, index) in data?.employee"
                                     >
-                                        <FormInputBasic
-                                            type="date"
-                                            id="mut_date"
-                                            v-model="values.mut_date"
+                                        <p class="w-4">{{ index + 1 }}</p>
+                                        <p>
+                                            {{ item?.nama }} -
+                                            {{ item?.nik }}
+                                        </p>
+                                        <DownloadFiles
+                                            v-if="item?.no_sk"
+                                            label="Download SK"
+                                            :options="getParams(item?.id)"
+                                            :services="getSKMutations"
+                                            :fileName="`${item?.no_sk}-sk`"
                                         />
                                     </div>
-                                    <div class="flex flex-col w-full" v-else>
-                                        {{ data.mut_date }}
-                                    </div>
                                 </div>
-                                <div class="hidden w-full md:flex"></div>
-                            </div>
+                            </LabelForm>
 
-                            <div class="flex w-full py-4 px-7 text-start">
-                                <div class="flex w-full">
-                                    <LabelForm
-                                        label="Alasan Mutasi"
-                                        class="w-full font-semibold"
+                            <LabelForm label="Tanggal Efektif Mutasi">
+                                <div
+                                    class="flex flex-col w-full"
+                                    v-if="isODStatuses"
+                                >
+                                    <FormInputBasic
+                                        type="date"
+                                        id="mut_date"
+                                        v-model="values.mut_date"
                                     />
-                                    <div class="flex flex-col w-full gap-2">
-                                        {{ data.mut_reason }}
-                                    </div>
                                 </div>
-                                <div class="hidden w-full md:flex"></div>
-                            </div>
-                        </div>
+                                <div class="flex flex-col w-full" v-else>
+                                    {{ data.mut_date }}
+                                </div>
+                            </LabelForm>
+
+                            <LabelForm label="Alasan Mutasi">
+                                <div class="flex flex-col w-full gap-2">
+                                    {{ data.mut_reason }}
+                                </div>
+                            </LabelForm>
+                        </FormDetailLabelContainer>
                     </template>
                     <template v-else>
-                        <div
-                            class="my-5"
-                            v-for="(item, index) in data?.employee"
-                            :key="index"
-                        >
-                            <div
-                                class="flex flex-col w-full py-4 px-7 text-start md:flex-row"
-                            >
-                                <div class="flex w-full">
-                                    <LabelForm
-                                        label="Nama & NIK"
-                                        value="John Doe"
-                                        class="w-full font-semibold"
-                                    />
-                                    <p class="w-full">
-                                        {{ item?.nama }} - {{ item?.nik }}
+                        <FormDetailLabelContainer>
+                            <LabelForm label="Nama & NIK">
+                                <div class="w-full flex gap-4">
+                                    <p>
+                                        {{ data?.employee[0]?.nama }} -
+                                        {{ data?.employee[0]?.nik }}
                                     </p>
-                                </div>
-                                <div class="flex w-full">
-                                    <LabelForm
-                                        label="Tanggal Lahir"
-                                        value="John Doe"
-                                        class="w-full font-semibold"
+
+                                    <DownloadFiles
+                                        label="Download SK"
+                                        v-if="data?.employee[0]?.no_sk"
+                                        :options="
+                                            getParams(data?.employee[0]?.id)
+                                        "
+                                        :services="getSKMutations"
+                                        :fileName="`${data?.employee[0]?.no_sk}-sk`"
                                     />
-                                    <p class="w-full">{{ item.tgl_lahir }}</p>
                                 </div>
-                            </div>
-                            <div
-                                class="flex flex-col w-full py-4 px-7 text-start md:flex-row"
-                            >
-                                <div class="flex w-full">
-                                    <LabelForm
-                                        label="Tanggal Masuk"
-                                        value="John Doe"
-                                        class="w-full font-semibold"
-                                    />
-                                    <p class="w-full">{{ item.tgl_masuk }}</p>
-                                </div>
-                                <div class="flex w-full">
-                                    <LabelForm
-                                        label="Pendidikan"
-                                        value="John Doe"
-                                        class="w-full font-semibold"
-                                    />
-                                    <p class="w-full">{{ item?.education }}</p>
-                                </div>
-                            </div>
-                            <div class="flex w-full py-4 px-7 text-start">
-                                <div class="flex w-full md:w-1/2">
-                                    <LabelForm
-                                        label="Home Base"
-                                        value="John Doe"
-                                        class="w-full font-semibold"
-                                    />
-                                    <p class="w-full">
-                                        {{ item?.homebase || "-" }}
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="flex w-full py-4 px-7 text-start">
-                                <div class="flex w-full md:w-1/2">
-                                    <LabelForm
-                                        label="Tanggal Efektif Mutasi"
-                                        value="John Doe"
-                                        class="w-full font-semibold"
-                                    />
+                            </LabelForm>
+
+                            <LabelForm label="Tanggal Lahir">
+                                <p class="w-full">
+                                    {{ data?.employee[0]?.tgl_lahir }}
+                                </p>
+                            </LabelForm>
+
+                            <LabelForm label="Tanggal Masuk">
+                                <p class="w-full">
+                                    {{ data?.employee[0]?.tgl_masuk }}
+                                </p>
+                            </LabelForm>
+
+                            <LabelForm label="Pendidikan">
+                                <p class="w-full">
+                                    {{ data?.employee[0]?.education }}
+                                </p>
+                            </LabelForm>
+
+                            <LabelForm label="Home Base">
+                                <p class="w-full">
+                                    {{ data?.employee[0]?.homebase || "-" }}
+                                </p>
+                            </LabelForm>
+
+                            <LabelForm label="Tanggal Efektif Mutasi">
+                                <div>
                                     <div
-                                        class="flex flex-col w-full gap-2"
+                                        class="flex flex-col w-full"
                                         v-if="isODStatuses"
                                     >
                                         <FormInputBasic
@@ -159,18 +122,12 @@
                                         {{ data.mut_date }}
                                     </div>
                                 </div>
-                            </div>
-                            <div class="flex w-full py-4 px-7 text-start">
-                                <div class="flex w-full md:w-1/2">
-                                    <LabelForm
-                                        label="Alasan Mutasi"
-                                        value="John Doe"
-                                        class="w-full font-semibold"
-                                    />
-                                    <p class="w-full">{{ data?.mut_reason }}</p>
-                                </div>
-                            </div>
-                        </div>
+                            </LabelForm>
+
+                            <LabelForm label="Alasan Mutasi">
+                                <p class="w-full">{{ data?.mut_reason }}</p>
+                            </LabelForm>
+                        </FormDetailLabelContainer>
                     </template>
 
                     <UIDivider />
@@ -192,13 +149,8 @@
 
                     <template v-if="formType === 'Group'"></template>
                     <template v-else>
-                        <div class="flex flex-col mx-10 my-10 gap-y-5">
-                            <div class="flex w-full md:w-1/2">
-                                <LabelForm
-                                    label="Keluarga"
-                                    value="John Doe"
-                                    class="w-full font-semibold"
-                                />
+                        <FormDetailLabelContainer>
+                            <LabelForm label="Keluarga">
                                 <p class="w-full">
                                     {{
                                         data?.famMove === "YES"
@@ -206,13 +158,9 @@
                                             : "Tidak Ikut pindah kelokasi kerja baru"
                                     }}
                                 </p>
-                            </div>
-                            <div class="flex w-full md:w-1/2">
-                                <LabelForm
-                                    label="Tunj Rumah"
-                                    value="John Doe"
-                                    class="w-full font-semibold"
-                                />
+                            </LabelForm>
+
+                            <LabelForm label="Tunj Rumah">
                                 <p class="w-full">
                                     {{
                                         data?.houseAllow === "Yearly"
@@ -222,13 +170,9 @@
                                             : "Diambil per 2 Tahun"
                                     }}
                                 </p>
-                            </div>
-                            <div class="flex w-full md:w-1/2">
-                                <LabelForm
-                                    label="Transportasi Barang"
-                                    value="John Doe"
-                                    class="w-full font-semibold"
-                                />
+                            </LabelForm>
+
+                            <LabelForm label="Transportasi Barang">
                                 <p class="w-full">
                                     {{
                                         data?.transport === "Tunai"
@@ -236,54 +180,44 @@
                                             : "Difasilitasi Perusahaan"
                                     }}
                                 </p>
-                            </div>
-                        </div>
+                            </LabelForm>
+                        </FormDetailLabelContainer>
 
                         <UIDivider />
 
                         <!-- info-2 -->
-                        <div class="flex flex-col mx-10 my-10 gap-y-5">
-                            <div class="flex w-full md:w-1/2">
-                                <LabelForm
-                                    label="Sisa Cuti"
-                                    value="John Doe"
-                                    class="w-full font-semibold"
-                                />
+                        <FormDetailLabelContainer>
+                            <LabelForm label="Sisa Cuti" value="John Doe">
                                 <p class="w-full">{{ data?.leaveBal }}</p>
-                            </div>
-                            <div class="flex w-full md:w-1/2">
-                                <LabelForm
-                                    label="Sisa Plafon Berobat"
-                                    value="John Doe"
-                                    class="w-full font-semibold"
-                                />
+                            </LabelForm>
+
+                            <LabelForm
+                                label="Sisa Plafon Berobat"
+                                value="John Doe"
+                            >
                                 <p class="w-full">{{ data?.medBal }}</p>
-                            </div>
-                            <div class="flex w-full md:w-1/2">
-                                <LabelForm
-                                    label="Hak Karyawan Belum Terbayar"
-                                    value="John Doe"
-                                    class="w-full font-semibold"
-                                />
-                                <p class="w-full">{{ data?.creditAmount }}</p>
-                            </div>
-                            <div class="flex w-full md:w-1/2">
-                                <LabelForm
-                                    label="Hutang ke Perusahaan"
-                                    value="John Doe"
-                                    class="w-full font-semibold"
-                                />
+                            </LabelForm>
+
+                            <LabelForm
+                                label="Hak Karyawan Belum Terbayar"
+                                value="John Doe"
+                            >
+                                <p class="w-full">
+                                    {{ data?.creditAmount }}
+                                </p>
+                            </LabelForm>
+
+                            <LabelForm
+                                label="Hutang ke Perusahaan"
+                                value="John Doe"
+                            >
                                 <p class="w-full">{{ data?.debitAmount }}</p>
-                            </div>
-                            <div class="flex w-full md:w-1/2">
-                                <LabelForm
-                                    label="Keterangan"
-                                    value="John Doe"
-                                    class="w-full font-semibold"
-                                />
+                            </LabelForm>
+
+                            <LabelForm label="Keterangan" value="John Doe">
                                 <p class="w-full">{{ data?.notes }}</p>
-                            </div>
-                        </div>
+                            </LabelForm>
+                        </FormDetailLabelContainer>
 
                         <UIDivider />
                     </template>
@@ -294,18 +228,37 @@
                     </div>
 
                     <!-- info-3-->
-                    <div class="flex flex-col mx-10 my-10 gap-y-5 w-full">
-                        <div class="flex w-full md:w-1/2">
-                            <LabelForm
-                                label="Lampiran"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full h-full">
-                                {{ docsUrl }}
-                            </p>
-                        </div>
-                    </div>
+                    <FormDetailLabelContainer>
+                        <LabelForm label="Lampiran">
+                            <div class="flex gap-4">
+                                <p
+                                    class="whitespace-nowrap overflow-hidden overflow-ellipsis"
+                                >
+                                    {{ docsUrl.body.url }}
+                                </p>
+                                <DownloadFiles
+                                    :services="getFileDocsMutations"
+                                    :options="docsUrl"
+                                    :fileName="`${data?.mut_req_no}-lampiran`"
+                                />
+                            </div>
+                        </LabelForm>
+
+                        <LabelForm
+                            label="Form Mutasi"
+                            class="items-center"
+                            v-if="data?.mut_status === 'F'"
+                        >
+                            <div class="flex gap-2 items-center">
+                                <DownloadFiles
+                                    :services="getFormMutations"
+                                    :options="getParams(data?.mut_id)"
+                                    :fileName="`${data?.mut_req_no}-form-Mutasi`"
+                                    label="Download Form Mutasi"
+                                />
+                            </div>
+                        </LabelForm>
+                    </FormDetailLabelContainer>
 
                     <div
                         v-if="approvalButton === 'approval'"
@@ -322,15 +275,6 @@
                         <UIButton @click="$router.back()" variant="form">
                             Kembali
                         </UIButton>
-
-                        <UIButton
-                            variant="form"
-                            v-if="docsUrl"
-                            @click="handleGetFile"
-                            :isLoading="downloadFileLoading"
-                        >
-                            Download Lampiran</UIButton
-                        >
                     </div>
                 </BasicCard>
                 <div class="hidden md:block">
@@ -385,12 +329,16 @@ import UILoader from "../../components/ui/UILoader.vue";
 import Modal from "../../components/Modal.vue";
 import {
     getFileDocsMutations,
+    getFormMutations,
     getMutationsDetailTable,
+    getSKMutations,
     putMutationsTable,
 } from "../../services/mutation.services";
 import { useModalStore } from "../../stores/index.js";
 import FormStatus from "../../components/mutations/FormStatusMutations.vue";
 import FormInputBasic from "../../components/FormInputBasic.vue";
+import DownloadFiles from "../../components/DownloadFiles.vue";
+import FormDetailLabelContainer from "../../components/mutations/FormDetailLabelContainer.vue";
 
 const store = useModalStore();
 
@@ -407,9 +355,17 @@ const statusApproval = ref("");
 const data = ref({});
 const formType = routeName.currentRoute.value.query.form_type;
 
-const downloadFileLoading = ref(false);
+const docsUrl = ref({
+    body: {
+        url: "",
+    },
+});
 
-const docsUrl = ref("");
+const getParams = (id) => {
+    return {
+        id: id,
+    };
+};
 
 const values = ref({
     mut_date: "",
@@ -427,53 +383,13 @@ const handleFetch = async () => {
         });
 
         data.value = response.value;
-        docsUrl.value = response.value.mut_file_request;
+        docsUrl.value.body.url = response.value.mut_file_request;
     } catch (error) {
         console.error(error);
         showErrorModal.value = true;
         errorMessages.value = "Failed to fetch data";
     } finally {
         isLoading.value = false;
-    }
-};
-
-const handleGetFile = async () => {
-    downloadFileLoading.value = true;
-    try {
-        const { data: response, headers } = await useFetch({
-            services: getFileDocsMutations,
-            options: {
-                body: {
-                    url: docsUrl.value,
-                },
-
-                config: {
-                    responseType: "blob",
-                },
-            },
-        });
-
-        const contentType = headers.value["content-type"];
-        const fileExtension = contentType ? contentType.split("/")[1] : "";
-
-        var fileURL = window.URL.createObjectURL(new Blob([response.value]));
-
-        var fileLink = document.createElement("a");
-        fileLink.href = fileURL;
-
-        fileLink.setAttribute(
-            "download",
-            `${data?.value?.mut_req_no}.${fileExtension}`
-        );
-
-        document.body.appendChild(fileLink);
-        fileLink.click();
-    } catch (error) {
-        console.error(error);
-        showErrorModal.value = true;
-        errorMessages.value = "Failed to fetch data";
-    } finally {
-        downloadFileLoading.value = false;
     }
 };
 

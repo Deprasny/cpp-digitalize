@@ -54,10 +54,32 @@ const getFileDocsMutations = async ({ body, config }) => {
     }
 };
 
+const getSKMutations = async ({ id }) => {
+    try {
+        const response = await apiServices.postData(`/get_sk_mutasi/${id}`);
+        return response;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
+const getFormMutations = async ({ id }) => {
+    try {
+        const response = await apiServices.postData(`/get_form_mutasi/${id}`);
+        return response;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
 export {
     getMutationsTable,
     createMutationsTable,
     getMutationsDetailTable,
     putMutationsTable,
     getFileDocsMutations,
+    getSKMutations,
+    getFormMutations,
 };

@@ -61,15 +61,21 @@
                 </FormStatusLamaItem>
 
                 <FormStatusLamaItem>
-                    {{ statusLamaData?.office || detailData?.locFr }}
+                    {{ statusLamaData?.office || `${detailData?.locFr} ` }}
                 </FormStatusLamaItem>
 
                 <FormStatusLamaItem>
-                    {{ statusLamaData?.empl_nik_spv || detailData?.spvFr }}
+                    {{
+                        statusLamaData?.empl_nik_spv ||
+                        `${detailData?.spvFr} - ${detailData?.spvFrName} `
+                    }}
                 </FormStatusLamaItem>
 
                 <FormStatusLamaItem>
-                    {{ statusLamaData?.immedmgr || detailData?.mgrFr }}
+                    {{
+                        statusLamaData?.immedmgr ||
+                        `${detailData?.mgrFr} - ${detailData?.mgrFrName}`
+                    }}
                 </FormStatusLamaItem>
 
                 <FormStatusLamaItem
@@ -149,15 +155,15 @@
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem>
-                        {{ detailData?.locTo }}
+                        {{ `${detailData?.locTo} - ${detailData?.locToName}` }}
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem>
-                        {{ detailData?.spvTo }}
+                        {{ `${detailData?.spvTo} - ${detailData?.spvToName}` }}
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem>
-                        {{ detailData?.mgrTo }}
+                        {{ `${detailData?.mgrTo} - ${detailData?.mgrToName}` }}
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem
