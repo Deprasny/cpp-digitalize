@@ -6,13 +6,15 @@ const useFetch = async ({ services, options }) => {
         hasError: false,
         errorMessage: "",
         data: null,
+        headers: null,
     });
 
     const fetchData = async () => {
         state.isLoading = true;
         try {
             const response = await services?.(options);
-            state.data = response;
+            state.data = response?.data;
+            state.headers = response?.headers;
         } catch (error) {
             state.hasError = true;
             throw error;

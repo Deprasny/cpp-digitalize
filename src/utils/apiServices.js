@@ -29,7 +29,8 @@ export default {
             const response = await apiService.get(endpoint, {
                 params: params,
             });
-            return response.data;
+
+            return response;
         } catch (error) {
             console.error("Error fetching data:", error);
             throw error;
@@ -40,7 +41,7 @@ export default {
     async postData(endpoint, data, config) {
         try {
             const response = await apiService.post(endpoint, data, config);
-            return response.data;
+            return response;
         } catch (error) {
             throw error;
         }
