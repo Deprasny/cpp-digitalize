@@ -52,7 +52,6 @@ onBeforeMount(async () => {
     });
 
     data.value = response?.value;
-    console.log(data?.value);
 });
 
 const columnHelper = createColumnHelper();
@@ -86,6 +85,11 @@ const columns = [
         id: "tgl_pengajuan",
         cell: (info) => info.getValue(),
         header: () => "Date",
+    }),
+    columnHelper.accessor((row) => row.draft, {
+        id: "type",
+        cell: (info) => (info.getValue() ? "Draft" : ""),
+        header: () => "",
     }),
 ];
 

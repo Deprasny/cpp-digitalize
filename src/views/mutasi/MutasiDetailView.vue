@@ -294,14 +294,16 @@
                     </div>
 
                     <!-- info-3-->
-                    <div class="flex flex-col mx-10 my-10 gap-y-5">
+                    <div class="flex flex-col mx-10 my-10 gap-y-5 w-full">
                         <div class="flex w-full md:w-1/2">
                             <LabelForm
                                 label="Lampiran"
                                 value="John Doe"
                                 class="w-full font-semibold"
                             />
-                            <p class="w-full">Lorem Ipsum.pdf</p>
+                            <p class="w-full h-full">
+                                {{ data?.mut_file_request }}
+                            </p>
                         </div>
                     </div>
 
