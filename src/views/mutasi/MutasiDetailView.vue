@@ -71,7 +71,7 @@
                                         class="w-full font-semibold"
                                     />
                                     <div class="flex flex-col w-full gap-2">
-                                        -
+                                        {{ data.mut_reason }}
                                     </div>
                                 </div>
                                 <div class="hidden w-full md:flex"></div>
@@ -167,7 +167,7 @@
                                         value="John Doe"
                                         class="w-full font-semibold"
                                     />
-                                    <p class="w-full">{{ data?.notes }}</p>
+                                    <p class="w-full">{{ data?.mut_reason }}</p>
                                 </div>
                             </div>
                         </div>
@@ -497,7 +497,7 @@ const onApprove = async (id) => {
         if (isODStatuses.value) {
             return {
                 statusApproval: statusApproval.value,
-                mut_reason: values.value.mut_reason,
+                mut_reason: data?.value?.mut_reason,
                 mut_date: values.value.mut_date,
                 companyTo: values.value.value.mutd_to_company,
                 positionTo: values.value.value.mutd_to_position,
