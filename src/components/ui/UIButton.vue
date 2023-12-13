@@ -7,13 +7,17 @@
         <span v-if="props.icon" class="mr-2">
             <component :is="props.icon" class="text-lg" />
         </span>
-        <slot></slot>
+
+        <UILoader v-if="isLoading" class="w-6 h-6" />
+
+        <slot v-else></slot>
     </button>
 </template>
 
 <script setup>
 import { computed } from "vue";
 import { defineProps } from "vue";
+import UILoader from "./UILoader.vue";
 
 const props = defineProps({
     variant: {
@@ -27,6 +31,10 @@ const props = defineProps({
     icon: {
         type: String,
         default: "",
+    },
+    isLoading: {
+        type: Boolean,
+        default: false,
     },
 });
 

@@ -302,7 +302,7 @@
                                 class="w-full font-semibold"
                             />
                             <p class="w-full h-full">
-                                {{ data?.mut_file_request }}
+                                {{ docsUrl }}
                             </p>
                         </div>
                     </div>
@@ -322,6 +322,15 @@
                         <UIButton @click="$router.back()" variant="form">
                             Kembali
                         </UIButton>
+
+                        <UIButton
+                            variant="form"
+                            v-if="docsUrl"
+                            @click="handleGetFile"
+                            :isLoading="downloadFileLoading"
+                        >
+                            Download Lampiran</UIButton
+                        >
                     </div>
                 </BasicCard>
                 <div class="hidden md:block">
@@ -375,6 +384,7 @@ import useFetch from "../../hooks/useFetch";
 import UILoader from "../../components/ui/UILoader.vue";
 import Modal from "../../components/Modal.vue";
 import {
+    getFileDocsMutations,
     getMutationsDetailTable,
     putMutationsTable,
 } from "../../services/mutation.services";
@@ -397,6 +407,10 @@ const statusApproval = ref("");
 const data = ref({});
 const formType = routeName.currentRoute.value.query.form_type;
 
+const downloadFileLoading = ref(false);
+
+const docsUrl = ref("");
+
 const values = ref({
     mut_date: "",
     mut_reason: "",
@@ -413,12 +427,53 @@ const handleFetch = async () => {
         });
 
         data.value = response.value;
+        docsUrl.value = response.value.mut_file_request;
     } catch (error) {
         console.error(error);
         showErrorModal.value = true;
         errorMessages.value = "Failed to fetch data";
     } finally {
         isLoading.value = false;
+    }
+};
+
+const handleGetFile = async () => {
+    downloadFileLoading.value = true;
+    try {
+        const { data: response, headers } = await useFetch({
+            services: getFileDocsMutations,
+            options: {
+                body: {
+                    url: docsUrl.value,
+                },
+
+                config: {
+                    responseType: "blob",
+                },
+            },
+        });
+
+        const contentType = headers.value["content-type"];
+        const fileExtension = contentType ? contentType.split("/")[1] : "";
+
+        var fileURL = window.URL.createObjectURL(new Blob([response.value]));
+
+        var fileLink = document.createElement("a");
+        fileLink.href = fileURL;
+
+        fileLink.setAttribute(
+            "download",
+            `${data?.value?.mut_req_no}.${fileExtension}`
+        );
+
+        document.body.appendChild(fileLink);
+        fileLink.click();
+    } catch (error) {
+        console.error(error);
+        showErrorModal.value = true;
+        errorMessages.value = "Failed to fetch data";
+    } finally {
+        downloadFileLoading.value = false;
     }
 };
 

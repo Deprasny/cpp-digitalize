@@ -44,9 +44,20 @@ const putMutationsTable = async ({ id, body }) => {
     }
 };
 
+const getFileDocsMutations = async ({ body, config }) => {
+    try {
+        const response = await apiServices.postData(`/get_file`, body, config);
+        return response;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
 export {
     getMutationsTable,
     createMutationsTable,
     getMutationsDetailTable,
     putMutationsTable,
+    getFileDocsMutations,
 };
