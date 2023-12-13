@@ -6,7 +6,7 @@
             class="fixed top-0 right-0 z-50 flex items-center justify-center w-full h-full bg-white bg-opacity-50 backdrop-blur-sm"
         >
             <div
-                class="w-[500px] h-[200px] p-4 border border-accent-1 rounded-3xl flex-col flex justify-center items-center bg-white relative space-y-2"
+                class="w-[full] h-[full] p-4 border border-accent-1 rounded-3xl flex-col flex justify-center items-center bg-white relative space-y-2"
             >
                 <span
                     @click="toggleModal"
@@ -16,7 +16,7 @@
                 </span>
                 <template v-if="props.isLoading === false">
                     <div v-if="props.modalType === 'danger'">
-                        <IconDanger class="text-red-600 text-7xl" />
+                        <IconDanger class="text-red-600 text-6xl" />
                     </div>
                     <div v-if="props.modalType === 'success'">
                         <IconCheck class="text-green-600 text-7xl" />
