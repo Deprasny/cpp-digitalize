@@ -46,7 +46,18 @@
                                         label="Tanggal Efektif Mutasi"
                                         class="w-full font-semibold"
                                     />
-                                    <div class="flex flex-col w-full gap-2">
+
+                                    <div
+                                        class="flex flex-col w-full gap-2"
+                                        v-if="isODStatuses"
+                                    >
+                                        <FormInputBasic
+                                            type="date"
+                                            id="mut_date"
+                                            v-model="values.mut_date"
+                                        />
+                                    </div>
+                                    <div class="flex flex-col w-full" v-else>
                                         {{ data.mut_date }}
                                     </div>
                                 </div>
@@ -134,7 +145,19 @@
                                         value="John Doe"
                                         class="w-full font-semibold"
                                     />
-                                    <p class="w-full">{{ data?.mut_date }}</p>
+                                    <div
+                                        class="flex flex-col w-full gap-2"
+                                        v-if="isODStatuses"
+                                    >
+                                        <FormInputBasic
+                                            type="date"
+                                            id="mut_date"
+                                            v-model="values.mut_date"
+                                        />
+                                    </div>
+                                    <div class="flex flex-col w-full" v-else>
+                                        {{ data.mut_date }}
+                                    </div>
                                 </div>
                             </div>
                             <div class="flex w-full py-4 px-7 text-start">
@@ -156,11 +179,10 @@
 
                     <div>
                         <FormStatus
-                            :values="formStatusValues"
-                            :isGroup="formType === 'Group'"
-                            isDetail="true"
+                            :values="values"
                             :detailData="data"
-                            formType="detail"
+                            :formType="isODStatuses ? 'edit' : 'detail'"
+                            :isShowTunjangan="isCOMBENStatuses"
                         />
                     </div>
 
@@ -312,6 +334,7 @@
             <UILoader v-if="isLoading" />
         </div>
     </template>
+
     <Modal
         :isModalOpen="store.isModalOpen"
         @toggleModal="store.toggleModal"
@@ -355,6 +378,7 @@ import {
 } from "../../services/mutation.services";
 import { useModalStore } from "../../stores/index.js";
 import FormStatus from "../../components/mutations/FormStatusMutations.vue";
+import FormInputBasic from "../../components/FormInputBasic.vue";
 
 const store = useModalStore();
 
@@ -369,10 +393,12 @@ const routeName = useRouter();
 const approvalButton = routeName.currentRoute.value.query.type;
 const statusApproval = ref("");
 const data = ref({});
-
 const formType = routeName.currentRoute.value.query.form_type;
 
-const formStatusValues = ref({});
+const values = ref({
+    mut_date: "",
+    mut_reason: "",
+});
 
 const handleFetch = async () => {
     isLoading.value = true;
@@ -398,6 +424,9 @@ onMounted(() => {
     handleFetch();
 });
 
+const isODStatuses = ref(false);
+const isCOMBENStatuses = ref(false);
+
 const onApprove = async (id) => {
     try {
         modalLoading.value = true;
@@ -407,19 +436,25 @@ const onApprove = async (id) => {
                 id: id,
                 body: {
                     statusApproval: statusApproval.value,
+                    mut_reason: values.value.mut_reason,
+                    mut_date: values.value.mut_date,
+                    companyTo: values.value.value.mutd_to_company,
+                    positionTo: values.value.value.mutd_to_position,
+                    buTo: values.value.value.mutd_to_division,
+                    ccTo: values.value.value.mutd_to_costcenter,
+                    locTo: values.value.value.mutd_to_work_location,
+                    spvTo: values.value.value.mutd_to_direct_spv,
+                    mgrTo: values.value.value.mutd_to_immed_mgr,
                 },
             },
         });
 
-        if (response.value.message === "Success") {
-            store.toggleModal();
-            isLoading.value = false;
-            showSuccessModal.value = true;
+        isLoading.value = false;
+        showSuccessModal.value = true;
 
-            setTimeout(() => {
-                routeName.push({ name: "approval" });
-            }, 1000);
-        }
+        setTimeout(() => {
+            routeName.push({ name: "approval-mutasi" });
+        }, 1000);
     } catch (error) {
         errorMessages.value = error.response.data.message;
         isLoading.value = false;
@@ -447,77 +482,9 @@ const handleReject = () => {
 
 const listLog = ref([]);
 
-const statusLama = ref([
-    "1450 CP Prima - Jakarta (HO)",
-    "Specialist Organization Development",
-    "4A",
-    "Organization Development",
-    "1450 145766 HR Corporate",
-    "DKI Jakarta_SCBD",
-    "Panca Dias Purnomo - 22000130",
-    "Panca Dias Purnomo - 22000130",
-    [
-        {
-            no: "1",
-            tunjangan: "Transportasi",
-            total: " 1.000.000",
-        },
-        {
-            no: "2",
-            tunjangan: "Transportasi",
-            total: " 1.000.000",
-        },
-    ],
-]);
-
-const statusBaru = ref([
-    "1450 CP Prima - Jakarta 0401",
-    "-",
-    "4A",
-    "Center of Excellence",
-    "-",
-    "-",
-    "22200169 - A.A Sagung ",
-    "Panca Dias Purnomo - 22000131",
-    [
-        {
-            no: "1",
-            tunjangan: "Transportasi",
-            total: " 1.000.000",
-        },
-        {
-            no: "2",
-            tunjangan: "Transportasi",
-            total: " 1.000.000",
-        },
-    ],
-]);
-
 watchEffect(() => {
     if (data.value) {
-        statusLama.value[0] = data.value.companyFr;
-        statusBaru.value[0] = data.value.companyTo;
-
-        statusLama.value[1] = data.value.positionFr;
-        statusBaru.value[1] = data.value.positionTo;
-
-        statusLama.value[2] = data.value.levelFr;
-        statusBaru.value[2] = data.value.levelTo;
-
-        statusLama.value[3] = data.value.buFr;
-        statusBaru.value[3] = data.value.buTo;
-
-        statusLama.value[4] = data.value.ccFr;
-        statusBaru.value[4] = data.value.ccTo;
-
-        statusLama.value[5] = data.value.locFr;
-        statusBaru.value[5] = data.value.locTo;
-
-        statusLama.value[6] = data.value.spvFr;
-        statusBaru.value[6] = data.value.spvTo;
-
-        statusLama.value[7] = data.value.mgrFr;
-        statusBaru.value[7] = data.value.mgrTo;
+        values.value.mut_date = data.value.mut_date;
 
         listLog.value = data?.value?.progress?.map((item) => {
             return {
@@ -525,6 +492,19 @@ watchEffect(() => {
                 description: item?.step_description,
             };
         });
+
+        const isOnApproval = approvalButton === "approval";
+
+        if (
+            (data?.value?.currentStep === "VEROD1" && isOnApproval) ||
+            (data?.value?.currentStep === "VEROD2" && isOnApproval)
+        ) {
+            isODStatuses.value = true;
+        }
+
+        if (data?.value?.currentStep === "BENEFIT2" && isOnApproval) {
+            isCOMBENStatuses.value = true;
+        }
     }
 });
 </script>

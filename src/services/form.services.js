@@ -96,6 +96,18 @@ const getImmediateManager = async ({ params }) => {
     }
 };
 
+const getAllowance = async ({ params }) => {
+    try {
+        const response = await apiServices.fetchData("/m_allowance", {
+            ...params,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
 export {
     getEmployeeByUser,
     getAllCompany,
@@ -105,4 +117,5 @@ export {
     getAllWorkLocation,
     getDirectSpv,
     getImmediateManager,
+    getAllowance,
 };
