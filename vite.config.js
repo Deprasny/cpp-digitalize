@@ -12,5 +12,9 @@ export default defineConfig({
             "@": "/src",
         },
     },
-    plugins: [vue()],
+    plugins: [
+        vue({
+            jsx: true,
+        }),
+    ],
 });

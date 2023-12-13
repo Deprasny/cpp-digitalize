@@ -37,6 +37,7 @@
                             <FormInputBasic
                                 label="Tanggal Efektif Mutasi"
                                 type="date"
+                                v-model="values.mut_date"
                             />
                             <FormInputBasic
                                 label="Alasan Mutasi"
@@ -63,13 +64,7 @@
                             <div
                                 class="flex md:items-center items-start gap-x-5 md:flex-row flex-col"
                             >
-                                <UIButton
-                                    variant="form"
-                                    class="w-[200px]"
-                                    type="file"
-                                >
-                                    Upload File
-                                </UIButton>
+                                <FormUploadFile v-model="files" />
                                 <p class="text-xs">
                                     Mohon melampirkan struktur organisasi
                                     sebelum dan sesudah
@@ -155,6 +150,7 @@ import FormAutocomplete from "../../components/FormAutocomplete.vue";
 import { createMutationsTable } from "../../services/mutation.services";
 import FormStatusMutations from "../../components/mutations/FormStatusMutations.vue";
 import FormNIKAutocomplete from "../../components/FormNIKAutocomplete.vue";
+import FormUploadFile from "../../components/FormUploadFile.vue";
 
 const store = useModalStore();
 const nama = ref("");
@@ -181,11 +177,13 @@ const values = ref({
             allowance_now: [],
         },
     ],
-
+    mut_date: "",
     mut_type: "Group",
     mut_reason: "",
     draft: "",
 });
+
+const files = ref([]);
 
 const selectedValue = ref({});
 
@@ -194,11 +192,21 @@ const isDraft = ref(false);
 const showSuccessModal = ref(false);
 
 const onSubmit = async () => {
+    const formData = new FormData();
+    formData.append("data", JSON.stringify({ ...values?.value }));
+    formData.append("lampiran", files.value[0] || []);
+
     try {
         const { data: response } = await useFetch({
             services: createMutationsTable,
             options: {
-                body: { ...values.value },
+                body: formData,
+                config: {
+                    headers: {
+                        Accept: "multipart/form-data",
+                        "Content-Type": "multipart/form-data",
+                    },
+                },
             },
         });
 
@@ -244,17 +252,6 @@ const handleDraft = () => {
 
 watchEffect(() => {
     if (selectedValue.value?.details) {
-        statusLama.value = [
-            selectedValue.value?.details?.persarea,
-            selectedValue.value?.details?.posisi,
-            selectedValue?.value?.details?.level,
-            selectedValue.value?.details?.busunit,
-            selectedValue.value?.details?.costcenter,
-            selectedValue.value?.details?.office,
-            selectedValue.value?.details?.empl_nik_spv,
-            selectedValue.value?.details?.immedmgr,
-        ];
-
         const transformArrayValues = enteredNames.value.map((item) => {
             return {
                 nik: item?.details?.nik,

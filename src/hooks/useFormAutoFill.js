@@ -25,8 +25,8 @@ const useFormAutoFill = async () => {
 
     const companyValues = companyResponse?.data?.value.map((item) => {
         return {
-            label: item?.company_name,
-            value: item?.company_name,
+            label: `${item?.company_id} - ${item?.company_name}`,
+            value: `${item?.company_id} - ${item?.company_name}`,
         };
     });
     const positionValues = positionResponse?.data?.value.map((item) => {

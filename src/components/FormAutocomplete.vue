@@ -19,6 +19,7 @@
             </div>
 
             <v-select
+                label="label"
                 :options="data"
                 class="style-chooser"
                 :id="id"

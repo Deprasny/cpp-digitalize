@@ -28,7 +28,9 @@
                     <LabelForm :label="formLabelTitle.ImmediateManager" />
                 </FormStatusInfo>
 
-                <FormStatusInfo v-if="formType === 'detail'">
+                <FormStatusInfo
+                    v-if="formType === 'detail' && !isShowTunjangan"
+                >
                     <LabelForm :label="formLabelTitle.Tunjangan" />
                 </FormStatusInfo>
             </div>
@@ -70,20 +72,11 @@
                     {{ statusLamaData?.immedmgr || detailData?.mgrFr }}
                 </FormStatusLamaItem>
 
-                <FormStatusLamaItem v-if="formType === 'detail'" class="h-40">
-                    <div class="h-full" v-if="statusLamaTunjangan.length > 0">
-                        <div v-for="(item, index) in statusLamaTunjangan">
-                            <p>
-                                {{
-                                    ` ${item.muta_allow_code} : ${item.muta_allow_amount}`
-                                }}
-                            </p>
-                        </div>
-                        <UIDivider class="mt-2" />
-
-                        <p>Total : 9000</p>
-                    </div>
-                    <div v-else>-</div>
+                <FormStatusLamaItem
+                    v-if="formType === 'detail' && !isShowTunjangan"
+                    class="h-40"
+                >
+                    <FormItemTunjanganDetail :data="statusLamaTunjangan" />
                 </FormStatusLamaItem>
 
                 <template v-if="isShowTunjangan">
@@ -97,22 +90,34 @@
                         </div>
                     </div>
                     <div
-                        v-for="(_, index) in columns"
-                        :key="index"
                         class="flex justify-between w-full"
+                        v-for="item in columnsTunjanganLama"
                     >
-                        <div
-                            class="w-full py-1 font-semibold bg-gray-100 border border-black"
-                            v-for="i in 3"
-                        >
-                            <input
-                                disabled
-                                type="text"
-                                class="bg-transparent w-full"
+                        <FormItemTunjangan>
+                            <Dropdown
+                                :is-loading="options.isLoading"
+                                :dropdown-options="options.allowance"
+                                v-model="item.muta_allow_code"
                             />
-                        </div>
+                        </FormItemTunjangan>
+                        <FormItemTunjangan>
+                            <input
+                                type="number"
+                                class="w-full h-full"
+                                v-model="item.muta_allow_amount"
+                            />
+                        </FormItemTunjangan>
+                        <FormItemTunjangan>
+                            <input
+                                type="number"
+                                class="w-full h-full"
+                                v-model="item.muta_allow_grossnet"
+                            />
+                        </FormItemTunjangan>
                     </div>
-                    <p class="self-start mt-5 font-semibold">Total : 0</p>
+                    <p class="self-start mt-5 font-semibold">
+                        Total : {{ totalTunjanganLama }}
+                    </p>
                 </template>
             </div>
             <div class="flex flex-col flex-1 text-center w-[450px]">
@@ -154,6 +159,13 @@
                     <FormStatusLamaItem>
                         {{ detailData?.mgrTo }}
                     </FormStatusLamaItem>
+
+                    <FormStatusLamaItem
+                        v-if="formType === 'detail' && !isShowTunjangan"
+                        class="h-40"
+                    >
+                        <FormItemTunjanganDetail :data="statusBaruTunjangan" />
+                    </FormStatusLamaItem>
                 </template>
 
                 <template v-else>
@@ -179,7 +191,7 @@
                     </FormStatusBaruItem>
                     <FormStatusBaruItem>
                         <div class="px-4 h-full py-2 flex items-center">
-                            {{ statusLamaData?.level }}
+                            {{ statusLamaData?.level || detailData?.levelFr }}
                         </div>
                     </FormStatusBaruItem>
                     <FormStatusBaruItem>
@@ -252,30 +264,40 @@
                     </div>
 
                     <div
-                        v-for="(item, index) in columns"
-                        :key="index"
                         class="flex justify-between w-full"
+                        v-for="(item, index) in columnsTunjanganBaru"
                     >
-                        <div
-                            class="w-full py-1 font-semibold border border-black"
-                            v-for="i in columnsData"
-                        >
-                            <input
-                                :type="i.type"
-                                class="w-full"
-                                :value="columnsValue[index][i.property]"
-                                @input="
-                                    columnsValue[index][i.property] =
-                                        $event.target.value
-                                "
+                        <FormItemTunjangan>
+                            <Dropdown
+                                :is-loading="options.isLoading"
+                                :dropdown-options="options.allowance"
+                                v-model="item.muta_allow_code"
                             />
-                        </div>
+                        </FormItemTunjangan>
+                        <FormItemTunjangan>
+                            <input
+                                type="number"
+                                class="w-full h-full"
+                                v-model="item.muta_allow_amount"
+                            />
+                        </FormItemTunjangan>
+                        <FormItemTunjangan>
+                            <input
+                                type="number"
+                                class="w-full h-full"
+                                v-model="item.muta_allow_grossnet"
+                            />
+                        </FormItemTunjangan>
+
                         <div class="relative">
                             <div
-                                v-if="index === columns - 1"
+                                v-if="index === columnsTunjanganBaru.length - 1"
                                 class="absolute top-2 -right-7"
                             >
-                                <button v-if="columns < 7" @click="addColumn">
+                                <button
+                                    v-if="columnsTunjanganBaru.length < 7"
+                                    @click="addColumn"
+                                >
                                     <div class="p-1 bg-red-600 rounded-full">
                                         <component
                                             :is="IconPlus"
@@ -285,7 +307,7 @@
                                 </button>
                             </div>
                             <div
-                                v-if="index === columns - 2"
+                                v-if="index === columnsTunjanganBaru.length - 2"
                                 class="absolute top-1 -right-5"
                             >
                                 <button @click="removeColumn">-</button>
@@ -294,7 +316,7 @@
                     </div>
 
                     <p class="self-start mt-5 font-semibold">
-                        Total : {{ totalTunjangan }}
+                        Total : {{ totalTunjanganBaru }}
                     </p>
                 </template>
             </div>
@@ -311,6 +333,7 @@ import FormStatusBaruItem from "./FormStatusBaruItem.vue";
 import useFormAutoFill from "../../hooks/useFormAutoFill";
 import { onMounted, ref, watch, watchEffect } from "vue";
 import {
+    getAllowance,
     getDirectSpv,
     getImmediateManager,
 } from "../../services/form.services";
@@ -325,6 +348,8 @@ import {
 import FormStatusLamaItem from "./FormStatusLamaItem.vue";
 import FormStatusInfo from "./FormStatusInfo.vue";
 import UIDivider from "../ui/UIDivider.vue";
+import FormItemTunjanganDetail from "./FormItemTunjanganDetail.vue";
+import FormItemTunjangan from "./FormItemTunjangan.vue";
 
 const props = defineProps([
     "isShowTunjangan",
@@ -336,25 +361,47 @@ const props = defineProps([
 ]);
 
 const headerTunjangan = ref(tunjanganLabelTitle);
-const columns = ref(1);
-const columnsData = ref(columnTunjanganDefaultValues);
-const columnsValue = ref([columnTunjanganValues]);
-const totalTunjangan = ref(0);
+
 const statusLamaTunjangan = ref([]);
 const statusBaruTunjangan = ref([]);
 
-const addColumn = () => {
-    columns.value++;
-    columnsValue.value.push({
-        muta_type: "NEW",
+const columnsTunjanganBaru = ref([
+    {
         muta_allow_amount: "",
         muta_allow_grossnet: "",
         muta_allow_code: "",
+        muta_type: "NEW",
+    },
+]);
+const columnsTunjanganLama = ref([
+    {
+        muta_allow_amount: "",
+        muta_allow_grossnet: "",
+        muta_allow_code: "",
+        muta_type: "PAST",
+    },
+]);
+
+const totalTunjanganLama = ref(0);
+const totalTunjanganBaru = ref(0);
+
+const addColumn = () => {
+    columnsTunjanganBaru.value.push({
+        muta_allow_amount: "",
+        muta_allow_grossnet: "",
+        muta_allow_code: "",
+        muta_type: "NEW",
+    });
+    columnsTunjanganLama.value.push({
+        muta_allow_amount: "",
+        muta_allow_grossnet: "",
+        muta_allow_code: "",
+        muta_type: "PAST",
     });
 };
 const removeColumn = () => {
-    columns.value--;
-    columnsValue.value.pop();
+    columnsTunjanganBaru.value.pop();
+    columnsTunjanganLama.value.pop();
 };
 
 const options = ref({
@@ -366,6 +413,7 @@ const options = ref({
     workLocation: [],
     directSPV: [],
     immedManager: [],
+    allowance: [],
 });
 
 const conditionalOptions = ref({
@@ -407,16 +455,17 @@ const fetchAutoFillForms = async () => {
     }
 };
 
+function allObjectsHaveEmptyValues(arrayOfObjects) {
+    return arrayOfObjects.every(
+        (obj) =>
+            obj.muta_allow_amount === "" &&
+            obj.muta_allow_grossnet === "" &&
+            obj.muta_allow_code === ""
+    );
+}
+
 watchEffect(() => {
     props.values.value = values.value;
-
-    if (columnsValue.value.length) {
-        totalTunjangan.value = columnsValue.value.reduce(
-            (acc, curr) => acc + Number(curr.muta_allow_amount),
-            0
-        );
-        props.values.value.allowance_now = columnsValue.value;
-    }
 
     if (
         props?.detailData?.allowance.length > 0 &&
@@ -433,6 +482,37 @@ watchEffect(() => {
                 return item.muta_type === "NEW";
             }
         );
+    }
+
+    if (props?.detailData && props.formType === "edit") {
+        values.value.mutd_to_company = props.detailData.companyTo;
+        values.value.mutd_to_position = props.detailData.positionTo;
+        values.value.mutd_to_division = props.detailData.buTo;
+        values.value.mutd_to_costcenter = props.detailData.ccTo;
+        values.value.mutd_to_work_location = props.detailData.locTo;
+        values.value.mutd_to_direct_spv = props.detailData.spvTo;
+        values.value.mutd_to_immed_mgr = props.detailData.mgrTo;
+
+        props.values.value = values.value;
+    }
+
+    if (props.isShowTunjangan) {
+        props.values.value.allowance_now = [
+            ...columnsTunjanganLama.value,
+            ...columnsTunjanganBaru.value,
+        ];
+
+        if (allObjectsHaveEmptyValues(columnsTunjanganLama.value)) {
+            props.values.value.allowance_now = [];
+        }
+
+        if (allObjectsHaveEmptyValues(columnsTunjanganBaru.value)) {
+            props.values.value.allowance_now = [];
+        }
+    }
+
+    if (!props.isShowTunjangan) {
+        props.values.value.allowance_now = [];
     }
 });
 
@@ -489,11 +569,69 @@ watch(
     }
 );
 
+watch(
+    () => columnsTunjanganLama.value.map((item) => item.muta_allow_amount),
+    (newColumns) => {
+        totalTunjanganLama.value = newColumns.reduce(
+            (acc, curr) => acc + Number(curr),
+            0
+        );
+    }
+);
+
+watch(
+    () => columnsTunjanganBaru.value.map((item) => item.muta_allow_amount),
+    (newColumns) => {
+        totalTunjanganBaru.value = newColumns.reduce(
+            (acc, curr) => acc + Number(curr),
+            0
+        );
+    }
+);
+
+const fetchAllowanceOptions = async () => {
+    const { data: allowanceResponse } = await useFetch({
+        services: getAllowance,
+        options: {},
+    });
+
+    options.value.allowance = allowanceResponse?.value.map((item) => {
+        return {
+            label: item?.allow_description,
+            value: item?.allow_code,
+        };
+    });
+};
+
 const onReduceOptions = (option) => {
     return option.value;
 };
 
 onMounted(() => {
     fetchAutoFillForms();
+    fetchAllowanceOptions();
+    if (
+        statusBaruTunjangan.value.length > 0 &&
+        statusLamaTunjangan.value.length > 0
+    ) {
+        columnsTunjanganLama.value = statusLamaTunjangan?.value.map((item) => ({
+            ...item,
+            muta_allow_code: {
+                label: item?.muta_allow_code,
+                value: item?.muta_allow_code,
+            },
+        }));
+        columnsTunjanganBaru.value = statusBaruTunjangan?.value.map((item) => ({
+            ...item,
+            muta_allow_code: {
+                label: item.muta_allow_code,
+                value: item.muta_allow_code,
+            },
+        }));
+        props.values.value.allowance_now = [
+            ...columnsTunjanganLama.value,
+            ...columnsTunjanganBaru.value,
+        ];
+    }
 });
 </script>
