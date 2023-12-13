@@ -6,9 +6,7 @@
         >
             <a href="#" class="block px-4 py-3 mb-1">
                 <span class="flex items-center justify-between">
-                    <span class="text-gray-800">{{
-                        selectedOptions.label
-                    }}</span>
+                    <span class="text-gray-800">{{ modelValue.label }}</span>
                     <IconChevronLeft class="text-accent-1" />
                 </span>
             </a>
@@ -38,49 +36,31 @@
 </template>
 
 <script setup>
-import { defineProps, ref, defineEmits } from "vue";
+import { ref, defineEmits } from "vue";
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
 import UILoader from "./ui/UILoader.vue";
-const props = defineProps({
-    dropdownOptions: {
-        type: Array,
-        required: true,
-    },
-    selectedOptionText: {
-        type: String,
-        required: true,
-    },
-    disabled: {
-        type: Boolean,
-        default: false,
-    },
-    isLoading: {
-        type: Boolean,
-        default: false,
-    },
-});
 
-const emits = defineEmits(["update:selectedOptionText"]);
+const emit = defineEmits(["update:modelValue"]);
 
-const selectedOptions = ref({
-    label: "",
-    value: "",
-});
+const { disabled, isLoading, modelValue, dropdownOptions } = defineProps([
+    "modelValue",
+    "dropdownOptions",
+    "disabled",
+    "isLoading",
+]);
 
 const isDropdownOpen = ref(false);
 
 const toggleDropdown = (event) => {
     event.preventDefault();
-    if (!props.disabled) {
+    if (!disabled) {
         isDropdownOpen.value = !isDropdownOpen.value;
     }
-
-    return;
 };
 
 const handleDropdownItemClick = (option) => {
     isDropdownOpen.value = true;
-    selectedOptions.value = option;
-    emits("update:selectedOptionText", option.value);
+
+    emit("update:modelValue", option);
 };
 </script>

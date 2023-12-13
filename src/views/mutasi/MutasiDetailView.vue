@@ -428,24 +428,49 @@ const isODStatuses = ref(false);
 const isCOMBENStatuses = ref(false);
 
 const onApprove = async (id) => {
+    const getValues = () => {
+        const getMutId = data?.value?.employee?.[0]?.id || "";
+        const transformAllowance =
+            values?.value?.value?.allowance_now.map((item) => ({
+                ...item,
+                muta_allow_code: item?.muta_allow_code?.value,
+                muta_id: getMutId,
+            })) || [];
+
+        if (isODStatuses.value) {
+            return {
+                statusApproval: statusApproval.value,
+                mut_reason: values.value.mut_reason,
+                mut_date: values.value.mut_date,
+                companyTo: values.value.value.mutd_to_company,
+                positionTo: values.value.value.mutd_to_position,
+                buTo: values.value.value.mutd_to_division,
+                ccTo: values.value.value.mutd_to_costcenter,
+                locTo: values.value.value.mutd_to_work_location,
+                spvTo: values.value.value.mutd_to_direct_spv,
+                mgrTo: values.value.value.mutd_to_immed_mgr,
+            };
+        }
+
+        if (isCOMBENStatuses.value) {
+            return {
+                statusApproval: statusApproval.value,
+                allowance: transformAllowance,
+            };
+        }
+
+        return {
+            statusApproval: statusApproval.value,
+        };
+    };
+
     try {
         modalLoading.value = true;
         const { data: response } = await useFetch({
             services: putMutationsTable,
             options: {
                 id: id,
-                body: {
-                    statusApproval: statusApproval.value,
-                    mut_reason: values.value.mut_reason,
-                    mut_date: values.value.mut_date,
-                    companyTo: values.value.value.mutd_to_company,
-                    positionTo: values.value.value.mutd_to_position,
-                    buTo: values.value.value.mutd_to_division,
-                    ccTo: values.value.value.mutd_to_costcenter,
-                    locTo: values.value.value.mutd_to_work_location,
-                    spvTo: values.value.value.mutd_to_direct_spv,
-                    mgrTo: values.value.value.mutd_to_immed_mgr,
-                },
+                body: getValues(),
             },
         });
 
@@ -502,7 +527,14 @@ watchEffect(() => {
             isODStatuses.value = true;
         }
 
-        if (data?.value?.currentStep === "BENEFIT2" && isOnApproval) {
+        if (
+            (data?.value?.currentStep === "BENEFIT2" &&
+                isOnApproval &&
+                formType !== "Group") ||
+            (data?.value?.currentStep === "BENEFIT1" &&
+                isOnApproval &&
+                formType !== "Group")
+        ) {
             isCOMBENStatuses.value = true;
         }
     }

@@ -28,7 +28,9 @@
                     <LabelForm :label="formLabelTitle.ImmediateManager" />
                 </FormStatusInfo>
 
-                <FormStatusInfo v-if="formType === 'detail'">
+                <FormStatusInfo
+                    v-if="formType === 'detail' && !isShowTunjangan"
+                >
                     <LabelForm :label="formLabelTitle.Tunjangan" />
                 </FormStatusInfo>
             </div>
@@ -70,7 +72,10 @@
                     {{ statusLamaData?.immedmgr || detailData?.mgrFr }}
                 </FormStatusLamaItem>
 
-                <FormStatusLamaItem v-if="formType === 'detail'" class="h-40">
+                <FormStatusLamaItem
+                    v-if="formType === 'detail' && !isShowTunjangan"
+                    class="h-40"
+                >
                     <FormItemTunjanganDetail :data="statusLamaTunjangan" />
                 </FormStatusLamaItem>
 
@@ -93,12 +98,6 @@
                                 :is-loading="options.isLoading"
                                 :dropdown-options="options.allowance"
                                 v-model="item.muta_allow_code"
-                                :selected-option-text="
-                                    item.muta_allow_code.label
-                                "
-                                @update:selected-option-text="
-                                    item.muta_allow_code = $event
-                                "
                             />
                         </FormItemTunjangan>
                         <FormItemTunjangan>
@@ -162,7 +161,7 @@
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem
-                        v-if="formType === 'detail'"
+                        v-if="formType === 'detail' && !isShowTunjangan"
                         class="h-40"
                     >
                         <FormItemTunjanganDetail :data="statusBaruTunjangan" />
@@ -273,14 +272,6 @@
                                 :is-loading="options.isLoading"
                                 :dropdown-options="options.allowance"
                                 v-model="item.muta_allow_code"
-                                :selected-option-text="
-                                    item.muta_allow_code.label
-                                "
-                                @update:selected-option-text="
-                                    (newVal) => {
-                                        item.muta_allow_code = newVal;
-                                    }
-                                "
                             />
                         </FormItemTunjangan>
                         <FormItemTunjangan>
@@ -519,10 +510,6 @@ watchEffect(() => {
             props.values.value.allowance_now = [];
         }
     }
-
-    console.log({
-        values: values.value,
-    });
 });
 
 const fetchAutoFillFormParams = async () => {
@@ -619,5 +606,28 @@ const onReduceOptions = (option) => {
 onMounted(() => {
     fetchAutoFillForms();
     fetchAllowanceOptions();
+    if (
+        statusBaruTunjangan.value.length > 0 &&
+        statusLamaTunjangan.value.length > 0
+    ) {
+        columnsTunjanganLama.value = statusLamaTunjangan?.value.map((item) => ({
+            ...item,
+            muta_allow_code: {
+                label: item?.muta_allow_code,
+                value: item?.muta_allow_code,
+            },
+        }));
+        columnsTunjanganBaru.value = statusBaruTunjangan?.value.map((item) => ({
+            ...item,
+            muta_allow_code: {
+                label: item.muta_allow_code,
+                value: item.muta_allow_code,
+            },
+        }));
+        props.values.value.allowance_now = [
+            ...columnsTunjanganLama.value,
+            ...columnsTunjanganBaru.value,
+        ];
+    }
 });
 </script>
