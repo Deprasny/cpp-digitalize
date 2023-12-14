@@ -12,7 +12,7 @@
             </router-link>
         </div>
 
-        <template v-if="data.length > 0">
+        <template v-if="!isLoading">
             <Table
                 @onCellClick="handleDetail"
                 :columns="columns"
@@ -53,7 +53,10 @@ const data = ref([]);
 
 const errorModal = ref("");
 
+const isLoading = ref(false);
+
 onBeforeMount(async () => {
+    isLoading.value = true;
     try {
         const { data: response } = await useFetch({
             services: getMutationsTable,
@@ -66,6 +69,8 @@ onBeforeMount(async () => {
         data.value = response?.value;
     } catch (error) {
         errorModal.value = "Terjadi kesalahan saat mengambil data mutasi";
+    } finally {
+        isLoading.value = false;
     }
 });
 

@@ -10,7 +10,7 @@
                         <h3 class="text-xl font-bold">HR</h3>
                         <p>Digitalize Document</p>
                     </div>
-                    <button class="sm:hidden" @click="toggleSidebar">X</button>
+                    <button @click="toggleSidebar">X</button>
                 </div>
                 <div class="flex flex-col justify-between h-[90%] mt-5">
                     <ul>
