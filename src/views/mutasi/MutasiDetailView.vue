@@ -234,7 +234,7 @@
                                 <p
                                     class="whitespace-nowrap overflow-hidden overflow-ellipsis"
                                 >
-                                    {{ docsUrl.body.url }}
+                                    {{ docsUrl.body.url.split("/").pop() }}
                                 </p>
                                 <DownloadFiles
                                     :services="getFileDocsMutations"
