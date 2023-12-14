@@ -15,7 +15,7 @@
                 <a href="#" class="block px-4 py-4">
                     <span class="flex items-center justify-between">
                         <span class="text-gray-800 opacity-70">{{
-                            selectedOption || "Pilih Individu / Group"
+                            selectedOption || "Pilih Individu / Kolektif"
                         }}</span>
                         <component :is="IconChevronLeft" />
                     </span>

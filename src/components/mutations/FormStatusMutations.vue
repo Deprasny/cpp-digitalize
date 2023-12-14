@@ -4,34 +4,58 @@
             <div class="flex flex-col items-center text-center flex-1 w-48">
                 <div class="w-full h-10"></div>
                 <FormStatusInfo>
-                    <LabelForm :label="formLabelTitle.Perusahaan" />
+                    <LabelForm
+                        :label="formLabelTitle.Perusahaan"
+                        :colon="false"
+                    />
                 </FormStatusInfo>
                 <FormStatusInfo>
-                    <LabelForm :label="formLabelTitle.Jabatan" />
+                    <LabelForm :label="formLabelTitle.Jabatan" :colon="false" />
                 </FormStatusInfo>
                 <FormStatusInfo>
-                    <LabelForm :label="formLabelTitle.KelasJabatan" />
+                    <LabelForm
+                        :label="formLabelTitle.KelasJabatan"
+                        :colon="false"
+                    />
                 </FormStatusInfo>
                 <FormStatusInfo>
-                    <LabelForm :label="formLabelTitle.BussinessUnits" />
+                    <LabelForm
+                        :label="formLabelTitle.BussinessUnits"
+                        :colon="false"
+                    />
                 </FormStatusInfo>
                 <FormStatusInfo>
-                    <LabelForm :label="formLabelTitle.CostCenter" />
+                    <LabelForm
+                        :label="formLabelTitle.CostCenter"
+                        :colon="false"
+                    />
                 </FormStatusInfo>
                 <FormStatusInfo>
-                    <LabelForm :label="formLabelTitle.LokasiKerja" />
+                    <LabelForm
+                        :label="formLabelTitle.LokasiKerja"
+                        :colon="false"
+                    />
                 </FormStatusInfo>
                 <FormStatusInfo>
-                    <LabelForm :label="formLabelTitle.MelaporKe" />
+                    <LabelForm
+                        :label="formLabelTitle.MelaporKe"
+                        :colon="false"
+                    />
                 </FormStatusInfo>
                 <FormStatusInfo>
-                    <LabelForm :label="formLabelTitle.ImmediateManager" />
+                    <LabelForm
+                        :label="formLabelTitle.ImmediateManager"
+                        :colon="false"
+                    />
                 </FormStatusInfo>
 
                 <FormStatusInfo
                     v-if="formType === 'detail' && !isShowTunjangan"
                 >
-                    <LabelForm :label="formLabelTitle.Tunjangan" />
+                    <LabelForm
+                        :label="formLabelTitle.Tunjangan"
+                        :colon="false"
+                    />
                 </FormStatusInfo>
             </div>
             <div
@@ -41,35 +65,67 @@
                     STATUS LAMA
                 </div>
                 <FormStatusLamaItem>
-                    {{ statusLamaData?.persarea || detailData?.companyFr }}
+                    {{
+                        formType === "detail"
+                            ? detailData?.companyFr
+                            : statusLamaData?.persarea
+                    }}
                 </FormStatusLamaItem>
 
                 <FormStatusLamaItem>
-                    {{ statusLamaData?.posisi || detailData?.positionFr }}
+                    {{
+                        formType === "detail"
+                            ? detailData?.companyFr
+                            : statusLamaData?.posisi
+                    }}
                 </FormStatusLamaItem>
 
                 <FormStatusLamaItem>
-                    {{ statusLamaData?.level || detailData?.levelFr }}
+                    {{
+                        formType === "detail"
+                            ? detailData?.levelFr
+                            : statusLamaData?.level
+                    }}
                 </FormStatusLamaItem>
 
                 <FormStatusLamaItem>
-                    {{ statusLamaData?.busunit || detailData?.buFr }}
+                    {{
+                        formType === "detail"
+                            ? detailData?.buFr
+                            : statusLamaData?.busunit
+                    }}
                 </FormStatusLamaItem>
 
                 <FormStatusLamaItem>
-                    {{ statusLamaData?.costcenter || detailData?.ccFr }}
+                    {{
+                        formType === "detail"
+                            ? detailData?.ccFr
+                            : statusLamaData?.costcenter
+                    }}
                 </FormStatusLamaItem>
 
                 <FormStatusLamaItem>
-                    {{ statusLamaData?.office || detailData?.locFr }}
+                    {{
+                        formType === "detail"
+                            ? detailData?.locFr
+                            : statusLamaData?.office
+                    }}
                 </FormStatusLamaItem>
 
                 <FormStatusLamaItem>
-                    {{ statusLamaData?.empl_nik_spv || detailData?.spvFr }}
+                    {{
+                        formType === "detail"
+                            ? `${detailData?.spvFr} - ${detailData?.spvFrName} `
+                            : statusLamaData?.empl_nik_spv
+                    }}
                 </FormStatusLamaItem>
 
                 <FormStatusLamaItem>
-                    {{ statusLamaData?.immedmgr || detailData?.mgrFr }}
+                    {{
+                        formType === "detail"
+                            ? `${detailData?.mgrFr} - ${detailData?.mgrFrName}`
+                            : statusLamaData?.immedmgr
+                    }}
                 </FormStatusLamaItem>
 
                 <FormStatusLamaItem
@@ -149,15 +205,15 @@
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem>
-                        {{ detailData?.locTo }}
+                        {{ `${detailData?.locTo} - ${detailData?.locToName}` }}
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem>
-                        {{ detailData?.spvTo }}
+                        {{ `${detailData?.spvTo} - ${detailData?.spvToName}` }}
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem>
-                        {{ detailData?.mgrTo }}
+                        {{ `${detailData?.mgrTo} - ${detailData?.mgrToName}` }}
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem

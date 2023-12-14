@@ -5,6 +5,7 @@
             ref="fileInput"
             @change="handleFileUpload"
             style="display: none"
+            accept="application/pdf"
         />
 
         <div v-if="modelValue && modelValue.length > 0" class="mt-4">

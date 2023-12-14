@@ -8,14 +8,28 @@ const props = defineProps({
     },
     value: {
         type: String,
-        default: "fill value",
+        default: "",
+    },
+    class: {
+        type: String,
+    },
+    colon: {
+        type: Boolean,
+        default: true,
     },
 });
 </script>
 
 <template>
-    <div class="flex justify-between px-2 flex-grow-0 w-full">
-        <div>{{ props.label }}</div>
-        <div>:</div>
+    <div class="flex px-2 w-full md:flex-row flex-col" :class="class">
+        <div
+            class="flex-shrink-0 pr-2 text-left font-semibold w-full md:w-[250px]"
+        >
+            {{ props.label }}
+        </div>
+        <div class="pr-2 md:flex hidden" v-show="colon">:</div>
+        <div class="flex-grow w-full">
+            <slot></slot>
+        </div>
     </div>
 </template>

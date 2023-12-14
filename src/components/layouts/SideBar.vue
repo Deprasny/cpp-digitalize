@@ -31,11 +31,22 @@
                             </router-link>
                         </div>
                     </ul>
+
                     <div
-                        class="flex flex-col items-center justify-center mb-5 gap-y-5"
+                        class="flex flex-col items-center justify-center mb-5 gap-y-8"
                     >
                         <IconLogo class="" />
                         <p class="text">Develop & maintain by CPP</p>
+                        <button
+                            @click="handleToggleModal"
+                            class="flex gap-2 text-gray-600 md:hidden"
+                        >
+                            Logout
+                            <component
+                                :is="IconArrowRight"
+                                class="text-2xl text-gray-600 cursor-pointer"
+                            />
+                        </button>
                     </div>
                 </div>
             </nav>
@@ -47,6 +58,13 @@
             <button @click="toggleSidebar"><IconHamburger /></button>
         </div>
     </div>
+
+    <Modal
+        :isModalOpen="showModal"
+        @toggleModal="handleToggleModal"
+        @submit="submit"
+        modalTitle="Anda yakin ingin keluar?"
+    />
 </template>
 
 <script setup>
@@ -57,10 +75,13 @@ import IconEvaluation from "@/components/icons/IconEvaluation.vue";
 import IconPensiun from "@/components/icons/IconPensiun.vue";
 import IconCheck from "../icons/IconCheck.vue";
 import IconHamburger from "../icons/IconHamburger.vue";
-
+import Modal from "@/components/Modal.vue";
 import IconLogo from "@/components/icons/IconLogo.vue";
+import IconArrowRight from "../icons/IconArrowRight.vue";
+import { useRouter } from "vue-router";
 const isSidebarOpen = ref(true);
 
+const router = useRouter();
 const menu = ref([
     {
         name: "Dashboard",
@@ -90,6 +111,18 @@ const menu = ref([
 ]);
 const toggleSidebar = () => {
     isSidebarOpen.value = !isSidebarOpen.value;
+};
+
+const showModal = ref(false);
+
+const handleToggleModal = () => {
+    showModal.value = !showModal.value;
+};
+
+const submit = () => {
+    router.push("/auth/login");
+    localStorage.clear();
+    handleToggleModal();
 };
 </script>
 
