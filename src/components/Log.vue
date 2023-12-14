@@ -6,7 +6,7 @@
                 v-for="(item, index) in data"
                 :key="index"
                 :class="{ 'last-item': index === data.length - 1 }"
-                class="flex h-full"
+                class="flex max-h-[200px] min-h-[100px]"
             >
                 <div class="relative h-full">
                     <div
