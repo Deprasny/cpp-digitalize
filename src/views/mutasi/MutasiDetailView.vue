@@ -249,14 +249,12 @@
                         <LabelForm
                             label="Form Mutasi"
                             class="items-center"
-                            v-if="data?.mut_status === 'F'"
+                            v-if="data?.mut_form_url"
                         >
                             <div class="flex items-center gap-2">
                                 <DownloadFiles
-                                    :services="getFormMutations"
-                                    :options="
-                                        getFormMutationsParams(data?.mut_id)
-                                    "
+                                    :services="getFileDocsMutations"
+                                    :options="getParams(data?.mut_form_url)"
                                     :fileName="`${data?.mut_req_no}-form-Mutasi`"
                                     label="Download Form Mutasi"
                                 />
@@ -370,12 +368,6 @@ const getParams = (id) => {
         body: {
             url: id,
         },
-    };
-};
-
-const getFormMutationsParams = (id) => {
-    return {
-        id: id,
     };
 };
 
