@@ -28,10 +28,10 @@
                                             {{ item?.nik }}
                                         </p>
                                         <DownloadFiles
-                                            v-if="item?.no_sk"
+                                            v-if="item?.url_sk"
                                             label="Download SK"
-                                            :options="getParams(item?.id)"
-                                            :services="getSKMutations"
+                                            :options="getParams(item?.url_sk)"
+                                            :services="getFileDocsMutations"
                                             :fileName="`${item?.no_sk}-sk`"
                                         />
                                     </div>
@@ -72,11 +72,11 @@
 
                                     <DownloadFiles
                                         label="Download SK"
-                                        v-if="data?.employee[0]?.no_sk"
+                                        v-if="data?.employee[0]?.url_sk"
                                         :options="
-                                            getParams(data?.employee[0]?.id)
+                                            getParams(data?.employee[0]?.url_sk)
                                         "
-                                        :services="getSKMutations"
+                                        :services="getFileDocsMutations"
                                         :fileName="`${data?.employee[0]?.no_sk}-sk`"
                                     />
                                 </div>
@@ -252,7 +252,9 @@
                             <div class="flex gap-2 items-center">
                                 <DownloadFiles
                                     :services="getFormMutations"
-                                    :options="getParams(data?.mut_id)"
+                                    :options="
+                                        getFormMutationsParams(data?.mut_id)
+                                    "
                                     :fileName="`${data?.mut_req_no}-form-Mutasi`"
                                     label="Download Form Mutasi"
                                 />
@@ -362,6 +364,14 @@ const docsUrl = ref({
 });
 
 const getParams = (id) => {
+    return {
+        body: {
+            url: id,
+        },
+    };
+};
+
+const getFormMutationsParams = (id) => {
     return {
         id: id,
     };

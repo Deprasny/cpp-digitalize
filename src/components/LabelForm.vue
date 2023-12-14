@@ -13,6 +13,10 @@ const props = defineProps({
     class: {
         type: String,
     },
+    colon: {
+        type: Boolean,
+        default: true,
+    },
 });
 </script>
 
@@ -23,7 +27,7 @@ const props = defineProps({
         >
             {{ props.label }}
         </div>
-        <div class="pr-2 md:flex hidden">:</div>
+        <div class="pr-2 md:flex hidden" v-show="colon">:</div>
         <div class="flex-grow w-full">
             <slot></slot>
         </div>
