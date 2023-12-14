@@ -6,19 +6,19 @@
                 v-for="(item, index) in data"
                 :key="index"
                 :class="{ 'last-item': index === data.length - 1 }"
-                class="flex h-[120px]"
+                class="flex h-full"
             >
                 <div class="relative h-full">
                     <div
-                        class="inline-block border-2 border-[#0A70A9] w-5 h-5 rounded-full mt-2 ml-1"
+                        class="inline-block border-2 border-[#0A70A9] w-5 h-5 rounded-full bg-white mt-2 ml-1 z-30"
                     ></div>
                     <div
-                        class="absolute bg-[#0A70A9] w-3 h-3 rounded-full top-[12px] right-[4px]"
+                        class="absolute bg-[#0A70A9] w-3 h-3 rounded-full top-[12px] right-[4px] z-30"
                         v-if="item?.date === 'DONE'"
                     ></div>
                     <span
                         v-if="index !== data.length - 1"
-                        class="absolute h-[100px] transform -translate-x-1/2 border-r-[3px] border-[#0A70A9] border-dotted left-[12px] top-8"
+                        class="absolute h-full transform -translate-x-1/2 border-r-[3px] border-[#0A70A9] border-dotted left-[12px] top-8"
                         >&nbsp;</span
                     >
                 </div>
