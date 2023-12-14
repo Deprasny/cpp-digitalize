@@ -27,7 +27,7 @@
         </div>
 
         <div class="flex mr-72 gap-x-5">
-            <p class="font-semibold">Hi, Panca Dias Purnomo</p>
+            <p class="font-semibold">{{ getEmail }}</p>
             <button @click="handleToggleModal">
                 <component
                     :is="IconArrowRight"
@@ -59,6 +59,8 @@ const showModal = ref(false);
 const handleToggleModal = () => {
     showModal.value = !showModal.value;
 };
+
+const getEmail = localStorage.getItem("user_email");
 
 const submit = () => {
     router.push("/auth/login");
