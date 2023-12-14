@@ -8,3 +8,12 @@
     font-family: "Poppins", sans-serif;
 }
 </style>
+
+<script>
+export default {
+    mounted() {
+        // Change the page title when the component is mounted
+        document.title = "HR FORM";
+    },
+};
+</script>
