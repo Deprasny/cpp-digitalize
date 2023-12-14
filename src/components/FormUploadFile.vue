@@ -49,7 +49,7 @@ import UIButton from "./ui/UIButton.vue";
 import IconFile from "./icons/IconFile.vue";
 import IconClose from "./icons/IconClose.vue";
 
-const { modelValue } = defineProps(["modelValue"]);
+let { modelValue } = defineProps(["modelValue"]);
 
 const emit = defineEmits(["update:modelValue"]);
 
