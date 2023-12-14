@@ -1,19 +1,19 @@
 <template>
-    <div class="flex justify-end">
+    <div class="flex justify-end max-w-[300px]">
         <p class="mx-3 mt-1 font-semibold">Status:</p>
         <div class="flex flex-col w-full ml-10 gap-y-2 md:ml-0">
             <div
                 v-for="(item, index) in data"
                 :key="index"
                 :class="{ 'last-item': index === data.length - 1 }"
-                class="flex h-full"
+                class="flex max-h-[200px] min-h-[100px]"
             >
                 <div class="relative h-full">
                     <div
-                        class="inline-block border-2 border-[#0A70A9] w-5 h-5 rounded-full bg-white mt-2 ml-1 z-30"
+                        class="inline-block border-2 border-[#0A70A9] w-5 h-5 rounded-full bg-white mt-2 ml-1"
                     ></div>
                     <div
-                        class="absolute bg-[#0A70A9] w-3 h-3 rounded-full top-[12px] right-[4px] z-30"
+                        class="absolute bg-[#0A70A9] w-3 h-3 rounded-full top-[12px] right-[4px]"
                         v-if="item?.date === 'DONE'"
                     ></div>
                     <span

@@ -1,7 +1,7 @@
 <!-- Sidebar.vue -->
 <template>
     <div>
-        <aside v-if="isSidebarOpen">
+        <aside v-if="store.isSidebarOpen">
             <nav
                 class="w-72 h-[100vh] rounded-br-lg p-6 shadow-2xl fixed bg-white z-20"
             >
@@ -10,7 +10,7 @@
                         <h3 class="text-xl font-bold">HR</h3>
                         <p>Digitalize Document</p>
                     </div>
-                    <button @click="toggleSidebar">X</button>
+                    <button @click="store.toggleSidebar">X</button>
                 </div>
                 <div class="flex flex-col justify-between h-[90%] mt-5">
                     <ul>
@@ -53,9 +53,11 @@
         </aside>
         <div
             v-else
-            class="fixed flex items-center justify-start w-full bg-white h-[40px] px-4"
+            class="fixed flex items-center justify-start w-full h-[40px] px-4 z-40"
         >
-            <button @click="toggleSidebar"><IconHamburger /></button>
+            <button @click="store.toggleSidebar" class="absolute top-8">
+                <IconHamburger />
+            </button>
         </div>
     </div>
 
@@ -79,7 +81,9 @@ import Modal from "@/components/Modal.vue";
 import IconLogo from "@/components/icons/IconLogo.vue";
 import IconArrowRight from "../icons/IconArrowRight.vue";
 import { useRouter } from "vue-router";
-const isSidebarOpen = ref(true);
+import { useSidebarStore } from "@/stores/index.js";
+
+const store = useSidebarStore();
 
 const router = useRouter();
 const menu = ref([
@@ -109,9 +113,6 @@ const menu = ref([
         route: "/approval/mutasi",
     },
 ]);
-const toggleSidebar = () => {
-    isSidebarOpen.value = !isSidebarOpen.value;
-};
 
 const showModal = ref(false);
 

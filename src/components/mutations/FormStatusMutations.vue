@@ -66,7 +66,7 @@
                 </div>
                 <FormStatusLamaItem>
                     {{
-                        formType === "detail"
+                        detailData?.companyFr
                             ? detailData?.companyFr
                             : statusLamaData?.persarea
                     }}
@@ -74,15 +74,15 @@
 
                 <FormStatusLamaItem>
                     {{
-                        formType === "detail"
-                            ? detailData?.companyFr
+                        detailData?.positionFr
+                            ? detailData?.positionFr
                             : statusLamaData?.posisi
                     }}
                 </FormStatusLamaItem>
 
                 <FormStatusLamaItem>
                     {{
-                        formType === "detail"
+                        detailData?.levelFr
                             ? detailData?.levelFr
                             : statusLamaData?.level
                     }}
@@ -90,7 +90,7 @@
 
                 <FormStatusLamaItem>
                     {{
-                        formType === "detail"
+                        detailData?.buFr
                             ? detailData?.buFr
                             : statusLamaData?.busunit
                     }}
@@ -98,7 +98,7 @@
 
                 <FormStatusLamaItem>
                     {{
-                        formType === "detail"
+                        detailData?.ccFr
                             ? detailData?.ccFr
                             : statusLamaData?.costcenter
                     }}
@@ -106,7 +106,7 @@
 
                 <FormStatusLamaItem>
                     {{
-                        formType === "detail"
+                        detailData?.locFr
                             ? detailData?.locFr
                             : statusLamaData?.office
                     }}
@@ -114,7 +114,7 @@
 
                 <FormStatusLamaItem>
                     {{
-                        formType === "detail"
+                        detailData?.spvFr
                             ? `${detailData?.spvFr} - ${detailData?.spvFrName} `
                             : statusLamaData?.empl_nik_spv
                     }}
@@ -122,7 +122,7 @@
 
                 <FormStatusLamaItem>
                     {{
-                        formType === "detail"
+                        detailData?.mgrFr
                             ? `${detailData?.mgrFr} - ${detailData?.mgrFrName}`
                             : statusLamaData?.immedmgr
                     }}
@@ -172,7 +172,7 @@
                         </FormItemTunjangan>
                     </div>
                     <p class="self-start mt-5 font-semibold">
-                        Total : {{ totalTunjanganLama }}
+                        Total : {{ formatRupiah(totalTunjanganLama) }}
                     </p>
                 </template>
             </div>
@@ -205,7 +205,7 @@
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem>
-                        {{ `${detailData?.locTo} - ${detailData?.locToName}` }}
+                        {{ detailData?.locToName }}
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem>
@@ -372,7 +372,7 @@
                     </div>
 
                     <p class="self-start mt-5 font-semibold">
-                        Total : {{ totalTunjanganBaru }}
+                        Total : {{ formatRupiah(totalTunjanganBaru) }}
                     </p>
                 </template>
             </div>
@@ -388,6 +388,7 @@ import FormAutocomplete from "../FormAutocomplete.vue";
 import FormStatusBaruItem from "./FormStatusBaruItem.vue";
 import useFormAutoFill from "../../hooks/useFormAutoFill";
 import { onMounted, ref, watch, watchEffect } from "vue";
+import formatRupiah from "../../utils/formatCurrencyRupiah";
 import {
     getAllowance,
     getDirectSpv,
