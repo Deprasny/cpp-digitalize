@@ -3,7 +3,7 @@
         class="fixed z-20 items-center justify-between hidden w-full p-5 transition-all duration-300 ease-in-out sm:flex"
         :class="{ 'bg-white shadow-lg': isScrolled }"
     >
-        <div class="flex items-center gap-x-5">
+        <div class="flex items-center ml-5 gap-x-5">
             <div class="relative">
                 <input
                     type="text"
@@ -26,7 +26,11 @@
             </div>
         </div>
 
-        <div class="flex mr-72 gap-x-5">
+        <div
+            :class="`flex ${
+                store.isSidebarOpen ? 'mr-72' : 'mr-[0px]'
+            } gap-x-5`"
+        >
             <p class="font-semibold">{{ getEmail }}</p>
             <button @click="handleToggleModal">
                 <component
@@ -51,6 +55,9 @@ import IconBell from "@/components/icons/IconBell.vue";
 import IconArrowRight from "../icons/IconArrowRight.vue";
 import Modal from "@/components/Modal.vue";
 import { useRouter } from "vue-router";
+import { useSidebarStore } from "@/stores/index.js";
+
+const store = useSidebarStore();
 
 const router = useRouter();
 

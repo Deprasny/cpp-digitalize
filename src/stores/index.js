@@ -11,3 +11,14 @@ export const useModalStore = defineStore("modal", {
         },
     },
 });
+
+export const useSidebarStore = defineStore("sidebar", {
+    state: () => ({
+        isSidebarOpen: open,
+    }),
+    actions: {
+        toggleSidebar() {
+            this.isSidebarOpen = !this.isSidebarOpen;
+        },
+    },
+});

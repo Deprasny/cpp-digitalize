@@ -64,7 +64,7 @@
                     <template v-else>
                         <FormDetailLabelContainer>
                             <LabelForm label="Nama & NIK">
-                                <div class="w-full flex gap-4">
+                                <div class="flex w-full gap-4">
                                     <p>
                                         {{ data?.employee[0]?.nama }} -
                                         {{ data?.employee[0]?.nik }}
@@ -222,7 +222,9 @@
                         <UIDivider />
                     </template>
 
-                    <div class="flex flex-col w-full gap-2 mt-10 md:hidden">
+                    <div
+                        class="flex flex-col justify-end w-full gap-2 mt-10 md:hidden"
+                    >
                         <Log :data="listLog" />
                         <UIDivider />
                     </div>
@@ -232,7 +234,7 @@
                         <LabelForm label="Lampiran">
                             <div class="flex gap-4">
                                 <p
-                                    class="whitespace-nowrap overflow-hidden overflow-ellipsis"
+                                    class="overflow-hidden whitespace-nowrap overflow-ellipsis"
                                 >
                                     {{ docsUrl.body.url.split("/").pop() }}
                                 </p>
@@ -249,7 +251,7 @@
                             class="items-center"
                             v-if="data?.mut_status === 'F'"
                         >
-                            <div class="flex gap-2 items-center">
+                            <div class="flex items-center gap-2">
                                 <DownloadFiles
                                     :services="getFormMutations"
                                     :options="
