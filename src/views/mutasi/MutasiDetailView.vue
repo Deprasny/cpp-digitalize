@@ -13,6 +13,8 @@
                     :title="data?.mut_req_no"
                     variant="detail"
                     class="md:w-[75%] w-full"
+                    :draft="data?.draft"
+                    @draft="handleDraft"
                 >
                     <template v-if="formType === 'Group'">
                         <FormDetailLabelContainer>
@@ -110,7 +112,7 @@
                                 <div>
                                     <div
                                         class="flex flex-col w-full"
-                                        v-if="isODStatuses"
+                                        v-if="isODStatuses || isEdit"
                                     >
                                         <FormInputBasic
                                             type="date"
@@ -125,7 +127,21 @@
                             </LabelForm>
 
                             <LabelForm label="Alasan Mutasi">
-                                <p class="w-full">{{ data?.mut_reason }}</p>
+                                <div>
+                                    <div
+                                        class="flex flex-col w-full"
+                                        v-if="isODStatuses || isEdit"
+                                    >
+                                        <FormInputBasic
+                                            type="textarea"
+                                            id="mut_reason"
+                                            v-model="values.mut_reason"
+                                        />
+                                    </div>
+                                    <div class="flex flex-col w-full" v-else>
+                                        {{ data.mut_reason }}
+                                    </div>
+                                </div>
                             </LabelForm>
                         </FormDetailLabelContainer>
                     </template>
@@ -138,7 +154,9 @@
                         <FormStatus
                             :values="values"
                             :detailData="data"
-                            :formType="isODStatuses ? 'edit' : 'detail'"
+                            :formType="
+                                isODStatuses || isEdit ? 'edit' : 'detail'
+                            "
                             :isShowTunjangan="isCOMBENStatuses"
                         />
                     </div>
@@ -274,6 +292,11 @@
                         </UIButton>
                     </div>
                     <div v-else class="flex justify-end mx-10 gap-x-5">
+                        <div v-if="isEdit">
+                            <UIButton @click="handleApprove" variant="approve">
+                                Submit
+                            </UIButton>
+                        </div>
                         <UIButton @click="$router.back()" variant="form">
                             Kembali
                         </UIButton>
@@ -304,7 +327,9 @@
         v-if="showSuccessModal"
         :isModalOpen="showSuccessModal"
         @toggleModal="showSuccessModal = false"
-        modalTitle="Mutasi Anda telah berhasil diapprove"
+        :modalTitle="
+            isEdit ? 'Berhasil mengedit draft' : 'Berhasil melakukan approval'
+        "
         modalType="success"
     />
 
@@ -357,11 +382,19 @@ const statusApproval = ref("");
 const data = ref({});
 const formType = routeName.currentRoute.value.query.form_type;
 
+const isODStatuses = ref(false);
+const isCOMBENStatuses = ref(false);
+const isEdit = ref(false);
+
 const docsUrl = ref({
     body: {
         url: "",
     },
 });
+
+const handleDraft = () => {
+    isEdit.value = !isEdit.value;
+};
 
 const getParams = (id) => {
     return {
@@ -401,9 +434,6 @@ onMounted(() => {
     handleFetch();
 });
 
-const isODStatuses = ref(false);
-const isCOMBENStatuses = ref(false);
-
 const onApprove = async (id) => {
     const getValues = () => {
         const getMutId = data?.value?.employee?.[0]?.id || "";
@@ -414,18 +444,29 @@ const onApprove = async (id) => {
                 muta_id: getMutId,
             })) || [];
 
+        const commonValues = {
+            mut_reason: values?.value?.mut_reason,
+            mut_date: values.value.mut_date,
+            companyTo: values.value.value.mutd_to_company,
+            positionTo: values.value.value.mutd_to_position,
+            buTo: values.value.value.mutd_to_division,
+            ccTo: values.value.value.mutd_to_costcenter,
+            locTo: values.value.value.mutd_to_work_location,
+            spvTo: values.value.value.mutd_to_direct_spv,
+            mgrTo: values.value.value.mutd_to_immed_mgr,
+        };
+
         if (isODStatuses.value) {
             return {
                 statusApproval: statusApproval.value,
-                mut_reason: data?.value?.mut_reason,
-                mut_date: values.value.mut_date,
-                companyTo: values.value.value.mutd_to_company,
-                positionTo: values.value.value.mutd_to_position,
-                buTo: values.value.value.mutd_to_division,
-                ccTo: values.value.value.mutd_to_costcenter,
-                locTo: values.value.value.mutd_to_work_location,
-                spvTo: values.value.value.mutd_to_direct_spv,
-                mgrTo: values.value.value.mutd_to_immed_mgr,
+                ...commonValues,
+            };
+        }
+
+        if (isEdit.value) {
+            return {
+                draft: false,
+                ...commonValues,
             };
         }
 
@@ -455,8 +496,9 @@ const onApprove = async (id) => {
         showSuccessModal.value = true;
 
         setTimeout(() => {
-            routeName.push({ name: "approval-mutasi" });
-        }, 1000);
+            const route = isEdit.value ? "mutasi" : "approval-mutasi";
+            routeName.push({ name: route });
+        }, 2000);
     } catch (error) {
         errorMessages.value = error.response.data.message;
         isLoading.value = false;
@@ -486,8 +528,8 @@ const listLog = ref([]);
 
 watchEffect(() => {
     if (data.value) {
+        values.value.mut_reason = data.value.mut_reason;
         values.value.mut_date = data.value.mut_date;
-
         listLog.value = data?.value?.progress?.map((item) => {
             return {
                 date: item?.docstep_status,
