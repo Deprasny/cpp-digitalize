@@ -79,6 +79,7 @@ import { getDashboardData } from "../services/dashboard.services";
 import { onBeforeMount, ref } from "vue";
 import useFetch from "../hooks/useFetch";
 import Modal from "../components/Modal.vue";
+import "@vuepic/vue-datepicker/dist/main.css";
 
 const { currentTime } = useCurrentTime();
 

@@ -38,6 +38,7 @@
                                 label="Tanggal Efektif Mutasi"
                                 type="date"
                                 v-model="values.mut_date"
+                                :allowedDates="allowedDates"
                             />
                             <FormInputBasic
                                 label="Alasan Mutasi"
@@ -119,7 +120,7 @@
     </div>
 </template>
 <script setup>
-import { onMounted, ref, watch, watchEffect } from "vue";
+import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import BasicCard from "../../components/BasicCard.vue";
 import BasicForm from "../../components/BasicForm.vue";
 import FormInputBasic from "../../components/FormInputBasic.vue";
@@ -294,4 +295,17 @@ const addName = () => {
 const removeName = (index) => {
     enteredNames.value.splice(index, 1);
 };
+
+const allowedDates = computed(() => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const monthsArray = [];
+
+    for (let month = 0; month < 12; month++) {
+        const firstDayOfMonth = new Date(currentYear, month, 1);
+        monthsArray.push(firstDayOfMonth);
+    }
+
+    return monthsArray;
+});
 </script>

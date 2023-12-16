@@ -52,7 +52,9 @@
                                 id="mut_date"
                                 v-model="values.mut_date"
                                 :disabled="isDisabled"
+                                :allowed-dates="allowedDates"
                             />
+
                             <FormInputBasic
                                 id="mut_reason"
                                 label="Alasan Mutasi"
@@ -217,7 +219,7 @@
     </div>
 </template>
 <script setup>
-import { ref, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import BasicCard from "../../components/BasicCard.vue";
 import BasicForm from "../../components/BasicForm.vue";
 import FormInputBasic from "../../components/FormInputBasic.vue";
@@ -388,4 +390,17 @@ const handleConditionalSubmit = () => {
         handleSubmit();
     }
 };
+
+const allowedDates = computed(() => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const monthsArray = [];
+
+    for (let month = 0; month < 12; month++) {
+        const firstDayOfMonth = new Date(currentYear, month, 1);
+        monthsArray.push(firstDayOfMonth);
+    }
+
+    return monthsArray;
+});
 </script>
