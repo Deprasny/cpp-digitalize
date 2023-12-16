@@ -12,7 +12,7 @@ const formLabelTitle = {
 
 const statusLamaDefaultValues = ["-", "-", "-", "-", "-", "-", "-", "-"];
 
-const tunjanganLabelTitle = ["Nama Tunjangan", "Nilai Tunjangan", "Net"];
+const tunjanganLabelTitle = ["Nama Tunjangan", "Nilai Tunjangan"];
 
 const statusBaruDefaultValues = [
     {
