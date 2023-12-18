@@ -13,9 +13,7 @@ export const getMutationsGroupValidations = (values) => {
 
     const validations = useVuelidate(rules, values);
 
-    return {
-        ...validations,
-    };
+    return validations;
 };
 
 export const getMutationsValidations = (values) => {
