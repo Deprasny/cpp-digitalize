@@ -3,7 +3,11 @@
     <div class="flex flex-col items-start">
         <p class="font-semibold">{{ label }}</p>
         <p class="mb-3 text-xs italic">(Pilih salah satu)</p>
-        <div v-for="option in options" :key="option.value" class="flex gap-x-2">
+        <div
+            v-for="(option, index) in options"
+            :key="index"
+            class="flex gap-x-2"
+        >
             <input
                 type="radio"
                 :name="name"

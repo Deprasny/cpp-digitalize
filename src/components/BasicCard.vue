@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col bg-white shadow-xl w-full">
+    <div class="flex flex-col w-full bg-white shadow-xl">
         <div
             :class="cardClasses"
             class="flex justify-between w-full py-4 border px-7 rounded-t-xl"
@@ -14,6 +14,17 @@
                     class="flex items-center justify-center w-6 h-6 border-2 border-black rounded-full"
                 >
                     !
+                </div>
+            </button>
+            <button
+                v-if="draft"
+                class="text-lg font-semibold"
+                @click="draftHandle"
+            >
+                <div
+                    class="flex items-center justify-center px-4 py-1 border-2 rounded-full"
+                >
+                    Edit Draft
                 </div>
             </button>
         </div>
@@ -39,7 +50,11 @@ const props = defineProps({
         default: "form",
     },
     tooltip: {
-        type: String,
+        type: Boolean,
+        default: false,
+    },
+    draft: {
+        type: Boolean,
         default: false,
     },
 });
@@ -53,5 +68,9 @@ const cardClasses = computed(() => {
 
 const tooltipHandle = () => {
     emit("tooltip");
+};
+
+const draftHandle = () => {
+    emit("draft");
 };
 </script>

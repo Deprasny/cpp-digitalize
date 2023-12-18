@@ -35,13 +35,24 @@
                         </div>
                         <div class="flex gap-x-7 md:flex-row flex-col">
                             <FormInputBasic
+                                id="mut_date"
                                 label="Tanggal Efektif Mutasi"
                                 type="date"
                                 v-model="values.mut_date"
+                                :allowedDates="allowedDates"
+                                :is-error="
+                                    validations?.mut_date.$errors.length > 0
+                                "
+                                :error-message="validations?.mut_date.$errors"
                             />
                             <FormInputBasic
+                                id="mut_reason"
                                 label="Alasan Mutasi"
                                 v-model="values.mut_reason"
+                                :is-error="
+                                    validations?.mut_reason.$errors.length > 0
+                                "
+                                :error-message="validations?.mut_reason.$errors"
                             />
                         </div>
                     </div>
@@ -64,7 +75,10 @@
                             <div
                                 class="flex md:items-center items-start gap-x-5 md:flex-row flex-col"
                             >
-                                <FormUploadFile v-model="files" />
+                                <FormUploadFile
+                                    v-model="files"
+                                    id="upload_mut"
+                                />
                                 <p class="text-xs">
                                     Mohon melampirkan struktur organisasi
                                     sebelum dan sesudah
@@ -119,7 +133,7 @@
     </div>
 </template>
 <script setup>
-import { onMounted, ref, watch, watchEffect } from "vue";
+import { computed, onMounted, reactive, ref, watch, watchEffect } from "vue";
 import BasicCard from "../../components/BasicCard.vue";
 import BasicForm from "../../components/BasicForm.vue";
 import FormInputBasic from "../../components/FormInputBasic.vue";
@@ -151,6 +165,7 @@ import { createMutationsTable } from "../../services/mutation.services";
 import FormStatusMutations from "../../components/mutations/FormStatusMutations.vue";
 import FormNIKAutocomplete from "../../components/FormNIKAutocomplete.vue";
 import FormUploadFile from "../../components/FormUploadFile.vue";
+import { getMutationsGroupValidations } from "../../validations/mutations.validation";
 
 const store = useModalStore();
 const nama = ref("");
@@ -162,7 +177,7 @@ const isLoading = ref(false);
 const statusLama = ref(statusLamaDefaultValues);
 const formStatusValues = ref({});
 
-const values = ref({
+const values = reactive({
     detail: [
         {
             nik: "",
@@ -183,6 +198,8 @@ const values = ref({
     draft: "",
 });
 
+const validations = getMutationsGroupValidations(values);
+
 const files = ref([]);
 
 const selectedValue = ref({});
@@ -196,33 +213,40 @@ const onSubmit = async () => {
     formData.append("data", JSON.stringify({ ...values?.value }));
     formData.append("lampiran", files.value[0] || []);
 
-    try {
-        const { data: response } = await useFetch({
-            services: createMutationsTable,
-            options: {
-                body: formData,
-                config: {
-                    headers: {
-                        Accept: "multipart/form-data",
-                        "Content-Type": "multipart/form-data",
+    const isValid = await validations.value.$validate();
+
+    if (!isValid) {
+        store.toggleModal();
+        isLoading.value = false;
+    } else {
+        try {
+            const { data: response } = await useFetch({
+                services: createMutationsTable,
+                options: {
+                    body: formData,
+                    config: {
+                        headers: {
+                            Accept: "multipart/form-data",
+                            "Content-Type": "multipart/form-data",
+                        },
                     },
                 },
-            },
-        });
+            });
 
-        if (response.value.message === "Success") {
+            if (response.value.message === "Success") {
+                store.toggleModal();
+                isLoading.value = false;
+                showSuccessModal.value = true;
+
+                setTimeout(() => {
+                    router.push({ name: "mutasi" });
+                }, 1000);
+            }
+        } catch (error) {
             store.toggleModal();
+            showErrorModal.value = true;
             isLoading.value = false;
-            showSuccessModal.value = true;
-
-            setTimeout(() => {
-                router.push({ name: "mutasi" });
-            }, 1000);
         }
-    } catch (error) {
-        store.toggleModal();
-        showErrorModal.value = true;
-        isLoading.value = false;
     }
 };
 
@@ -294,4 +318,17 @@ const addName = () => {
 const removeName = (index) => {
     enteredNames.value.splice(index, 1);
 };
+
+const allowedDates = computed(() => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const monthsArray = [];
+
+    for (let month = 0; month < 12; month++) {
+        const firstDayOfMonth = new Date(currentYear, month, 1);
+        monthsArray.push(firstDayOfMonth);
+    }
+
+    return monthsArray;
+});
 </script>

@@ -29,7 +29,6 @@ const props = defineProps({
         default: "submit",
     },
     icon: {
-        type: String,
         default: "",
     },
     isLoading: {

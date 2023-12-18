@@ -1,42 +1,38 @@
 <template>
-    <div class="relative shadow-xl h-full" @click="toggleDropdown">
-        <div
-            class="absolute w-full rounded-lg shadow-xs dropdown-content"
-            :class="{ 'z-20': isDropdownOpen }"
+    <div class="relative shadow-xl h-full flex items-center gap-2 px-2">
+        <select
+            v-if="!isLoading"
+            :disabled="disabled"
+            @click="toggleDropdown"
+            class="w-full px-4 py-3 mb-1 appearance-none rounded-lg text-gray-800 select-container"
+            :value="modelValue"
+            @input="emit('update:modelValue', $event.target.value)"
         >
-            <a href="#" class="block px-4 py-3 mb-1">
-                <span class="flex items-center justify-between">
-                    <span class="text-gray-800">{{ modelValue.label }}</span>
-                    <IconChevronLeft class="text-accent-1" />
-                </span>
-            </a>
-
-            <div
-                v-show="isDropdownOpen"
-                class="max-h-[300px] z-30 overflow-auto scroll-smooth z-30 bg-white"
+            <option
+                v-for="(option, index) in dropdownOptions"
+                :key="option.value"
+                :value="option.value"
             >
-                <div v-for="(option, index) in dropdownOptions" :key="index">
-                    <div
-                        class="block px-2 py-2 text-gray-800 border border-b border-gray-500 hover:bg-line-gradient hover:border-l-accent-1 hover:border-2 hover:py-6 hover:text-accent-1 hover:font-semibold"
-                        @click="handleDropdownItemClick(option)"
-                    >
-                        {{ option.label }}
-                    </div>
-                </div>
+                {{ option.label }}
+            </option>
+        </select>
 
-                <div
-                    v-show="isLoading"
-                    class="block px-2 py-2 text-gray-800 border border-b border-gray-500"
-                >
-                    <UILoader class="w-6 h-6" />
-                </div>
-            </div>
-        </div>
+        <UILoader class="w-6 h-6" v-else />
+
+        <IconChevronLeft class="text-accent-1" />
     </div>
 </template>
 
+<style>
+.select-container {
+    font-size: 12px;
+    max-width: 100%;
+    white-space: wrap;
+}
+</style>
+
 <script setup>
-import { ref, defineEmits } from "vue";
+import { ref, defineProps, defineEmits } from "vue";
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
 import UILoader from "./ui/UILoader.vue";
 
@@ -48,19 +44,4 @@ const { disabled, isLoading, modelValue, dropdownOptions } = defineProps([
     "disabled",
     "isLoading",
 ]);
-
-const isDropdownOpen = ref(false);
-
-const toggleDropdown = (event) => {
-    event.preventDefault();
-    if (!disabled) {
-        isDropdownOpen.value = !isDropdownOpen.value;
-    }
-};
-
-const handleDropdownItemClick = (option) => {
-    isDropdownOpen.value = true;
-
-    emit("update:modelValue", option);
-};
 </script>

@@ -1,19 +1,50 @@
 <template>
     <div class="relative w-full mb-4">
-        <label :for="id" class="text-base font-semibold leading-5 text-black">{{
-            label
-        }}</label>
+        <label
+            :for="id"
+            class="text-base font-semibold leading-5"
+            :class="{
+                'text-red-500': isError,
+                'text-black': !isError,
+            }"
+        >
+            {{ label }}</label
+        >
         <div class="relative flex items-center mt-3">
+            <template v-if="type === 'date'">
+                <VueDatePicker
+                    :disabled="disabled"
+                    :id="id"
+                    class="w-full px-3 py-2 text-black placeholder-black placeholder-opacity-50 bg-transparent border border-gray-500 rounded-lg shadow appearance-none focus:placeholder-opacity-100 date-picker"
+                    :placeholder="placeholder"
+                    :class="{
+                        'bg-gray-100': disabled,
+                        'border-gray-500': !isError,
+                        'border-red-500': isError,
+                    }"
+                    @update:modelValue="emit('update:modelValue', $event)"
+                    :modelValue="modelValue"
+                    :monthPicker="monthPicker"
+                    :allowed-dates="allowedDates"
+                    :hide-navigation="['time']"
+                    :enable-time-picker="false"
+                />
+            </template>
             <input
+                v-else
                 :disabled="disabled"
                 :type="type"
                 :id="id"
                 :value="modelValue"
                 @input="emit('update:modelValue', $event.target.value)"
-                class="w-full px-3 py-3 text-black placeholder-black placeholder-opacity-50 bg-transparent border border-gray-500 rounded-lg shadow appearance-none focus:placeholder-opacity-100"
+                class="w-full px-3 py-3 text-black placeholder-black placeholder-opacity-50 bg-transparent border rounded-lg shadow appearance-none focus:placeholder-opacity-100"
                 :placeholder="placeholder"
                 @keydown.enter.prevent="emitHandleAddName"
-                :class="{ 'bg-gray-100': disabled }"
+                :class="{
+                    'bg-gray-100': disabled,
+                    'border-gray-500': !isError,
+                    'border-red-500': isError,
+                }"
             />
             <div
                 v-if="icon"
@@ -23,10 +54,20 @@
                 <component :is="icon" />
             </div>
         </div>
+
+        <div
+            class="text-sm text-red-500 pt-2"
+            v-for="error of errorMessage"
+            :key="error.$uid"
+        >
+            <div class="error-msg">{{ error.$message }}</div>
+        </div>
     </div>
 </template>
 
 <script setup>
+import VueDatePicker from "@vuepic/vue-datepicker";
+
 const props = defineProps({
     id: {
         type: String,
@@ -59,6 +100,25 @@ const props = defineProps({
         default: false,
         required: false,
     },
+    monthPicker: {
+        type: Boolean,
+        default: false,
+        required: false,
+    },
+    allowedDates: {
+        default: "",
+        required: false,
+    },
+    isError: {
+        type: Boolean,
+        default: false,
+        required: false,
+    },
+    errorMessage: {
+        type: Array,
+        default: [],
+        required: false,
+    },
 });
 
 const emit = defineEmits(["update:modelValue", "toggleIcon", "addName"]);
@@ -71,3 +131,16 @@ const emitHandleAddName = () => {
     emit("addName");
 };
 </script>
+
+<style>
+.date-picker input {
+    background-color: transparent !important;
+    border: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.date-picker .dp__action_button.dp__action_select {
+    @apply bg-accent-1;
+}
+</style>

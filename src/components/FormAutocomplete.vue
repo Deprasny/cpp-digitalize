@@ -1,13 +1,21 @@
 <template>
     <div class="relative w-full mb-4">
-        <label :for="id" class="text-base font-semibold leading-5 text-black">
+        <label
+            :for="id"
+            class="text-base font-semibold leading-5"
+            :class="{
+                'text-red-500': isError,
+                'text-black': !isError,
+            }"
+        >
             {{ label }}</label
         >
         <div
-            class="relative flex items-center mt-3 w-full border p-2"
+            class="relative flex items-center mt-3 w-full border p-2 rounded-md"
             :class="{
                 border: !noBorder,
                 'border-transparent': noBorder,
+                'border-red-500': isError,
             }"
         >
             <div
@@ -62,6 +70,8 @@ const {
     "reduceOption",
     "noBorder",
     "isDisabled",
+    "isError",
+    "errorMessage",
 ]);
 
 const emit = defineEmits(["update:modelValue"]);

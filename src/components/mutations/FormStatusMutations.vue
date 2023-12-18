@@ -1,6 +1,6 @@
 <template>
     <div class="overflow-x-auto h-full w-full">
-        <div class="flex my-10 w-[900px]">
+        <div class="flex my-10 w-[900px] h-full">
             <div class="flex flex-col items-center text-center flex-1 w-48">
                 <div class="w-full h-10"></div>
                 <FormStatusInfo>
@@ -161,13 +161,6 @@
                                 type="number"
                                 class="w-full h-full"
                                 v-model="item.muta_allow_amount"
-                            />
-                        </FormItemTunjangan>
-                        <FormItemTunjangan>
-                            <input
-                                type="number"
-                                class="w-full h-full"
-                                v-model="item.muta_allow_grossnet"
                             />
                         </FormItemTunjangan>
                     </div>
@@ -337,13 +330,6 @@
                                 v-model="item.muta_allow_amount"
                             />
                         </FormItemTunjangan>
-                        <FormItemTunjangan>
-                            <input
-                                type="number"
-                                class="w-full h-full"
-                                v-model="item.muta_allow_grossnet"
-                            />
-                        </FormItemTunjangan>
 
                         <div class="relative">
                             <div
@@ -425,7 +411,6 @@ const statusBaruTunjangan = ref([]);
 const columnsTunjanganBaru = ref([
     {
         muta_allow_amount: "",
-        muta_allow_grossnet: "",
         muta_allow_code: "",
         muta_type: "NEW",
     },
@@ -433,7 +418,6 @@ const columnsTunjanganBaru = ref([
 const columnsTunjanganLama = ref([
     {
         muta_allow_amount: "",
-        muta_allow_grossnet: "",
         muta_allow_code: "",
         muta_type: "PAST",
     },
@@ -445,13 +429,13 @@ const totalTunjanganBaru = ref(0);
 const addColumn = () => {
     columnsTunjanganBaru.value.push({
         muta_allow_amount: "",
-        muta_allow_grossnet: "",
+
         muta_allow_code: "",
         muta_type: "NEW",
     });
     columnsTunjanganLama.value.push({
         muta_allow_amount: "",
-        muta_allow_grossnet: "",
+
         muta_allow_code: "",
         muta_type: "PAST",
     });
@@ -513,12 +497,7 @@ const fetchAutoFillForms = async () => {
 };
 
 function allObjectsHaveEmptyValues(arrayOfObjects) {
-    return arrayOfObjects.every(
-        (obj) =>
-            obj.muta_allow_amount === "" &&
-            obj.muta_allow_grossnet === "" &&
-            obj.muta_allow_code === ""
-    );
+    return arrayOfObjects.every((obj) => obj.muta_allow_amount === "");
 }
 
 watchEffect(() => {
@@ -554,17 +533,25 @@ watchEffect(() => {
     }
 
     if (props.isShowTunjangan) {
-        props.values.value.allowance_now = [
-            ...columnsTunjanganLama.value,
-            ...columnsTunjanganBaru.value,
-        ];
+        props.values.value.allowance_now = [];
 
-        if (allObjectsHaveEmptyValues(columnsTunjanganLama.value)) {
+        if (
+            allObjectsHaveEmptyValues(columnsTunjanganLama.value) &&
+            allObjectsHaveEmptyValues(columnsTunjanganBaru.value)
+        ) {
             props.values.value.allowance_now = [];
         }
 
-        if (allObjectsHaveEmptyValues(columnsTunjanganBaru.value)) {
-            props.values.value.allowance_now = [];
+        if (!allObjectsHaveEmptyValues(columnsTunjanganLama.value)) {
+            props.values.value.allowance_now.push(
+                ...columnsTunjanganLama.value
+            );
+        }
+
+        if (!allObjectsHaveEmptyValues(columnsTunjanganBaru.value)) {
+            props.values.value.allowance_now.push(
+                ...columnsTunjanganBaru.value
+            );
         }
     }
 

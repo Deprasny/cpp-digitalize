@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, h } from "vue";
 import Table from "@/components/BasicTable.vue";
 import { createColumnHelper } from "@tanstack/table-core";
 import UIButton from "@/components/ui/UIButton.vue";
@@ -108,7 +108,18 @@ const columns = [
     }),
     columnHelper.accessor((row) => row.draft, {
         id: "type",
-        cell: (info) => (info.getValue() ? "Draft" : ""),
+        cell: (info) => {
+            const type = info.getValue();
+            if (type) {
+                return h(
+                    "span",
+                    {
+                        class: "px-4 text-md py-1 rounded-full bg-accent-1 text-white ",
+                    },
+                    "Draft"
+                );
+            }
+        },
         header: () => "",
     }),
 ];

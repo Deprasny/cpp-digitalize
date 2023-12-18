@@ -102,18 +102,18 @@ function handlePageSizeChange(newPageSize) {
                 :key="row.id"
                 class="mb-4"
             >
-                <div class="w-full p-4 bg-white border rounded-lg shadow-md">
+                <div
+                    class="w-full p-4 space-y-3 bg-white border rounded-lg shadow-md"
+                >
                     <div v-for="cell in row.getVisibleCells()" :key="cell.id">
                         <strong @click="emit('onCellClick', cell)">{{
                             cell.column.columnDef.header()
                         }}</strong>
                         <p class="text-black break-words cursor-pointer">
-                            {{
-                                cell.column.columnDef.cell({
-                                    ...cell.getContext(),
-                                    row,
-                                })
-                            }}
+                            <FlexRender
+                                :render="cell.column.columnDef.cell"
+                                :props="cell.getContext()"
+                            />
                         </p>
                     </div>
                 </div>
