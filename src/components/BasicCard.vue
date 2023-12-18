@@ -50,7 +50,7 @@ const props = defineProps({
         default: "form",
     },
     tooltip: {
-        type: String,
+        type: Boolean,
         default: false,
     },
     draft: {

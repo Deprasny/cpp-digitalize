@@ -10,6 +10,8 @@
         :onSearch="fetchData"
         :modelValue="modelValue"
         @update:modelValue="updateModelValue"
+        :isError="isError"
+        :errorMessage="errorMessage"
     />
 </template>
 
@@ -19,6 +21,7 @@ import { getEmployeeByUser } from "../services/form.services";
 import useFetch from "../hooks/useFetch";
 import FormAutocomplete from "./FormAutocomplete.vue";
 
+const props = defineProps(["isError", "errorMessage"]);
 const emit = defineEmits(["update:modelValue"]);
 
 function updateModelValue(newValue) {

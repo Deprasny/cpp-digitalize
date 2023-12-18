@@ -70,7 +70,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { markRaw, ref } from "vue";
 import IconHome from "@/components/icons/IconHome.vue";
 import IconChange from "@/components/icons/IconChange.vue";
 import IconEvaluation from "@/components/icons/IconEvaluation.vue";
@@ -89,27 +89,27 @@ const router = useRouter();
 const menu = ref([
     {
         name: "Dashboard",
-        icon: IconHome,
+        icon: markRaw(IconHome),
         route: "/dashboard",
     },
     {
         name: "Mutasi",
-        icon: IconChange,
+        icon: markRaw(IconChange),
         route: "/mutasi",
     },
     {
         name: "Evaluasi",
-        icon: IconEvaluation,
+        icon: markRaw(IconEvaluation),
         route: "/evaluasi",
     },
     {
         name: "Pensiun",
-        icon: IconPensiun,
+        icon: markRaw(IconPensiun),
         route: "/pensiun",
     },
     {
         name: "Approval",
-        icon: IconCheck,
+        icon: markRaw(IconCheck),
         route: "/approval/mutasi",
     },
 ]);

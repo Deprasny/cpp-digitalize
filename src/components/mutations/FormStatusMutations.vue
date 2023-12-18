@@ -411,7 +411,6 @@ const statusBaruTunjangan = ref([]);
 const columnsTunjanganBaru = ref([
     {
         muta_allow_amount: "",
-
         muta_allow_code: "",
         muta_type: "NEW",
     },
@@ -419,7 +418,6 @@ const columnsTunjanganBaru = ref([
 const columnsTunjanganLama = ref([
     {
         muta_allow_amount: "",
-
         muta_allow_code: "",
         muta_type: "PAST",
     },
@@ -499,12 +497,7 @@ const fetchAutoFillForms = async () => {
 };
 
 function allObjectsHaveEmptyValues(arrayOfObjects) {
-    return arrayOfObjects.every(
-        (obj) =>
-            obj.muta_allow_amount === "" &&
-            obj.muta_allow_grossnet === "" &&
-            obj.muta_allow_code === ""
-    );
+    return arrayOfObjects.every((obj) => obj.muta_allow_amount === "");
 }
 
 watchEffect(() => {
@@ -540,17 +533,25 @@ watchEffect(() => {
     }
 
     if (props.isShowTunjangan) {
-        props.values.value.allowance_now = [
-            ...columnsTunjanganLama.value,
-            ...columnsTunjanganBaru.value,
-        ];
+        props.values.value.allowance_now = [];
 
-        if (allObjectsHaveEmptyValues(columnsTunjanganLama.value)) {
+        if (
+            allObjectsHaveEmptyValues(columnsTunjanganLama.value) &&
+            allObjectsHaveEmptyValues(columnsTunjanganBaru.value)
+        ) {
             props.values.value.allowance_now = [];
         }
 
-        if (allObjectsHaveEmptyValues(columnsTunjanganBaru.value)) {
-            props.values.value.allowance_now = [];
+        if (!allObjectsHaveEmptyValues(columnsTunjanganLama.value)) {
+            props.values.value.allowance_now.push(
+                ...columnsTunjanganLama.value
+            );
+        }
+
+        if (!allObjectsHaveEmptyValues(columnsTunjanganBaru.value)) {
+            props.values.value.allowance_now.push(
+                ...columnsTunjanganBaru.value
+            );
         }
     }
 

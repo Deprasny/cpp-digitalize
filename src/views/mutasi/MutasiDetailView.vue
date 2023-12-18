@@ -40,7 +40,10 @@
                                 </div>
                             </LabelForm>
 
-                            <LabelForm label="Tanggal Efektif Mutasi">
+                            <LabelForm
+                                label="Tanggal Efektif Mutasi"
+                                class="items-center"
+                            >
                                 <div
                                     class="flex flex-col w-full"
                                     v-if="isODStatuses"
@@ -56,7 +59,10 @@
                                 </div>
                             </LabelForm>
 
-                            <LabelForm label="Alasan Mutasi">
+                            <LabelForm
+                                label="Alasan Mutasi"
+                                class="items-center"
+                            >
                                 <div class="flex flex-col w-full gap-2">
                                     {{ data.mut_reason }}
                                 </div>
@@ -108,7 +114,10 @@
                                 </p>
                             </LabelForm>
 
-                            <LabelForm label="Tanggal Efektif Mutasi">
+                            <LabelForm
+                                label="Tanggal Efektif Mutasi"
+                                class="items-center"
+                            >
                                 <div>
                                     <div
                                         class="flex flex-col w-full"
@@ -126,7 +135,10 @@
                                 </div>
                             </LabelForm>
 
-                            <LabelForm label="Alasan Mutasi">
+                            <LabelForm
+                                label="Alasan Mutasi"
+                                class="items-center"
+                            >
                                 <div>
                                     <div
                                         class="flex flex-col w-full"
@@ -438,11 +450,16 @@ const onApprove = async (id) => {
     const getValues = () => {
         const getMutId = data?.value?.employee?.[0]?.id || "";
         const transformAllowance =
-            values?.value?.value?.allowance_now.map((item) => ({
-                ...item,
-                muta_allow_code: item?.muta_allow_code?.value,
-                muta_id: getMutId,
-            })) || [];
+            values?.value?.value?.allowance_now
+                .map((item) => {
+                    return {
+                        ...item,
+                        muta_allow_code: item?.muta_allow_code,
+                        muta_allow_grossnet: item?.muta_allow_amount,
+                        muta_id: getMutId,
+                    };
+                })
+                .filter((item) => item.muta_allow_amount !== "") || [];
 
         const commonValues = {
             mut_reason: values?.value?.mut_reason,
