@@ -5,8 +5,20 @@
                 <div class="px-10 py-5 w-full h-full">
                     <!-- form basic -->
                     <div class="w-full h-full">
-                        <div class="flex w-full gap-x-2 md:flex-row flex-col">
-                            <FormNIKAutocomplete v-model="selectedValue" />
+                        <div
+                            class="flex w-full gap-x-2 md:flex-row flex-col pb-10"
+                        >
+                            <FormNIKAutocomplete
+                                v-model="selectedValue"
+                                :isError="isErrorNIK"
+                                :error-message="[
+                                    {
+                                        $uid: '1',
+                                        $message:
+                                            'NIK Tidak Boleh Kosong / NIK Sudah Terdaftar',
+                                    },
+                                ]"
+                            />
 
                             <UIButton
                                 variant="form"
@@ -166,6 +178,7 @@ import FormStatusMutations from "../../components/mutations/FormStatusMutations.
 import FormNIKAutocomplete from "../../components/FormNIKAutocomplete.vue";
 import FormUploadFile from "../../components/FormUploadFile.vue";
 import { getMutationsGroupValidations } from "../../validations/mutations.validation";
+import formatDateToPayload from "../../utils/formatDateToPayload";
 
 const store = useModalStore();
 const nama = ref("");
@@ -177,7 +190,7 @@ const isLoading = ref(false);
 const statusLama = ref(statusLamaDefaultValues);
 const formStatusValues = ref({});
 
-const values = reactive({
+const values = ref({
     detail: [
         {
             nik: "",
@@ -208,13 +221,19 @@ const isDraft = ref(false);
 
 const showSuccessModal = ref(false);
 
+const isErrorNIK = ref(false);
+
 const onSubmit = async () => {
+    const transformDateData = {
+        ...values.value,
+        mut_date: formatDateToPayload(values.value.mut_date),
+    };
+
     const formData = new FormData();
-    formData.append("data", JSON.stringify({ ...values?.value }));
+    formData.append("data", JSON.stringify({ ...transformDateData }));
     formData.append("lampiran", files.value[0] || []);
 
     const isValid = await validations.value.$validate();
-
     if (!isValid) {
         store.toggleModal();
         isLoading.value = false;
@@ -232,12 +251,10 @@ const onSubmit = async () => {
                     },
                 },
             });
-
             if (response.value.message === "Success") {
                 store.toggleModal();
                 isLoading.value = false;
                 showSuccessModal.value = true;
-
                 setTimeout(() => {
                     router.push({ name: "mutasi" });
                 }, 1000);
@@ -311,8 +328,15 @@ const handleConditionalSubmit = () => {
 };
 
 const addName = () => {
-    enteredNames.value.push(selectedValue.value);
-    nama.value = "";
+    const newName = selectedValue?.value?.value?.trim();
+
+    if (newName && !enteredNames.value.some((val) => val.value === newName)) {
+        enteredNames.value.push(selectedValue?.value);
+        nama.value = "";
+        isErrorNIK.value = false;
+    } else {
+        isErrorNIK.value = true;
+    }
 };
 
 const removeName = (index) => {

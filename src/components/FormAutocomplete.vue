@@ -40,6 +40,15 @@
             >
             </v-select>
         </div>
+        <template v-if="isError">
+            <div
+                class="text-sm text-red-500 absolute pt-2"
+                v-for="error of errorMessage"
+                :key="error.$uid"
+            >
+                <div class="error-msg">{{ error.$message }}</div>
+            </div>
+        </template>
     </div>
 </template>
 

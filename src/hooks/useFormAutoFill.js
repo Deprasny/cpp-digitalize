@@ -38,15 +38,15 @@ const useFormAutoFill = async () => {
     const businessUnitValues = businessUnitsResponse?.data?.value.map(
         (item) => {
             return {
-                label: item?.busunit,
-                value: item?.busunit,
+                label: item?.division_name,
+                value: item?.division_name,
             };
         }
     );
     const costCenterValues = costCenterResponse?.data?.value.map((item) => {
         return {
-            label: item?.costcenter,
-            value: item?.costcenter,
+            label: item?.dept_name,
+            value: `${item?.dept_id} ${item?.division_id} ${item?.dept_name}`,
         };
     });
     const workLocationValues = workLocationResponse?.data?.value.map((item) => {

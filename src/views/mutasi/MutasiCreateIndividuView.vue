@@ -249,6 +249,7 @@ import {
 } from "../../data/mutations.data";
 import FormNIKAutocomplete from "../../components/FormNIKAutocomplete.vue";
 import FormUploadFile from "../../components/FormUploadFile.vue";
+import formatDateToPayload from "../../utils/formatDateToPayload";
 
 const store = useModalStore();
 const showSuccessModal = ref(false);
@@ -306,7 +307,7 @@ const onSubmit = async () => {
                     ...formStatusValues.value?.value,
                 },
             ],
-            mut_date: values.value.mut_date,
+            mut_date: formatDateToPayload(values.value.mut_date),
             mut_type: values.value.mut_type,
             mut_reason: values.value.mut_reason,
             draft: values.value.draft,
