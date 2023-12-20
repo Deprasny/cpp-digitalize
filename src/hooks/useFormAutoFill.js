@@ -17,7 +17,12 @@ const useFormAutoFill = async () => {
         workLocationResponse,
     ] = await Promise.all([
         useFetch({ services: getAllCompany, options: {} }),
-        useFetch({ services: getAllPosition, options: {} }),
+        useFetch({
+            services: getAllPosition,
+            options: {
+                params: { page: 1, limit: 999, cari: "" },
+            },
+        }),
         useFetch({ services: getAllBusinessUnit, options: {} }),
         useFetch({ services: getAllCostCenter, options: {} }),
         useFetch({ services: getAllWorkLocation, options: {} }),
@@ -31,8 +36,8 @@ const useFormAutoFill = async () => {
     });
     const positionValues = positionResponse?.data?.value.map((item) => {
         return {
-            label: item?.posisi,
-            value: item?.posisi,
+            label: item?.position_name,
+            value: `${item?.position_code}-${item?.position_name}`,
         };
     });
     const businessUnitValues = businessUnitsResponse?.data?.value.map(
