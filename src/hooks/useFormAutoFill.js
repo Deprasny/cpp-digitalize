@@ -39,14 +39,14 @@ const useFormAutoFill = async () => {
         (item) => {
             return {
                 label: item?.division_name,
-                value: item?.division_id,
+                value: item?.division_name,
             };
         }
     );
     const costCenterValues = costCenterResponse?.data?.value.map((item) => {
         return {
             label: item?.dept_name,
-            value: item?.dept_id,
+            value: `${item?.dept_id} ${item?.division_id} ${item?.dept_name}`,
         };
     });
     const workLocationValues = workLocationResponse?.data?.value.map((item) => {

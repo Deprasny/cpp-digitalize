@@ -13,163 +13,63 @@
                 variant="detail"
                 class="w-[95%]"
             >
-                <div class="my-5">
-                    <div class="flex w-full py-4 px-7 text-start">
-                        <div class="flex w-full">
-                            <LabelForm
-                                label="Nama & NIK"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">Zavira Andini - 21900133</p>
-                        </div>
-                        <div class="flex w-full">
-                            <LabelForm
-                                label="Usia"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">27 Tahun</p>
-                        </div>
+                <DetailWrapper>
+                    <div class="flex w-full">
+                        <LabelForm label="Nama & NIK">
+                            <p class="w-full">
+                                Zavira Andini - 21900133
+                            </p></LabelForm
+                        >
                     </div>
-                    <div class="flex w-full py-4 px-7 text-start">
-                        <div class="flex w-full">
-                            <LabelForm
-                                label="Jabatan"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
+                    <div class="flex w-full">
+                        <LabelForm label="Usia"
+                            ><p class="w-full">27 Tahun</p>
+                        </LabelForm>
+                    </div>
+
+                    <div class="flex w-full">
+                        <LabelForm label="Jabatan">
                             <p class="w-full">
                                 Specialist Organization Development
                             </p>
-                        </div>
-                        <div class="flex w-full">
-                            <LabelForm
-                                label="Level"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">4A</p>
-                        </div>
+                        </LabelForm>
                     </div>
-                    <div class="flex w-full py-4 px-7 text-start">
-                        <div class="flex w-1/2">
-                            <LabelForm
-                                label="Divisi/Department"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">Organization Development</p>
-                        </div>
+                    <div class="flex w-full">
+                        <LabelForm label="Level">
+                            <p class="w-full">4A</p></LabelForm
+                        >
                     </div>
-                    <div class="flex w-full py-4 px-7 text-start">
-                        <div class="flex w-1/2">
-                            <LabelForm
-                                label="Tanggal Masuk"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">1 Januari 2023</p>
-                        </div>
+
+                    <div class="flex w-full">
+                        <LabelForm label="Divisi/Department">
+                            <p class="w-full">
+                                Organization Development
+                            </p></LabelForm
+                        >
                     </div>
-                    <div class="flex w-full py-4 px-7 text-start">
-                        <div class="flex w-1/2">
-                            <LabelForm
-                                label="Periode"
-                                value="John Doe"
-                                class="w-full font-semibold"
-                            />
-                            <p class="w-full">1 Januari 2023 - 31 Maret 2023</p>
-                        </div>
+
+                    <div class="flex w-full">
+                        <LabelForm label="Tanggal Masuk">
+                            <p class="w-full">1 Januari 2023</p></LabelForm
+                        >
                     </div>
-                </div>
+
+                    <div class="flex w-fukk">
+                        <LabelForm label="Periode">
+                            <p class="w-full">
+                                1 Januari 2023 - 31 Maret 2023
+                            </p></LabelForm
+                        >
+                    </div>
+                </DetailWrapper>
 
                 <UIDivider />
 
                 <!-- form penilaian -->
-                <div class="mx-10">
-                    <div
-                        class="flex justify-between w-full mt-10 mb-5 text-start"
-                    >
-                        <div class="flex gap-x-3">
-                            <p class="font-bold uppercase">
-                                PENILAIAN CAPAIAN TARGET
-                            </p>
-                        </div>
-                    </div>
 
-                    <div class="flex justify-between w-full gap-x-5">
-                        <div class="w-1/2">
-                            <div
-                                class="flex items-center p-3 font-semibold uppercase bg-accent-2"
-                            >
-                                <div class="w-full h-full text-center">
-                                    KOMPETENSI INTI
-                                </div>
-                                <div class="text-center w-[20%] text-xs">
-                                    Max Score
-                                </div>
-                            </div>
-
-                            <div v-for="i in 3" class="flex w-full" :key="i">
-                                <div
-                                    class="items-center w-full p-4 border border-black h-[150px]"
-                                >
-                                    <p>
-                                        1. Always put customer satisfaction as
-                                        priority/Selalu mengutamakan kepuasan
-                                        pelanggan)
-                                    </p>
-                                </div>
-                                <div
-                                    class="h-[150px] border-l-0 p-4 border border-black w-[20%] flex items-center justify-center"
-                                >
-                                    <P class="text-2xl font-bold">30</P>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-1/2">
-                            <div
-                                class="flex items-center p-3 font-semibold text-white uppercase bg-accent-1"
-                            >
-                                <div class="w-full h-full text-center">
-                                    ACTUAL ACHIEVEMENT
-                                </div>
-                                <div class="text-center w-[20%] text-xs">
-                                    Max Score
-                                </div>
-                            </div>
-
-                            <div v-for="i in 3" class="flex w-full" :key="i">
-                                <div
-                                    class="items-center w-full p-4 border border-black h-[150px]"
-                                >
-                                    <p>
-                                        1. Always put customer satisfaction as
-                                        priority/Selalu mengutamakan kepuasan
-                                        pelanggan)
-                                    </p>
-                                </div>
-                                <div
-                                    class="h-[150px] border-l-0 p-4 border border-black w-[20%] flex items-center justify-center"
-                                >
-                                    <P class="text-2xl font-bold text-accent-1"
-                                        >30</P
-                                    >
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="flex justify-end w-full my-10 font-semibold text-white"
-                    >
-                        <div class="flex px-4 py-2 bg-accent-1 w-fit gap-x-10">
-                            <p>Total Score:</p>
-                            <p class="text-xl">60</p>
-                        </div>
-                    </div>
-                </div>
+                <DetailWrapper>
+                    <FormTablePencapaian />
+                </DetailWrapper>
 
                 <UIDivider />
 
@@ -287,6 +187,8 @@ import UIDivider from "@/components/ui/UIDivider.vue";
 import BasicCard from "../../components/BasicCard.vue";
 import LabelForm from "../../components/LabelForm.vue";
 import Log from "../../components/Log.vue";
+import FormTablePencapaian from "../../components/evaluasi/FormTablePencapaian.vue";
+import DetailWrapper from "../../components/evaluasi/wrapper/DetailWrapper.vue";
 
 const listLog = ref([
     { date: "7 Agustus 2023", description: "Approve by BU Head Penerima" },
