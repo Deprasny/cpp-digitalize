@@ -96,13 +96,13 @@
             }"
         >
             <p class="font-medium">Total Score:</p>
-            <p class="font-semibold">30</p>
+            <p class="font-semibold">{{ totalScore }}</p>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref, watch, watchEffect } from "vue";
 import FormInputTablePencapaian from "./FormInputTablePencapaian.vue";
 import ToolTip from "../ToolTip.vue";
 import FormHeaderPenpacapian from "./FormHeaderPenpacapian.vue";
@@ -172,6 +172,18 @@ const addColumns = () => {
         inputLabel: "",
     });
 };
+
+const totalScore = ref(0);
+
+watch(
+    () => inputActual.value.map((item) => item.inputVal),
+    (newColumns) => {
+        totalScore.value = newColumns.reduce(
+            (acc, curr) => acc + Number(curr),
+            0
+        );
+    }
+);
 
 const removeColumns = () => {
     inputTarget.value.pop();
