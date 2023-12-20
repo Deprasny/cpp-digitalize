@@ -307,7 +307,7 @@ const onSubmit = async () => {
                     ...formStatusValues.value?.value,
                 },
             ],
-            mut_date: formatDateToPayload(values.value.mut_date),
+            mut_date: formatDateToPayload(values?.value.mut_date),
             mut_type: values.value.mut_type,
             mut_reason: values.value.mut_reason,
             draft: values.value.draft,
