@@ -7,7 +7,7 @@
         placeholder="Cari nama karyawan / NIK"
         isSearchIcon="true"
         :isLoading="data.isLoading"
-        :onSearch="fetchData"
+        :onSearch="debounce(fetchData, 500)"
         :modelValue="modelValue"
         @update:modelValue="updateModelValue"
         :isError="isError"
@@ -20,6 +20,7 @@ import { onMounted, ref, watchEffect } from "vue";
 import { getEmployeeByUser } from "../services/form.services";
 import useFetch from "../hooks/useFetch";
 import FormAutocomplete from "./FormAutocomplete.vue";
+import debounce from "../utils/debounce";
 
 const props = defineProps(["isError", "errorMessage"]);
 const emit = defineEmits(["update:modelValue"]);
