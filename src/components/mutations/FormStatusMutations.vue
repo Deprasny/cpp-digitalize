@@ -453,10 +453,7 @@ function allObjectsHaveEmptyValues(arrayOfObjects) {
 watchEffect(() => {
     props.values.value = values.value;
 
-    if (
-        props?.detailData?.allowance.length > 0 &&
-        props.formType === "detail"
-    ) {
+    if (props?.detailData?.allowance.length > 0) {
         statusLamaTunjangan.value = props.detailData.allowance.filter(
             (item) => {
                 return item.muta_type === "PAST";

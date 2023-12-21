@@ -16,7 +16,7 @@
                     :draft="data?.draft"
                     @draft="handleDraft"
                 >
-                    <template v-if="formType === 'Group'">
+                    <template v-if="formType === 'Kolektif'">
                         <FormDetailLabelContainer>
                             <LabelForm label="Nama & NIK">
                                 <div class="flex flex-col w-full gap-2">
@@ -177,7 +177,7 @@
 
                     <!-- info-1 -->
 
-                    <template v-if="formType === 'Group'"></template>
+                    <template v-if="formType === 'Kolektif'"></template>
                     <template v-else>
                         <FormDetailLabelContainer>
                             <LabelForm label="Keluarga">
@@ -566,10 +566,10 @@ watchEffect(() => {
         if (
             (data?.value?.currentStep === "BENEFIT2" &&
                 isOnApproval &&
-                formType !== "Group") ||
+                formType !== "Kolektif") ||
             (data?.value?.currentStep === "BENEFIT1" &&
                 isOnApproval &&
-                formType !== "Group")
+                formType !== "Kolektif")
         ) {
             isCOMBENStatuses.value = true;
         }
