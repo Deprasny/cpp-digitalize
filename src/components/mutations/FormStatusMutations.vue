@@ -219,23 +219,13 @@
 
                 <template v-else>
                     <FormStatusBaruItem>
-                        <FormAutocomplete
-                            noBorder="true"
-                            :data="options.company"
-                            id="company-status"
-                            :isLoading="options.isLoading"
+                        <FormAutoCompleteCompany
                             v-model="values.mutd_to_company"
-                            :reduceOption="onReduceOptions"
                         />
                     </FormStatusBaruItem>
                     <FormStatusBaruItem>
-                        <FormAutocomplete
-                            noBorder="true"
-                            :data="options.position"
-                            id="position-status"
-                            :isLoading="options.isLoading"
+                        <FormAutoCompletePosition
                             v-model="values.mutd_to_position"
-                            :reduceOption="onReduceOptions"
                         />
                     </FormStatusBaruItem>
                     <FormStatusBaruItem>
@@ -244,33 +234,18 @@
                         </div>
                     </FormStatusBaruItem>
                     <FormStatusBaruItem>
-                        <FormAutocomplete
-                            noBorder="true"
-                            :data="options.bussunit"
-                            id="bussunit-status"
-                            :isLoading="options.isLoading"
+                        <FormAutoCompleteBussunits
                             v-model="values.mutd_to_division"
-                            :reduceOption="onReduceOptions"
                         />
                     </FormStatusBaruItem>
                     <FormStatusBaruItem>
-                        <FormAutocomplete
-                            noBorder="true"
-                            :data="options.costCenter"
-                            id="costcenter-status"
-                            :isLoading="options.isLoading"
+                        <FormAutoCompleteCostCenter
                             v-model="values.mutd_to_costcenter"
-                            :reduceOption="onReduceOptions"
                         />
                     </FormStatusBaruItem>
                     <FormStatusBaruItem>
-                        <FormAutocomplete
-                            noBorder="true"
-                            :data="options.workLocation"
-                            id="worklocation-status"
-                            :isLoading="options.isLoading"
+                        <FormAutocompleteWorkLocation
                             v-model="values.mutd_to_work_location"
-                            :reduceOption="onReduceOptions"
                         />
                     </FormStatusBaruItem>
                     <FormStatusBaruItem
@@ -372,7 +347,6 @@ import Dropdown from "../Dropdown.vue";
 import IconPlus from "../../components/icons/IconPlus.vue";
 import FormAutocomplete from "../FormAutocomplete.vue";
 import FormStatusBaruItem from "./FormStatusBaruItem.vue";
-import useFormAutoFill from "../../hooks/useFormAutoFill";
 import { onMounted, ref, watch, watchEffect } from "vue";
 import formatRupiah from "../../utils/formatCurrencyRupiah";
 import {
@@ -381,18 +355,17 @@ import {
     getImmediateManager,
 } from "../../services/form.services";
 import useFetch from "../../hooks/useFetch";
-import {
-    columnTunjanganDefaultValues,
-    columnTunjanganValues,
-    formLabelTitle,
-    statusLamaDefaultValues,
-    tunjanganLabelTitle,
-} from "../../data/mutations.data";
+import { formLabelTitle, tunjanganLabelTitle } from "../../data/mutations.data";
 import FormStatusLamaItem from "./FormStatusLamaItem.vue";
 import FormStatusInfo from "./FormStatusInfo.vue";
 import UIDivider from "../ui/UIDivider.vue";
 import FormItemTunjanganDetail from "./FormItemTunjanganDetail.vue";
 import FormItemTunjangan from "./FormItemTunjangan.vue";
+import FormAutoCompleteCompany from "./FormAutoComplete/FormAutoCompleteCompany.vue";
+import FormAutoCompletePosition from "./FormAutoComplete/FormAutoCompletePosition.vue";
+import FormAutoCompleteBussunits from "./FormAutoComplete/FormAutoCompleteBussunits.vue";
+import FormAutoCompleteCostCenter from "./FormAutoComplete/FormAutoCompleteCostCenter.vue";
+import FormAutocompleteWorkLocation from "./FormAutoComplete/FormAutocompleteWorkLocation.vue";
 
 const props = defineProps([
     "isShowTunjangan",
@@ -472,29 +445,6 @@ const values = ref({
     mutd_to_direct_spv: "",
     mutd_to_immed_mgr: "",
 });
-
-const fetchAutoFillForms = async () => {
-    options.value.isLoading = true;
-    try {
-        const {
-            businessUnitValues,
-            companyValues,
-            costCenterValues,
-            positionValues,
-            workLocationValues,
-        } = await useFormAutoFill();
-
-        options.value.company = companyValues;
-        options.value.position = positionValues;
-        options.value.bussunit = businessUnitValues;
-        options.value.costCenter = costCenterValues;
-        options.value.workLocation = workLocationValues;
-    } catch (e) {
-        console.log(e);
-    } finally {
-        options.value.isLoading = false;
-    }
-};
 
 function allObjectsHaveEmptyValues(arrayOfObjects) {
     return arrayOfObjects.every((obj) => obj.muta_allow_amount === "");
@@ -652,7 +602,6 @@ const onReduceOptions = (option) => {
 };
 
 onMounted(() => {
-    fetchAutoFillForms();
     fetchAllowanceOptions();
     if (
         statusBaruTunjangan.value.length > 0 &&
