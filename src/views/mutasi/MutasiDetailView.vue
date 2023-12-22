@@ -52,6 +52,7 @@
                                         type="date"
                                         id="mut_date"
                                         v-model="values.mut_date"
+                                        :allowed-dates="allowedDates"
                                     />
                                 </div>
                                 <div class="flex flex-col w-full" v-else>
@@ -378,6 +379,7 @@ import FormStatus from "../../components/mutations/FormStatusMutations.vue";
 import FormInputBasic from "../../components/FormInputBasic.vue";
 import DownloadFiles from "../../components/DownloadFiles.vue";
 import FormDetailLabelContainer from "../../components/mutations/FormDetailLabelContainer.vue";
+import { allowedDates } from "../../utils/allowedDates";
 
 const store = useModalStore();
 
