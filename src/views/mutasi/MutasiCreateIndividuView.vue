@@ -250,6 +250,7 @@ import {
 import FormNIKAutocomplete from "../../components/FormNIKAutocomplete.vue";
 import FormUploadFile from "../../components/FormUploadFile.vue";
 import formatDateToPayload from "../../utils/formatDateToPayload";
+import { allowedDates } from "../../utils/allowedDates";
 
 const store = useModalStore();
 const showSuccessModal = ref(false);
@@ -391,20 +392,4 @@ const handleConditionalSubmit = () => {
         handleSubmit();
     }
 };
-
-const allowedDates = computed(() => {
-    const startYear = 2022; // You can modify this to the desired start year
-    const endYear = new Date().getFullYear() + 5; // You can modify this to set the number of years into the future
-
-    const monthsArray = [];
-
-    for (let year = startYear; year <= endYear; year++) {
-        for (let month = 0; month < 12; month++) {
-            const firstDayOfMonth = new Date(year, month, 1);
-            monthsArray.push(firstDayOfMonth);
-        }
-    }
-
-    return monthsArray;
-});
 </script>

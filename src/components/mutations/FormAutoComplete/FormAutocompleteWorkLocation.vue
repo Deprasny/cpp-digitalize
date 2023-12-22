@@ -39,7 +39,7 @@ const fetchData = async (searchValue) => {
 
         function transformWorkLocationValues(response) {
             return response?.value.map((item) => ({
-                label: item?.worklocation_name,
+                label: `${item?.worklocation_code} - ${item?.worklocation_name}`,
                 value: item?.worklocation_code,
             }));
         }

@@ -174,6 +174,7 @@ import FormNIKAutocomplete from "../../components/FormNIKAutocomplete.vue";
 import FormUploadFile from "../../components/FormUploadFile.vue";
 import { getMutationsGroupValidations } from "../../validations/mutations.validation";
 import formatDateToPayload from "../../utils/formatDateToPayload";
+import { allowedDates } from "../../utils/allowedDates";
 
 const store = useModalStore();
 const nama = ref("");
@@ -337,20 +338,4 @@ const addName = () => {
 const removeName = (index) => {
     enteredNames.value.splice(index, 1);
 };
-
-const allowedDates = computed(() => {
-    const startYear = 2022; // You can modify this to the desired start year
-    const endYear = new Date().getFullYear() + 5; // You can modify this to set the number of years into the future
-
-    const monthsArray = [];
-
-    for (let year = startYear; year <= endYear; year++) {
-        for (let month = 0; month < 12; month++) {
-            const firstDayOfMonth = new Date(year, month, 1);
-            monthsArray.push(firstDayOfMonth);
-        }
-    }
-
-    return monthsArray;
-});
 </script>
