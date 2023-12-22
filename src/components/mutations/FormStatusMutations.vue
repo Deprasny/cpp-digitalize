@@ -116,7 +116,7 @@
                     {{
                         detailData?.spvFr
                             ? `${detailData?.spvFr} - ${detailData?.spvFrName} `
-                            : statusLamaData?.empl_nik_spv
+                            : `${statusLamaData?.empl_nik_spv} - ${statusLamaData?.empl_name_spv}`
                     }}
                 </FormStatusLamaItem>
 
@@ -124,7 +124,7 @@
                     {{
                         detailData?.mgrFr
                             ? `${detailData?.mgrFr} - ${detailData?.mgrFrName}`
-                            : statusLamaData?.immedmgr
+                            : `${statusLamaData?.immedmgr} - ${statusLamaData?.immedmgr_name}`
                     }}
                 </FormStatusLamaItem>
 
