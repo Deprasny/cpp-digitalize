@@ -9,10 +9,11 @@
                         :colon="false"
                     />
                 </FormStatusInfo>
-                <FormStatusInfo>
+
+                <FormStatusInfo v-if="isShowJabatan">
                     <LabelForm :label="formLabelTitle.Jabatan" :colon="false" />
                 </FormStatusInfo>
-                <FormStatusInfo>
+                <FormStatusInfo v-if="isShowJabatan">
                     <LabelForm
                         :label="formLabelTitle.KelasJabatan"
                         :colon="false"
@@ -50,7 +51,10 @@
                 </FormStatusInfo>
 
                 <FormStatusInfo
-                    v-if="formType === 'detail' && !isShowTunjangan"
+                    v-if="
+                        (formType === 'detail' && !isShowTunjangan) ||
+                        isShowTunjanganDetail
+                    "
                 >
                     <LabelForm
                         :label="formLabelTitle.Tunjangan"
@@ -72,7 +76,7 @@
                     }}
                 </FormStatusLamaItem>
 
-                <FormStatusLamaItem>
+                <FormStatusLamaItem v-if="isShowJabatan">
                     {{
                         detailData?.positionFr
                             ? detailData?.positionFr
@@ -80,7 +84,7 @@
                     }}
                 </FormStatusLamaItem>
 
-                <FormStatusLamaItem>
+                <FormStatusLamaItem v-if="isShowJabatan">
                     {{
                         detailData?.levelFr
                             ? detailData?.levelFr
@@ -133,7 +137,10 @@
                 </FormStatusLamaItem>
 
                 <FormStatusLamaItem
-                    v-if="formType === 'detail' && !isShowTunjangan"
+                    v-if="
+                        (formType === 'detail' && !isShowTunjangan) ||
+                        isShowTunjanganDetail
+                    "
                     class="h-40"
                 >
                     <FormItemTunjanganDetail :data="statusLamaTunjangan" />
@@ -161,11 +168,7 @@
                             />
                         </FormItemTunjangan>
                         <FormItemTunjangan>
-                            <input
-                                type="number"
-                                class="w-full h-full"
-                                v-model="item.muta_allow_amount"
-                            />
+                            <FormCurrency v-model="item.muta_allow_amount" />
                         </FormItemTunjangan>
                     </div>
                     <p class="self-start mt-5 font-semibold">
@@ -185,11 +188,11 @@
                         {{ detailData?.companyTo }}
                     </FormStatusLamaItem>
 
-                    <FormStatusLamaItem>
+                    <FormStatusLamaItem v-if="isShowJabatan">
                         {{ detailData?.positionTo }}
                     </FormStatusLamaItem>
 
-                    <FormStatusLamaItem>
+                    <FormStatusLamaItem v-if="isShowJabatan">
                         {{ detailData?.levelTo }}
                     </FormStatusLamaItem>
 
@@ -214,7 +217,10 @@
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem
-                        v-if="formType === 'detail' && !isShowTunjangan"
+                        v-if="
+                            (formType === 'detail' && !isShowTunjangan) ||
+                            isShowTunjanganDetail
+                        "
                         class="h-40"
                     >
                         <FormItemTunjanganDetail :data="statusBaruTunjangan" />
@@ -227,12 +233,12 @@
                             v-model="values.mutd_to_company"
                         />
                     </FormStatusBaruItem>
-                    <FormStatusBaruItem>
+                    <FormStatusBaruItem v-if="isShowJabatan">
                         <FormAutoCompletePosition
                             v-model="values.mutd_to_position"
                         />
                     </FormStatusBaruItem>
-                    <FormStatusBaruItem>
+                    <FormStatusBaruItem v-if="isShowJabatan">
                         <div class="px-4 h-full py-2 flex items-center">
                             {{ statusLamaData?.level || detailData?.levelFr }}
                         </div>
@@ -244,6 +250,7 @@
                     </FormStatusBaruItem>
                     <FormStatusBaruItem>
                         <FormAutoCompleteCostCenter
+                            :division_id="values.mutd_to_division.value"
                             v-model="values.mutd_to_costcenter"
                         />
                     </FormStatusBaruItem>
@@ -278,6 +285,13 @@
                             :isDisabled="values.mutd_to_division === ''"
                         />
                     </FormStatusBaruItem>
+
+                    <FormStatusLamaItem
+                        v-if="isShowTunjanganDetail"
+                        class="h-40"
+                    >
+                        <FormItemTunjanganDetail :data="statusBaruTunjangan" />
+                    </FormStatusLamaItem>
                 </template>
 
                 <template v-if="isShowTunjangan">
@@ -303,11 +317,7 @@
                             />
                         </FormItemTunjangan>
                         <FormItemTunjangan>
-                            <input
-                                type="number"
-                                class="w-full h-full"
-                                v-model="item.muta_allow_amount"
-                            />
+                            <FormCurrency v-model="item.muta_allow_amount" />
                         </FormItemTunjangan>
 
                         <div class="relative">
@@ -370,6 +380,8 @@ import FormAutoCompletePosition from "./FormAutoComplete/FormAutoCompletePositio
 import FormAutoCompleteBussunits from "./FormAutoComplete/FormAutoCompleteBussunits.vue";
 import FormAutoCompleteCostCenter from "./FormAutoComplete/FormAutoCompleteCostCenter.vue";
 import FormAutocompleteWorkLocation from "./FormAutoComplete/FormAutocompleteWorkLocation.vue";
+import FormCurrency from "../FormCurrency.vue";
+import { watchDebounced } from "@vueuse/core";
 
 const props = defineProps([
     "isShowTunjangan",
@@ -378,6 +390,9 @@ const props = defineProps([
     "statusLamaData",
     "detailData",
     "formType",
+    "isShowJabatan",
+    "selectedNik",
+    "isShowTunjanganDetail",
 ]);
 
 const headerTunjangan = ref(tunjanganLabelTitle);
@@ -387,14 +402,14 @@ const statusBaruTunjangan = ref([]);
 
 const columnsTunjanganBaru = ref([
     {
-        muta_allow_amount: "",
+        muta_allow_amount: 0,
         muta_allow_code: "",
         muta_type: "NEW",
     },
 ]);
 const columnsTunjanganLama = ref([
     {
-        muta_allow_amount: "",
+        muta_allow_amount: 0,
         muta_allow_code: "",
         muta_type: "PAST",
     },
@@ -405,14 +420,12 @@ const totalTunjanganBaru = ref(0);
 
 const addColumn = () => {
     columnsTunjanganBaru.value.push({
-        muta_allow_amount: "",
-
+        muta_allow_amount: 0,
         muta_allow_code: "",
         muta_type: "NEW",
     });
     columnsTunjanganLama.value.push({
-        muta_allow_amount: "",
-
+        muta_allow_amount: 0,
         muta_allow_code: "",
         muta_type: "PAST",
     });
@@ -450,12 +463,13 @@ const values = ref({
     mutd_to_immed_mgr: "",
 });
 
-function allObjectsHaveEmptyValues(arrayOfObjects) {
-    return arrayOfObjects.every((obj) => obj.muta_allow_amount === "");
-}
+const allowance_now = ref([]);
 
 watchEffect(() => {
-    props.values.value = values.value;
+    props.values.value = {
+        ...values.value,
+        mutd_to_division: values.value.mutd_to_division.label || "",
+    };
 
     if (props?.detailData?.allowance.length > 0) {
         statusLamaTunjangan.value = props.detailData.allowance.filter(
@@ -471,6 +485,13 @@ watchEffect(() => {
         );
     }
 
+    if (props.isShowTunjangan) {
+        allowance_now.value = [
+            ...columnsTunjanganLama.value,
+            ...columnsTunjanganBaru.value,
+        ];
+    }
+
     if (props?.detailData && props.formType === "edit") {
         values.value.mutd_to_company = props.detailData.companyTo;
         values.value.mutd_to_position = props.detailData.positionTo;
@@ -482,33 +503,6 @@ watchEffect(() => {
 
         props.values.value = values.value;
     }
-
-    if (props.isShowTunjangan) {
-        props.values.value.allowance_now = [];
-
-        if (
-            allObjectsHaveEmptyValues(columnsTunjanganLama.value) &&
-            allObjectsHaveEmptyValues(columnsTunjanganBaru.value)
-        ) {
-            props.values.value.allowance_now = [];
-        }
-
-        if (!allObjectsHaveEmptyValues(columnsTunjanganLama.value)) {
-            props.values.value.allowance_now.push(
-                ...columnsTunjanganLama.value
-            );
-        }
-
-        if (!allObjectsHaveEmptyValues(columnsTunjanganBaru.value)) {
-            props.values.value.allowance_now.push(
-                ...columnsTunjanganBaru.value
-            );
-        }
-    }
-
-    if (!props.isShowTunjangan) {
-        props.values.value.allowance_now = [];
-    }
 });
 
 const fetchAutoFillFormParams = async () => {
@@ -518,7 +512,7 @@ const fetchAutoFillFormParams = async () => {
             services: getDirectSpv,
             options: {
                 params: {
-                    bu: values.value.mutd_to_division,
+                    bu: values.value.mutd_to_division?.value,
                 },
             },
         });
@@ -527,7 +521,7 @@ const fetchAutoFillFormParams = async () => {
             services: getImmediateManager,
             options: {
                 params: {
-                    bu: values.value.mutd_to_division,
+                    bu: values.value.mutd_to_division?.value,
                 },
             },
         });
@@ -564,23 +558,48 @@ watch(
     }
 );
 
-watch(
+watchDebounced(
     () => columnsTunjanganLama.value.map((item) => item.muta_allow_amount),
     (newColumns) => {
         totalTunjanganLama.value = newColumns.reduce(
             (acc, curr) => acc + Number(curr),
             0
         );
+    },
+    {
+        debounce: 1000,
     }
 );
 
-watch(
+watchDebounced(
     () => columnsTunjanganBaru.value.map((item) => item.muta_allow_amount),
     (newColumns) => {
         totalTunjanganBaru.value = newColumns.reduce(
             (acc, curr) => acc + Number(curr),
             0
         );
+    },
+    {
+        debounce: 1000,
+    }
+);
+
+watchDebounced(
+    () => props?.selectedNik,
+    (newValue) => {
+        if (newValue.allowance.length > 0) {
+            statusBaruTunjangan.value = newValue.allowance.filter((item) => {
+                return item.muta_type === "NEW";
+            });
+
+            statusLamaTunjangan.value = newValue.allowance.filter((item) => {
+                return item.muta_type === "PAST";
+            });
+        }
+    },
+    {
+        debounce: 1000,
+        deep: true,
     }
 );
 
@@ -602,30 +621,29 @@ const onReduceOptions = (option) => {
     return option.value;
 };
 
+watchDebounced(
+    () => allowance_now.value,
+    (newValue) => {
+        if (newValue.length === 0) {
+            props.values.value.allowance_now = [];
+        } else {
+            props.values.value.allowance_now = allowance_now.value.filter(
+                (item) => {
+                    return (
+                        item.muta_allow_amount !== 0 &&
+                        item.muta_allow_code !== ""
+                    );
+                }
+            );
+        }
+    },
+    {
+        debounce: 1000,
+        deep: true,
+    }
+);
+
 onMounted(() => {
     fetchAllowanceOptions();
-    if (
-        statusBaruTunjangan.value.length > 0 &&
-        statusLamaTunjangan.value.length > 0
-    ) {
-        columnsTunjanganLama.value = statusLamaTunjangan?.value.map((item) => ({
-            ...item,
-            muta_allow_code: {
-                label: item?.muta_allow_code,
-                value: item?.muta_allow_code,
-            },
-        }));
-        columnsTunjanganBaru.value = statusBaruTunjangan?.value.map((item) => ({
-            ...item,
-            muta_allow_code: {
-                label: item.muta_allow_code,
-                value: item.muta_allow_code,
-            },
-        }));
-        props.values.value.allowance_now = [
-            ...columnsTunjanganLama.value,
-            ...columnsTunjanganBaru.value,
-        ];
-    }
 });
 </script>

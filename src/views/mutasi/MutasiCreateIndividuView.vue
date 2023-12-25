@@ -70,6 +70,9 @@
                         id="status"
                         :values="formStatusValues"
                         :statusLamaData="selectedValue?.details"
+                        is-show-jabatan="true"
+                        :selected-nik="selectedValue?.details"
+                        is-show-tunjangan-detail="true"
                     />
 
                     <UIDivider />
@@ -219,7 +222,7 @@
     </div>
 </template>
 <script setup>
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref, watch, watchEffect } from "vue";
 import BasicCard from "../../components/BasicCard.vue";
 import BasicForm from "../../components/BasicForm.vue";
 import FormInputBasic from "../../components/FormInputBasic.vue";
@@ -374,6 +377,8 @@ const handleDraft = () => {
 };
 
 watchEffect(() => {
+    console.log({ formStatusValues: formStatusValues.value?.value });
+
     if (selectedValue.value?.details) {
         values.value.nik = selectedValue.value?.details?.nik;
     }
