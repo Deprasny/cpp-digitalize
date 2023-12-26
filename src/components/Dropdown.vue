@@ -1,10 +1,10 @@
 <template>
-    <div class="relative shadow-xl h-full flex items-center gap-2 px-2">
+    <div class="relative h-full flex items-center gap-2 px-2">
         <select
             v-if="!isLoading"
             :disabled="disabled"
             @click="toggleDropdown"
-            class="w-full px-4 py-3 mb-1 appearance-none rounded-lg text-gray-800 select-container"
+            class="w-full px-4 py-3 mb-1 appearance-none rounded-lg text-gray-800 select-container focus:outline-none"
             :value="modelValue"
             @input="emit('update:modelValue', $event.target.value)"
         >

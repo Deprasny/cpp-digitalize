@@ -39,8 +39,8 @@ const fetchData = async (searchValue) => {
 
         function transformCompanyValues(response) {
             return response?.value.map((item) => ({
-                label: `${item?.company_id} - ${item?.company_name}`,
-                value: `${item?.company_id} - ${item?.company_name}`,
+                label: item?.persarea,
+                value: item?.persarea,
             }));
         }
         data.value.val = transformCompanyValues(response);

@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 import useFetch from "../../../hooks/useFetch";
 import FormAutocomplete from "../../FormAutocomplete.vue";
@@ -23,7 +23,7 @@ import {
     getAllCostCenter,
 } from "../../../services/form.services";
 
-const props = defineProps(["isError", "errorMessage"]);
+const props = defineProps(["isError", "errorMessage", "division_id"]);
 const emit = defineEmits(["update:modelValue"]);
 
 function updateModelValue(newValue) {
@@ -36,7 +36,12 @@ const fetchData = async (searchValue) => {
         const { data: response } = await useFetch({
             services: getAllCostCenter,
             options: {
-                params: { page: 1, limit: 25, cari: searchValue },
+                params: {
+                    page: 1,
+                    limit: 25,
+                    cari: searchValue,
+                    division_id: props.division_id,
+                },
             },
         });
 
@@ -67,4 +72,11 @@ const onReduceOptions = (option) => {
 onMounted(() => {
     fetchData();
 });
+
+watch(
+    () => props.division_id,
+    (newValue) => {
+        fetchData();
+    }
+);
 </script>

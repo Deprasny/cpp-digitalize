@@ -171,6 +171,7 @@
                                 isODStatuses || isEdit ? 'edit' : 'detail'
                             "
                             :isShowTunjangan="isCOMBENStatuses"
+                            is-show-jabatan="true"
                         />
                     </div>
 
@@ -265,7 +266,7 @@
                         <LabelForm label="Lampiran">
                             <div class="flex gap-4">
                                 <p
-                                    class="overflow-hidden whitespace-nowrap overflow-ellipsis"
+                                    class="overflow-hidden whitespace-wrap overflow-ellipsis w-60"
                                 >
                                     {{ docsUrl.body.url.split("/").pop() }}
                                 </p>
@@ -559,17 +560,18 @@ watchEffect(() => {
         const isOnApproval = approvalButton === "approval";
 
         if (
-            (data?.value?.currentStep === "VEROD1" && isOnApproval) ||
-            (data?.value?.currentStep === "VEROD2" && isOnApproval)
+            (data?.value?.currentStep?.step_name === "VEROD1" &&
+                isOnApproval) ||
+            (data?.value?.currentStep?.step_name === "VEROD2" && isOnApproval)
         ) {
             isODStatuses.value = true;
         }
 
         if (
-            (data?.value?.currentStep === "BENEFIT2" &&
+            (data?.value?.currentStep?.step_name === "BENEFIT2" &&
                 isOnApproval &&
                 formType !== "Kolektif") ||
-            (data?.value?.currentStep === "BENEFIT1" &&
+            (data?.value?.currentStep?.step_name === "BENEFIT1" &&
                 isOnApproval &&
                 formType !== "Kolektif")
         ) {

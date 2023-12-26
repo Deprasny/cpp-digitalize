@@ -5,7 +5,6 @@
         id="company-status"
         :isLoading="data.isLoading"
         v-model="selectedValue"
-        :reduceOption="onReduceOptions"
         :modelValue="modelValue"
         @update:modelValue="updateModelValue"
         :onSearch="debounce(fetchData, 500)"
@@ -40,7 +39,7 @@ const fetchData = async (searchValue) => {
         function transformBusinessUnitValues(response) {
             return response?.value.map((item) => ({
                 label: item?.division_name,
-                value: item?.division_name,
+                value: item?.division_id,
             }));
         }
 
@@ -57,10 +56,6 @@ const data = ref({
 });
 
 const selectedValue = ref({});
-
-const onReduceOptions = (option) => {
-    return option.value;
-};
 
 onMounted(() => {
     fetchData();
