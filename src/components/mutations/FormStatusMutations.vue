@@ -3,9 +3,10 @@
         <div class="flex my-10 w-[900px] h-full">
             <div class="flex flex-col items-center text-center flex-1 w-48">
                 <div class="w-full h-10"></div>
+
                 <FormStatusInfo>
                     <LabelForm
-                        :label="formLabelTitle.Perusahaan"
+                        :label="formLabelTitle.BussinessUnits"
                         :colon="false"
                     />
                 </FormStatusInfo>
@@ -21,7 +22,7 @@
                 </FormStatusInfo>
                 <FormStatusInfo>
                     <LabelForm
-                        :label="formLabelTitle.BussinessUnits"
+                        :label="formLabelTitle.Perusahaan"
                         :colon="false"
                     />
                 </FormStatusInfo>
@@ -68,11 +69,12 @@
                 <div class="w-[450px] py-1 text-lg font-bold bg-accent-2">
                     STATUS LAMA
                 </div>
+
                 <FormStatusLamaItem>
                     {{
-                        detailData?.companyFr
-                            ? detailData?.companyFr
-                            : statusLamaData?.persarea
+                        detailData?.buFr
+                            ? detailData?.buFr
+                            : statusLamaData?.busunit
                     }}
                 </FormStatusLamaItem>
 
@@ -94,9 +96,9 @@
 
                 <FormStatusLamaItem>
                     {{
-                        detailData?.buFr
-                            ? detailData?.buFr
-                            : statusLamaData?.busunit
+                        detailData?.companyFr
+                            ? detailData?.companyFr
+                            : statusLamaData?.persarea
                     }}
                 </FormStatusLamaItem>
 
@@ -185,7 +187,7 @@
 
                 <template v-if="formType === 'detail'">
                     <FormStatusLamaItem>
-                        {{ detailData?.companyTo }}
+                        {{ detailData?.buTo }}
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem v-if="isShowJabatan">
@@ -197,7 +199,7 @@
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem>
-                        {{ detailData?.buTo }}
+                        {{ detailData?.companyTo }}
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem>
@@ -229,10 +231,11 @@
 
                 <template v-else>
                     <FormStatusBaruItem>
-                        <FormAutoCompleteCompany
-                            v-model="values.mutd_to_company"
+                        <FormAutoCompleteBussunits
+                            v-model="values.mutd_to_division"
                         />
                     </FormStatusBaruItem>
+
                     <FormStatusBaruItem v-if="isShowJabatan">
                         <FormAutoCompletePosition
                             v-model="values.mutd_to_position"
@@ -244,8 +247,8 @@
                         </div>
                     </FormStatusBaruItem>
                     <FormStatusBaruItem>
-                        <FormAutoCompleteBussunits
-                            v-model="values.mutd_to_division"
+                        <FormAutoCompleteCompany
+                            v-model="values.mutd_to_company"
                         />
                     </FormStatusBaruItem>
                     <FormStatusBaruItem>

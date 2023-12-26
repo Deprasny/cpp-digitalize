@@ -307,7 +307,7 @@ const onSubmit = async () => {
                     mutd_debit_amount: values.value.mutd_debit_amount,
                     mutd_credit_amount: values.value.mutd_credit_amount,
                     mutd_notes: values.value.mutd_notes,
-
+                    allowance_now: [],
                     ...formStatusValues.value?.value,
                 },
             ],
