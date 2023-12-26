@@ -72,7 +72,6 @@
                         :statusLamaData="selectedValue?.details"
                         is-show-jabatan="true"
                         :selected-nik="selectedValue?.details"
-                        is-show-tunjangan-detail="true"
                     />
 
                     <UIDivider />
@@ -308,6 +307,7 @@ const onSubmit = async () => {
                     mutd_debit_amount: values.value.mutd_debit_amount,
                     mutd_credit_amount: values.value.mutd_credit_amount,
                     mutd_notes: values.value.mutd_notes,
+
                     ...formStatusValues.value?.value,
                 },
             ],
