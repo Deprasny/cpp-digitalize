@@ -213,12 +213,22 @@ import FormNIKAutocomplete from "../../components/FormNIKAutocomplete.vue";
 import FormTableKompetensi from "../../components/evaluasi/formKompetensi/FormTableKompetensi.vue";
 import ToolTip from "../../components/ToolTip.vue";
 import FormTablePencapaian from "../../components/evaluasi/formPencapaian/FormTablePencapaian.vue";
-import FormEvaluasiItemWrapper from "../../components/evaluasi/wrapper/formevaluasiitemwrapper.vue";
+import FormEvaluasiItemWrapper from "../../components/evaluasi/wrapper/FormEvaluasiItemWrapper.vue";
 import { getEmployyeeByProb } from "../../services/form.services";
 
 const store = useModalStore();
 
-const payload = ref({});
+const payload = ref({
+    kpi: [],
+    nik: "",
+    competence: [],
+    prob_score_kpi: 0,
+    prob_score_comp: 0,
+    prob_score_final: 0,
+    result: "",
+    note: [],
+    draft: false,
+});
 
 const showSuccessModal = ref(false);
 
