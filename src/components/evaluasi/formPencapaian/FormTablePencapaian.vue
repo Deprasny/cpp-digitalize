@@ -3,11 +3,30 @@
         class="flex justify-between w-full my-10 text-start md:flex-row flex-col gap-4"
         v-if="formAction === 'mutate'"
     >
-        <div class="flex gap-x-3 md:flex-row flex-col gap-2">
+        <div
+            class="flex gap-x-3 md:flex-row flex-col gap-2"
+            :class="{
+                'text-red-500': errors?.length > 0,
+            }"
+        >
             <p class="font-bold uppercase">Pencapaian Target</p>
-            <p class="text-[#0A70A9] text-sm md:text-base">
+            <p
+                class="text-[#0A70A9] text-sm md:text-base"
+                :class="{
+                    'text-red-500': errors?.length > 0,
+                }"
+            >
                 (maximum score: 75)
             </p>
+
+            <div
+                v-if="errors?.length > 0"
+                class="text-sm text-red-500 pt-2"
+                v-for="error of errors"
+                :key="error.$uid"
+            >
+                <div class="error-msg">{{ error.$message }}</div>
+            </div>
         </div>
         <div class="flex gap-x-5 text-sm md:text-base">
             <p>Download contoh</p>
@@ -77,7 +96,7 @@
                 </button>
 
                 <button
-                    v-if="inputTarget.length > 1"
+                    v-if="inputTarget.length > 3"
                     class="w-6 h-6 grid place-items-center border rounded-full bg-white"
                     @click="removeColumns"
                 >
@@ -110,10 +129,11 @@ import IconDownload from "../../icons/IconDownload.vue";
 import FormHeaderPencapaian from "./FormHeaderPenpacapian.vue";
 import FormInputTablePencapaian from "./FormInputTablePencapaian.vue";
 
-const { onGetValues, onGetTotalValues } = defineProps([
+const { onGetValues, onGetTotalValues, errors } = defineProps([
     "formAction",
     "onGetValues",
     "onGetTotalValues",
+    "errors",
 ]);
 
 const tooltipScore = ref(false);

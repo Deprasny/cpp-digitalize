@@ -37,6 +37,7 @@
                 :onSearch="onSearch"
                 :reduce="reduceOption"
                 :disabled="isDisabled"
+                @input="onInput"
             >
             </v-select>
         </div>
@@ -81,6 +82,7 @@ const {
     "isDisabled",
     "isError",
     "errorMessage",
+    "onInput",
 ]);
 
 const emit = defineEmits(["update:modelValue"]);

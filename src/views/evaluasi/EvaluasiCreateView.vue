@@ -122,6 +122,7 @@
                             formAction="mutate"
                             :on-get-total-values="getTotalKPIValues"
                             :on-get-values="getKPIValues"
+                            :errors="validations.prob_score_kpi.$errors"
                         />
 
                         <UIDivider />
@@ -279,6 +280,7 @@ import { watchDebounced } from "@vueuse/core";
 import useCreateProbations from "../../hooks/evaluasi/useCreateProbations";
 import { useRouter } from "vue-router";
 import FormNotes from "../../components/evaluasi/formNotes/FormNotes.vue";
+import { getEvaluasiValidations } from "../../validations/evaluasi.validation";
 
 const store = useModalStore();
 const tooltip = ref(false);
@@ -303,6 +305,8 @@ const payload = ref({
     note: [],
     draft: false,
 });
+
+const validations = getEvaluasiValidations(payload);
 
 const { data: dropdownProbationData, isLoading: loadingDropdownProbationData } =
     useGetResultProbation();
@@ -360,13 +364,17 @@ watchEffect(() => {
         payload.value.prob_score_final =
             payload.value.prob_score_comp + payload.value.prob_score_kpi;
     }
-
-    console.log(payload.value);
 });
 
-const handleSubmit = ({ isDraft }) => {
-    payload.value.draft = isDraft;
-    store.toggleModal();
+const handleSubmit = async ({ isDraft }) => {
+    const isValid = await validations.value.$validate();
+
+    if (!isValid) {
+        scrollTo(0, 0);
+    } else {
+        payload.value.draft = isDraft;
+        store.toggleModal();
+    }
 };
 
 const onMutate = () => {
