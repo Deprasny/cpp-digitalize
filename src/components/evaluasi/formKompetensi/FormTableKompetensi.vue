@@ -52,19 +52,28 @@ import { watchDebounced } from "@vueuse/core";
 import useGetCompetence from "../../../hooks/evaluasi/useGetCompetence";
 import UILoader from "../../ui/UILoader.vue";
 
-const props = defineProps(["onGetValues"]);
+const props = defineProps(["onGetValues", "onGetTotalValues"]);
+const { data: competenceData, isLoading: isCompetenceLoading } =
+    useGetCompetence();
 
 const values = ref([]);
 const totalScore = ref(0);
 
 const getFormKomptensi = (newVal) => {
-    values.value = newVal;
+    const transfromData = competenceData?.value
+        ?.map((item, index) => ({
+            id: item?.raw_details?.id,
+            ...newVal[index],
+        }))
+        .filter(
+            (item) =>
+                item.score !== 0 && item.notes.filter((note) => note !== "")
+        );
 
-    props.onGetValues(values.value);
+    values.value = transfromData;
+
+    props.onGetValues(transfromData);
 };
-
-const { data: competenceData, isLoading: isCompetenceLoading } =
-    useGetCompetence();
 
 watchDebounced(
     () => values?.value,
@@ -72,6 +81,8 @@ watchDebounced(
         totalScore.value = newVal.reduce((acc, curr) => {
             return acc + curr.score;
         }, 0);
+
+        props.onGetTotalValues(totalScore.value);
     },
     { debounce: 1000, deep: true }
 );

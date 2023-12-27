@@ -110,6 +110,7 @@
 
                         <FormTablePencapaian
                             formAction="mutate"
+                            :on-get-total-values="getTotalKPIValues"
                             :on-get-values="getKPIValues"
                         />
 
@@ -119,6 +120,7 @@
 
                         <FormTableKompetensi
                             :on-get-values="getCompetenceValues"
+                            :on-get-total-values="getTotalCompetenceValues"
                         />
 
                         <UIDivider />
@@ -139,7 +141,7 @@
                                     <div
                                         class="bg-accent-1 px-10 py-2 text-white font-semibold md:w-auto md:h-auto w-[60px] flex justify-center items-center"
                                     >
-                                        0
+                                        {{ payload.prob_score_final }}
                                     </div>
                                 </FormEvaluasiItemWrapper>
                                 <FormEvaluasiItemWrapper
@@ -151,16 +153,17 @@
                                     </p>
 
                                     <FormDropdown
-                                        :dropdownOptions="[
-                                            'Diangkat menjadi karyawan tetap',
-                                            'Diperpanjang masa kontraknya',
-                                            'Diakhiri hubungan kerjanya',
-                                        ]"
-                                        :selectedOptionText="payload.result"
+                                        v-if="!loadingDropdownProbationData"
+                                        :dropdownOptions="dropdownProbationData"
+                                        :selectedOptionText="
+                                            payload.result?.label
+                                        "
                                         @update:selectedOptionText="
                                             payload.result = $event
                                         "
                                     />
+
+                                    <UILoader v-else />
                                 </FormEvaluasiItemWrapper>
                             </div>
                         </div>
@@ -172,19 +175,24 @@
                     <UIButton
                         variant="form"
                         class="w-[200px]"
-                        @click="store.toggleModal"
+                        @click="handleSubmit({ isDraft: false })"
                     >
                         Submit
                     </UIButton>
-                    <UIButton variant="form" class="w-[200px]">
+                    <UIButton
+                        variant="form"
+                        class="w-[200px]"
+                        @click="handleSubmit({ isDraft: true })"
+                    >
                         Simpan ke Draft
                     </UIButton>
                 </div>
             </BasicForm>
             <Modal
                 :isModalOpen="store.isModalOpen"
+                :is-loading="isLoading"
                 @toggleModal="store.toggleModal"
-                @submit="handleSubmit"
+                @submit="onMutate"
                 modalTitle="Anda yakin untuk submit Form Evaluasi berikut?"
             />
 
@@ -195,14 +203,27 @@
                 modalTitle="Form Evaluasi Anda telah berhasil disubmit"
                 modalType="success"
             />
+
+            <Modal
+                v-if="showErrorModal"
+                :isModalOpen="showErrorModal"
+                @toggleModal="
+                    () => {
+                        showErrorModal = false;
+                        store.toggleModal();
+                    }
+                "
+                :modalTitle="errorMessage"
+                modalType="danger"
+            />
         </div>
     </div>
 </template>
 
 <script setup>
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
-import IconDownload from "@/components/icons/IconDownload.vue";
-import { ref } from "vue";
+
+import { ref, watch, watchEffect } from "vue";
 import BasicCard from "../../components/BasicCard.vue";
 import BasicForm from "../../components/BasicForm.vue";
 import FormInputBasic from "../../components/FormInputBasic.vue";
@@ -221,7 +242,20 @@ import FormTablePencapaian from "../../components/evaluasi/formPencapaian/FormTa
 import FormEvaluasiItemWrapper from "../../components/evaluasi/wrapper/FormEvaluasiItemWrapper.vue";
 import { getEmployyeeByProb } from "../../services/form.services";
 
+import useGetResultProbation from "../../hooks/evaluasi/useGetResultProbation";
+import UILoader from "../../components/ui/UILoader.vue";
+import { watchDebounced } from "@vueuse/core";
+import useCreateProbations from "../../hooks/evaluasi/useCreateProbations";
+
 const store = useModalStore();
+const tooltip = ref(false);
+
+const selectedNIKValues = ref({});
+const listInfoForm = [
+    "Penilaian masa percobaan/PKWTT <b> paling lambat  3 (tiga) minggu sebelumnya </b> sudah diterima oleh HR Services area",
+    "Penilaian masa kontrak/PKWT <b> paling lambat 1,5 (satu setengah) bulan sebelumnya</b> sudah diterima oleh HR Services area",
+    "Total nilai dibawah<b> 70 diakhiri hubungan kerjanya </b>",
+];
 
 const payload = ref({
     kpi: [],
@@ -235,7 +269,25 @@ const payload = ref({
     draft: false,
 });
 
+const { data: dropdownProbationData, isLoading: loadingDropdownProbationData } =
+    useGetResultProbation();
+
+const { mutate, isLoading, errorMessage } = useCreateProbations();
+
+const showErrorModal = ref(false);
 const showSuccessModal = ref(false);
+
+watch(
+    () => errorMessage?.value,
+    (newVal) => {
+        if (newVal) {
+            showErrorModal.value = true;
+        } else {
+            showErrorModal.value = false;
+        }
+    },
+    { immediate: true }
+);
 
 const getKPIValues = (newVal) => {
     payload.value.kpi = newVal;
@@ -245,19 +297,42 @@ const getCompetenceValues = (newVal) => {
     payload.value.competence = newVal;
 };
 
-const handleSubmit = () => {
-    // store.toggleModal();
-    // showSuccessModal.value = true;
-    console.log(payload.value);
+const getTotalKPIValues = (newVal) => {
+    payload.value.prob_score_kpi = newVal;
 };
 
-const tooltip = ref(false);
+const getTotalCompetenceValues = (newVal) => {
+    payload.value.prob_score_comp = newVal;
+};
 
-const selectedNIKValues = ref({});
+watchDebounced(
+    () => selectedNIKValues.value?.value,
+    (newVal) => {
+        payload.value.nik = newVal;
+    },
+    { debounce: 1000 }
+);
 
-const listInfoForm = [
-    "Penilaian masa percobaan/PKWTT <b> paling lambat  3 (tiga) minggu sebelumnya </b> sudah diterima oleh HR Services area",
-    "Penilaian masa kontrak/PKWT <b> paling lambat 1,5 (satu setengah) bulan sebelumnya</b> sudah diterima oleh HR Services area",
-    "Total nilai dibawah<b> 70 diakhiri hubungan kerjanya </b>",
-];
+watchEffect(() => {
+    if (payload.value.prob_score_comp && payload.value.prob_score_kpi) {
+        payload.value.prob_score_final =
+            payload.value.prob_score_comp + payload.value.prob_score_kpi;
+    }
+});
+
+const handleSubmit = ({ isDraft }) => {
+    payload.value.draft = isDraft;
+    store.toggleModal();
+};
+
+const onMutate = () => {
+    const transformValues = {
+        ...payload.value,
+        result: payload.value.result?.value,
+    };
+
+    mutate({
+        body: transformValues,
+    });
+};
 </script>
