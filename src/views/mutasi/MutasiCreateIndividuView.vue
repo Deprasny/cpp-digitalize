@@ -276,7 +276,7 @@ const values = ref({
     mutd_to_work_location: "",
     mutd_to_direct_spv: "",
     mutd_to_immed_mgr: "",
-    mutd_family_move: 0,
+    mutd_family_move: "",
     mutd_house_allowance: 0,
     mutd_transportation: 0,
     mutd_leave_bal: 0,
