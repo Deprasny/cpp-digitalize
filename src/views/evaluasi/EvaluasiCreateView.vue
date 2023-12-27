@@ -156,9 +156,9 @@
                                             'Diperpanjang masa kontraknya',
                                             'Diakhiri hubungan kerjanya',
                                         ]"
-                                        :selectedOptionText="selectedOption"
+                                        :selectedOptionText="payload.result"
                                         @update:selectedOptionText="
-                                            handleSelectedOptionUpdate
+                                            payload.result = $event
                                         "
                                     />
                                 </FormEvaluasiItemWrapper>
