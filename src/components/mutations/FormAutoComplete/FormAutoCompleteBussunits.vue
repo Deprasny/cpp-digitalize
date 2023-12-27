@@ -7,7 +7,7 @@
         v-model="selectedValue"
         :modelValue="modelValue"
         @update:modelValue="updateModelValue"
-        :onSearch="debounce(fetchData, 500)"
+        :onInput="handleChangesValue"
     />
 </template>
 
@@ -18,6 +18,7 @@ import useFetch from "../../../hooks/useFetch";
 import FormAutocomplete from "../../FormAutocomplete.vue";
 import debounce from "../../../utils/debounce";
 import { getAllBusinessUnit } from "../../../services/form.services";
+import { watchDebounced } from "@vueuse/core";
 
 const props = defineProps(["isError", "errorMessage"]);
 const emit = defineEmits(["update:modelValue"]);
@@ -56,6 +57,20 @@ const data = ref({
 });
 
 const selectedValue = ref({});
+
+const input = ref("");
+
+const handleChangesValue = (event) => {
+    input.value = event.target.value;
+};
+
+watchDebounced(
+    () => input.value,
+    () => {
+        fetchData(input.value);
+    },
+    { debounce: 1000 }
+);
 
 onMounted(() => {
     fetchData();

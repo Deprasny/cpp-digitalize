@@ -8,7 +8,7 @@
         :reduceOption="onReduceOptions"
         :modelValue="modelValue"
         @update:modelValue="updateModelValue"
-        :onSearch="debounce(fetchData, 500)"
+        :onInput="handleChangesValue"
     />
 </template>
 
@@ -22,6 +22,7 @@ import {
     getAllBusinessUnit,
     getAllCostCenter,
 } from "../../../services/form.services";
+import { watchDebounced } from "@vueuse/core";
 
 const props = defineProps(["isError", "errorMessage", "division_id"]);
 const emit = defineEmits(["update:modelValue"]);
@@ -68,6 +69,20 @@ const selectedValue = ref({});
 const onReduceOptions = (option) => {
     return option.value;
 };
+
+const input = ref("");
+
+const handleChangesValue = (event) => {
+    input.value = event.target.value;
+};
+
+watchDebounced(
+    () => input.value,
+    () => {
+        fetchData(input.value);
+    },
+    { debounce: 1000 }
+);
 
 onMounted(() => {
     fetchData();
