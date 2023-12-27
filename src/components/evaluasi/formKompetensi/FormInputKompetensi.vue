@@ -1,0 +1,99 @@
+<template>
+    <div
+        v-for="(item, itemIdx) in values"
+        class="flex w-full h-[150px] relative"
+        :key="itemIdx"
+    >
+        <div class="w-full h-full border border-black">
+            <input
+                v-for="column in item.notes"
+                placeholder="fill here"
+                type="text"
+                class="w-full h-[30px] border-b-black border-b-2"
+                v-model="column.val"
+            />
+        </div>
+        <div class="border border-black w-[80px] h-full">
+            <input class="w-full h-full" type="number" v-model="item.score" />
+        </div>
+
+        <div class="absolute -right-9 h-full pt-3 flex-col gap-1 flex">
+            <button
+                class="w-6 h-6 grid place-items-center border rounded-full bg-white"
+                @click="addColumns(itemIdx)"
+                v-if="item.notes.length < 5"
+            >
+                <component :is="IconPlus" class="text-xs text-accent-1" />
+            </button>
+
+            <button
+                v-if="item.notes.length > 1"
+                class="w-6 h-6 grid place-items-center border rounded-full bg-white"
+                @click="removeColumns(itemIdx)"
+            >
+                <component :is="IconMinus" class="text-xs text-accent-1" />
+            </button>
+        </div>
+    </div>
+</template>
+
+<script setup>
+import { reactive, ref } from "vue";
+import IconPlus from "../../icons/IconPlus.vue";
+import IconMinus from "../../icons/IconMinus.vue";
+import { watchDebounced } from "@vueuse/core";
+
+const props = defineProps(["values", "onGetValues"]);
+
+const values = ref([
+    {
+        notes: [{ val: "" }],
+        score: 0,
+    },
+    {
+        notes: [{ val: "" }],
+        score: 0,
+    },
+    {
+        notes: [{ val: "" }],
+        score: 0,
+    },
+    {
+        notes: [{ val: "" }],
+        score: 0,
+    },
+    {
+        notes: [{ val: "" }],
+        score: 0,
+    },
+]);
+
+watchDebounced(
+    () => values?.value,
+    (newVal) => {
+        if (newVal) {
+            const transformValues = newVal
+                .map((item) => ({
+                    ...item,
+                    notes: item?.notes.map((note) => note.val),
+                }))
+                .filter(
+                    (item) =>
+                        item.score !== 0 &&
+                        item.notes.filter((note) => note !== "")
+                );
+
+            props.onGetValues(transformValues);
+        }
+    },
+    { debounce: 1000, deep: true }
+);
+
+const addColumns = (itemIdx) => {
+    values?.value[itemIdx].notes.push({ val: "" });
+};
+
+const removeColumns = (itemIdx) => {
+    values?.value[itemIdx].notes.pop();
+};
+</script>

@@ -28,7 +28,6 @@
                         </ol>
                     </ToolTip>
                     <div class="px-10 py-5">
-                        <!-- form basic -->
                         <div class="w-full mb-10">
                             <FormNIKAutocomplete v-model="selectedNIKValues" />
 
@@ -79,114 +78,7 @@
 
                         <!-- form penilaian -->
 
-                        <div
-                            class="flex justify-between w-full mt-10 mb-5 text-start"
-                        >
-                            <div class="flex gap-x-3">
-                                <p class="font-bold uppercase">
-                                    PENILAIAN KOMPETENSI INTI
-                                </p>
-                                <p class="text-[#0A70A9]">
-                                    (maximum score: 25)
-                                </p>
-                            </div>
-                        </div>
-                        <p class="mb-10">
-                            Score diisi dengan angka 1-5
-                            <button @click="openInfoScoreKompetensi">
-                                <div
-                                    class="flex items-center justify-center w-5 h-5 border-2 rounded-full border-accent-1"
-                                >
-                                    <span class="text-accent-1">!</span>
-                                </div>
-                            </button>
-                        </p>
-                        <ToolTip
-                            v-if="tooltipScoreKompetensi"
-                            class="-top-16 left-[260px]"
-                            @close="openInfoScoreKompetensi"
-                        >
-                            <ol class="space-y-2 list-decimal">
-                                <li
-                                    v-for="note in listInfoScoreKompetensi"
-                                    :key="note"
-                                >
-                                    <span class="text-sm">{{ note }} </span>
-                                </li>
-                            </ol>
-                        </ToolTip>
-
-                        <div class="flex justify-between w-full gap-x-5">
-                            <div class="w-1/2">
-                                <div
-                                    class="flex p-3 font-semibold uppercase bg-accent-2"
-                                >
-                                    <div class="w-full h-full text-center">
-                                        KOMPETENSI INTI
-                                    </div>
-                                </div>
-
-                                <div
-                                    v-for="i in 5"
-                                    class="flex w-full"
-                                    :key="i"
-                                >
-                                    <div
-                                        class="items-start w-full p-4 border border-black h-[150px]"
-                                    >
-                                        <p class="font-semibold">
-                                            Prioritize Customer /Prioritaskan
-                                            Pelanggan
-                                        </p>
-                                        <p class="font-light">
-                                            Always put customer satisfaction as
-                                            priority/Selalu mengutamakan
-                                            kepuasan pelanggan)
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="w-1/2">
-                                <div
-                                    class="flex p-3 font-semibold text-white uppercase bg-accent-1"
-                                >
-                                    <div class="w-full h-full text-center">
-                                        URAIAN HASIL PENILAIAN
-                                    </div>
-                                    <div class="text-end pr-5 w-[25%]">
-                                        Score
-                                    </div>
-                                </div>
-
-                                <div
-                                    v-for="i in 5"
-                                    class="flex w-full h-[150px]"
-                                    :key="i"
-                                >
-                                    <div
-                                        class="w-full h-full p-4 border border-black"
-                                    >
-                                        <input
-                                            placeholder="fill here"
-                                            type="text"
-                                        />
-                                    </div>
-                                    <div
-                                        class="h-full p-4 border border-black w-[20%]"
-                                    >
-                                        <input class="w-full" type="text" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div
-                            class="flex justify-end w-full my-10 font-semibold gap-x-20"
-                        >
-                            <p>Total Score:</p>
-                            <p>-</p>
-                        </div>
+                        <FormTableKompetensi />
 
                         <UIDivider />
 
@@ -269,12 +161,15 @@ import IconMagnifier from "../../components/icons/IconMagnifying.vue";
 import UIDivider from "../../components/ui/UIDivider.vue";
 import UIButton from "../../components/ui/UIButton.vue";
 import FormDropdown from "../../components/FormDropdown.vue";
-import ToolTip from "../../components/ToolTip.vue";
+
 import Modal from "../../components/Modal.vue";
 import { useModalStore } from "../../stores/index.js";
 import FormNIKAutocomplete from "../../components/FormNIKAutocomplete.vue";
-import FormEvaluasiItemWrapper from "../../components/evaluasi/wrapper/FormEvaluasiItemWrapper.vue";
-import FormTablePencapaian from "../../components/evaluasi/FormTablePencapaian.vue";
+
+import FormTableKompetensi from "../../components/evaluasi/formKompetensi/FormTableKompetensi.vue";
+import ToolTip from "../../components/ToolTip.vue";
+import FormTablePencapaian from "../../components/evaluasi/formPencapaian/FormTablePencapaian.vue";
+import FormEvaluasiItemWrapper from "../../components/evaluasi/wrapper/formevaluasiitemwrapper.vue";
 
 const store = useModalStore();
 

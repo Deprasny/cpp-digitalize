@@ -22,7 +22,7 @@
     <div class="overflow-auto">
         <div class="flex w-full max-w-6xl min-w-[900px] gap-2">
             <div class="w-1/2">
-                <FormHeaderPenpacapian
+                <FormHeaderPencapaian
                     :formAction="formAction"
                     headerLabel="TARGET UTAMA"
                     headerValue="Score Max"
@@ -44,7 +44,7 @@
             </div>
 
             <div class="w-1/2 relative">
-                <FormHeaderPenpacapian
+                <FormHeaderPencapaian
                     :formAction="formAction"
                     headerLabel="ACTUAL ACHIVEMENT"
                     headerValue="Score"
@@ -102,13 +102,13 @@
 </template>
 
 <script setup>
-import { ref, watch, watchEffect } from "vue";
+import { ref, watch } from "vue";
+
+import IconPlus from "../../icons/IconPlus.vue";
+import IconMinus from "../../icons/IconMinus.vue";
+import IconDownload from "../../icons/IconDownload.vue";
+import FormHeaderPencapaian from "./FormHeaderPenpacapian.vue";
 import FormInputTablePencapaian from "./FormInputTablePencapaian.vue";
-import ToolTip from "../ToolTip.vue";
-import FormHeaderPenpacapian from "./FormHeaderPenpacapian.vue";
-import IconPlus from "../icons/IconPlus.vue";
-import IconMinus from "../icons/IconMinus.vue";
-import IconDownload from "../icons/IconDownload.vue";
 
 const {} = defineProps(["formAction"]);
 

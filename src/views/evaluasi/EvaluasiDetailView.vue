@@ -187,8 +187,9 @@ import UIDivider from "@/components/ui/UIDivider.vue";
 import BasicCard from "../../components/BasicCard.vue";
 import LabelForm from "../../components/LabelForm.vue";
 import Log from "../../components/Log.vue";
-import FormTablePencapaian from "../../components/evaluasi/FormTablePencapaian.vue";
+
 import DetailWrapper from "../../components/evaluasi/wrapper/DetailWrapper.vue";
+import FormTablePencapaian from "../../components/evaluasi/formPencapaian/FormTablePencapaian.vue";
 
 const listLog = ref([
     { date: "7 Agustus 2023", description: "Approve by BU Head Penerima" },

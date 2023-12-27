@@ -108,6 +108,18 @@ const getAllowance = async ({ params }) => {
     }
 };
 
+const getAllCompetence = async ({ params }) => {
+    try {
+        const response = await apiServices.fetchData("/m_competence", {
+            ...params,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
 export {
     getEmployeeByUser,
     getAllCompany,
@@ -118,4 +130,5 @@ export {
     getDirectSpv,
     getImmediateManager,
     getAllowance,
+    getAllCompetence,
 };

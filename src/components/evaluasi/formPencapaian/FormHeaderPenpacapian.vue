@@ -36,7 +36,7 @@
 
 <script setup>
 import { ref, defineProps } from "vue";
-import ToolTip from "../ToolTip.vue";
+import ToolTip from "../../ToolTip.vue";
 
 const { tooltipRef } = defineProps([
     "headerLabel",
