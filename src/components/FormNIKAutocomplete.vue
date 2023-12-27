@@ -22,7 +22,7 @@ import useFetch from "../hooks/useFetch";
 import FormAutocomplete from "./FormAutocomplete.vue";
 import debounce from "../utils/debounce";
 
-const props = defineProps(["isError", "errorMessage"]);
+const props = defineProps(["isError", "errorMessage", "customService"]);
 const emit = defineEmits(["update:modelValue"]);
 
 function updateModelValue(newValue) {
@@ -33,7 +33,9 @@ const fetchData = async (searchValue) => {
     data.value.isLoading = true;
     try {
         const { data: response } = await useFetch({
-            services: getEmployeeByUser,
+            services: props.customService
+                ? props.customService
+                : getEmployeeByUser,
             options: {
                 page: 1,
                 limit: 10,

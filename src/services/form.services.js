@@ -120,6 +120,18 @@ const getAllCompetence = async ({ params }) => {
     }
 };
 
+const getEmployyeeByProb = async ({ params }) => {
+    try {
+        const response = await apiServices.fetchData("/employeeByUserProb", {
+            ...params,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
 export {
     getEmployeeByUser,
     getAllCompany,
@@ -131,4 +143,5 @@ export {
     getImmediateManager,
     getAllowance,
     getAllCompetence,
+    getEmployyeeByProb,
 };

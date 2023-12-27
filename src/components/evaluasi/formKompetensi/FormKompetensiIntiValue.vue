@@ -5,7 +5,7 @@
                 {{ item?.title }}
             </p>
             <p class="font-light">
-                {{ item?.value }}
+                {{ item?.description }}
             </p>
         </div>
     </div>

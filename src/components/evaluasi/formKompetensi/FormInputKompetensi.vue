@@ -38,35 +38,23 @@
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import IconPlus from "../../icons/IconPlus.vue";
 import IconMinus from "../../icons/IconMinus.vue";
 import { watchDebounced } from "@vueuse/core";
 
-const props = defineProps(["values", "onGetValues"]);
+const props = defineProps(["values", "onGetValues", "numberOfValues"]);
 
-const values = ref([
-    {
-        notes: [{ val: "" }],
-        score: 0,
-    },
-    {
-        notes: [{ val: "" }],
-        score: 0,
-    },
-    {
-        notes: [{ val: "" }],
-        score: 0,
-    },
-    {
-        notes: [{ val: "" }],
-        score: 0,
-    },
-    {
-        notes: [{ val: "" }],
-        score: 0,
-    },
-]);
+const valueOfTable = {
+    notes: [{ val: "" }],
+    score: 0,
+};
+
+const repeatedValues = computed(() =>
+    Array.from({ length: props.numberOfValues }, () => ({ ...valueOfTable }))
+);
+
+const values = ref(repeatedValues.value);
 
 watchDebounced(
     () => values?.value,
