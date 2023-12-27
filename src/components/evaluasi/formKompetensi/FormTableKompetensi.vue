@@ -19,7 +19,6 @@
                 />
 
                 <FormInputKompetensi
-                    :values="formKompetensiVal"
                     :number-of-values="competenceData.length"
                     :on-get-values="(val) => getFormKomptensi(val)"
                 />
@@ -53,11 +52,15 @@ import { watchDebounced } from "@vueuse/core";
 import useGetCompetence from "../../../hooks/evaluasi/useGetCompetence";
 import UILoader from "../../ui/UILoader.vue";
 
+const props = defineProps(["onGetValues"]);
+
 const values = ref([]);
 const totalScore = ref(0);
 
 const getFormKomptensi = (newVal) => {
     values.value = newVal;
+
+    props.onGetValues(values.value);
 };
 
 const { data: competenceData, isLoading: isCompetenceLoading } =

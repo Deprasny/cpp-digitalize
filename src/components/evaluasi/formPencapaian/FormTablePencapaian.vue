@@ -110,7 +110,7 @@ import IconDownload from "../../icons/IconDownload.vue";
 import FormHeaderPencapaian from "./FormHeaderPenpacapian.vue";
 import FormInputTablePencapaian from "./FormInputTablePencapaian.vue";
 
-const {} = defineProps(["formAction"]);
+const { onGetValues } = defineProps(["formAction", "onGetValues"]);
 
 const tooltipScore = ref(false);
 const tooltipScoreMax = ref(false);
@@ -185,7 +185,24 @@ watch(
     }
 );
 
-watchEffect(() => {});
+watchEffect(() => {
+    if (onGetValues) {
+        const transformValuesToPayload = inputTarget.value
+            ?.map((item, index) => {
+                return {
+                    probt_kpi: item.inputLabel,
+                    probt_kpi_score: item.inputVal,
+                    probt_actual: inputActual.value[index].inputLabel,
+                    probt_actual_score: inputActual.value[index].inputVal,
+                };
+            })
+            .filter(
+                (item) => item.probt_kpi !== "" && item.probt_actual !== ""
+            );
+
+        onGetValues(transformValuesToPayload);
+    }
+});
 
 const removeColumns = () => {
     inputTarget.value.pop();
