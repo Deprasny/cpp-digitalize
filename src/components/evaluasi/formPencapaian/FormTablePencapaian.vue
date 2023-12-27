@@ -102,7 +102,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, watchEffect } from "vue";
 
 import IconPlus from "../../icons/IconPlus.vue";
 import IconMinus from "../../icons/IconMinus.vue";
@@ -184,6 +184,8 @@ watch(
         );
     }
 );
+
+watchEffect(() => {});
 
 const removeColumns = () => {
     inputTarget.value.pop();

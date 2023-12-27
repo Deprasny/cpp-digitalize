@@ -29,16 +29,21 @@
                     </ToolTip>
                     <div class="px-10 py-5">
                         <div class="w-full mb-10">
-                            <FormNIKAutocomplete v-model="selectedNIKValues" />
+                            <FormNIKAutocomplete
+                                v-model="selectedNIKValues"
+                                :custom-service="getEmployyeeByProb"
+                            />
 
                             <FormEvaluasiItemWrapper>
                                 <FormInputBasic
+                                    disabled="true"
                                     label="Jabatan"
                                     :model-value="
                                         selectedNIKValues?.details?.posisi
                                     "
                                 />
                                 <FormInputBasic
+                                    disabled="true"
                                     label="Divisi / Departement"
                                     :model-value="
                                         selectedNIKValues?.details?.busunit
@@ -47,25 +52,56 @@
                             </FormEvaluasiItemWrapper>
                             <FormEvaluasiItemWrapper>
                                 <FormInputBasic
+                                    disabled="true"
                                     label="Tanggal Masuk"
                                     type="date"
                                     :model-value="
                                         selectedNIKValues?.details?.joindate
                                     "
                                 />
-                                <FormInputBasic label="usia" />
+                                <FormInputBasic
+                                    disabled="true"
+                                    label="usia"
+                                    :model-value="
+                                        selectedNIKValues?.details?.age
+                                    "
+                                />
                             </FormEvaluasiItemWrapper>
                             <FormEvaluasiItemWrapper>
                                 <FormInputBasic
+                                    disabled="true"
                                     label="Level"
                                     :model-value="
                                         selectedNIKValues?.details?.level
                                     "
                                 />
-                                <FormInputBasic label="Status Karyawan" />
+                                <FormInputBasic
+                                    disabled="true"
+                                    label="Status Karyawan"
+                                    :model-value="
+                                        selectedNIKValues?.details?.empstatus
+                                    "
+                                />
                             </FormEvaluasiItemWrapper>
                             <FormEvaluasiItemWrapper>
-                                <FormInputBasic label="Probation" type="date" />
+                                <div class="w-full">
+                                    <FormEvaluasiItemWrapper
+                                        class="text-base font-semibold leading-5"
+                                    >
+                                        Probation
+                                    </FormEvaluasiItemWrapper>
+
+                                    <FormEvaluasiItemWrapper>
+                                        <FormInputBasic
+                                            type="date"
+                                            placeholder="Dari"
+                                        />
+                                        <FormInputBasic
+                                            type="date"
+                                            placeholder="Sampai"
+                                        />
+                                    </FormEvaluasiItemWrapper>
+                                </div>
                             </FormEvaluasiItemWrapper>
                         </div>
 
@@ -84,23 +120,31 @@
 
                         <!-- form akhir  -->
                         <div
-                            class="flex items-start justify-between max-w-[500px] my-10"
+                            class="flex items-start justify-between my-10 w-full"
                         >
-                            <div class="flex flex-col items-start gap-y-5">
-                                <div class="flex justify-between gap-x-5">
+                            <div
+                                class="flex flex-col items-start gap-12 w-full"
+                            >
+                                <FormEvaluasiItemWrapper
+                                    class="md:items-center"
+                                >
                                     <p class="font-semibold">
                                         PENILAIAN AKHIR (GRAND TOTAL SCORE)
                                     </p>
-                                    <button>-</button>
-                                </div>
-                                <div class="flex items-center gap-x-5">
-                                    <p>
+                                    <div
+                                        class="bg-accent-1 px-10 py-2 text-white font-semibold md:w-auto md:h-auto w-[60px] flex justify-center items-center"
+                                    >
+                                        0
+                                    </div>
+                                </FormEvaluasiItemWrapper>
+                                <FormEvaluasiItemWrapper
+                                    class="md:items-center"
+                                >
+                                    <p class="max-w-[420px] min-w-full">
                                         Berdasarkan penilaian diatas perkenankan
                                         kami mengajukan karyawan tersebut untuk
-                                        :
                                     </p>
 
-                                    <!-- dropdown  -->
                                     <FormDropdown
                                         :dropdownOptions="[
                                             'Diangkat menjadi karyawan tetap',
@@ -112,7 +156,7 @@
                                             handleSelectedOptionUpdate
                                         "
                                     />
-                                </div>
+                                </FormEvaluasiItemWrapper>
                             </div>
                         </div>
                     </div>
@@ -170,8 +214,11 @@ import FormTableKompetensi from "../../components/evaluasi/formKompetensi/FormTa
 import ToolTip from "../../components/ToolTip.vue";
 import FormTablePencapaian from "../../components/evaluasi/formPencapaian/FormTablePencapaian.vue";
 import FormEvaluasiItemWrapper from "../../components/evaluasi/wrapper/formevaluasiitemwrapper.vue";
+import { getEmployyeeByProb } from "../../services/form.services";
 
 const store = useModalStore();
+
+const payload = ref({});
 
 const showSuccessModal = ref(false);
 
@@ -181,9 +228,6 @@ const handleSubmit = () => {
 };
 
 const tooltip = ref(false);
-const tooltipScore = ref(false);
-const tooltipScoreMax = ref(false);
-const tooltipScoreKompetensi = ref(false);
 
 const selectedNIKValues = ref({});
 
@@ -192,40 +236,4 @@ const listInfoForm = [
     "Penilaian masa kontrak/PKWT <b> paling lambat 1,5 (satu setengah) bulan sebelumnya</b> sudah diterima oleh HR Services area",
     "Total nilai dibawah<b> 70 diakhiri hubungan kerjanya </b>",
 ];
-
-const listInfoScore = [
-    "Tentukan bobot nilai di setiap dari setiap point target utama",
-    "Contoh, bobot target no 1 adalah 20",
-    "Nilai akhir bobot jika ditambahkan semua maksimal adalah 75",
-];
-
-const listInfoScoreKompetensi = [
-    "Sangat Kurang",
-    "Kurang",
-    "Cukup",
-    "Baik",
-    "Sangat Baik",
-];
-
-const selectedOption = ref("Pilih salah satu");
-
-const handleSelectedOptionUpdate = (newOption) => {
-    selectedOption.value = newOption;
-};
-
-const openInfo = () => {
-    tooltip.value = !tooltip.value;
-};
-
-const openInfoScore = () => {
-    tooltipScore.value = !tooltipScore.value;
-};
-
-const openInfoScoreMax = () => {
-    tooltipScoreMax.value = !tooltipScoreMax.value;
-};
-
-const openInfoScoreKompetensi = () => {
-    tooltipScoreKompetensi.value = !tooltipScoreKompetensi.value;
-};
 </script>

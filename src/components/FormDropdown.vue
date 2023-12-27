@@ -1,11 +1,11 @@
 <template>
     <div class="relative shadow-xl -top-8" @click="toggleDropdown">
         <div
-            class="absolute z-10 mt-2 bg-white border border-gray-500 rounded-lg shadow-xs dropdown-content"
+            class="absolute z-10 mt-2 bg-white border border-gray-500 rounded-lg shadow-xs dropdown-content w-full"
             :class="classes"
         >
             <a href="#" class="block px-4 py-3">
-                <span class="flex items-center justify-between">
+                <span class="flex items-center justify-between gap-3">
                     <span class="text-gray-800">{{ selectedOptionText }}</span>
                     <component :is="IconChevronLeft" />
                 </span>

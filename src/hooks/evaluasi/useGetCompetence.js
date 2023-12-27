@@ -2,6 +2,7 @@ import { onMounted } from "vue";
 import { getAllCompetence } from "../../services/form.services";
 import useFetch from "../useFetch";
 import { ref } from "vue";
+import { computed } from "vue";
 
 const useGetCompetence = () => {
     const data = ref([]);
@@ -22,7 +23,15 @@ const useGetCompetence = () => {
                 },
             });
 
-            data.value = response.value;
+            const transformData = response.value.map((item) => {
+                return {
+                    title: item?.comp_topic,
+                    description: item?.comp_description,
+                    raw_details: { ...item },
+                };
+            });
+
+            data.value = transformData;
         } catch (error) {
             errorMessage.value = error;
         } finally {
@@ -35,9 +44,9 @@ const useGetCompetence = () => {
     });
 
     return {
-        data: data.value,
-        isLoading: isLoading.value,
-        errorMessage: errorMessage.value,
+        data: computed(() => data.value),
+        isLoading: computed(() => isLoading.value),
+        errorMessage: computed(() => errorMessage.value),
         fetchData,
     };
 };
