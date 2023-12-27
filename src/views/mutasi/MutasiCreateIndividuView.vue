@@ -377,8 +377,6 @@ const handleDraft = () => {
 };
 
 watchEffect(() => {
-    console.log({ formStatusValues: formStatusValues.value?.value });
-
     if (selectedValue.value?.details) {
         values.value.nik = selectedValue.value?.details?.nik;
     }
