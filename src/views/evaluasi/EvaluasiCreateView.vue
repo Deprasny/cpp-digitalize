@@ -95,10 +95,20 @@
                                         <FormInputBasic
                                             type="date"
                                             placeholder="Dari"
+                                            :model-value="
+                                                selectedNIKValues?.details
+                                                    ?.joindate
+                                            "
+                                            disabled="true"
                                         />
                                         <FormInputBasic
+                                            disabled="true"
                                             type="date"
                                             placeholder="Sampai"
+                                            :model-value="
+                                                selectedNIKValues?.details
+                                                    ?.enddate
+                                            "
                                         />
                                     </FormEvaluasiItemWrapper>
                                 </div>
@@ -210,7 +220,6 @@
                 @toggleModal="
                     () => {
                         showErrorModal = false;
-                        store.toggleModal();
                     }
                 "
                 :modalTitle="errorMessage"
@@ -246,6 +255,7 @@ import useGetResultProbation from "../../hooks/evaluasi/useGetResultProbation";
 import UILoader from "../../components/ui/UILoader.vue";
 import { watchDebounced } from "@vueuse/core";
 import useCreateProbations from "../../hooks/evaluasi/useCreateProbations";
+import { useRouter } from "vue-router";
 
 const store = useModalStore();
 const tooltip = ref(false);
@@ -256,6 +266,8 @@ const listInfoForm = [
     "Penilaian masa kontrak/PKWT <b> paling lambat 1,5 (satu setengah) bulan sebelumnya</b> sudah diterima oleh HR Services area",
     "Total nilai dibawah<b> 70 diakhiri hubungan kerjanya </b>",
 ];
+
+const router = useRouter();
 
 const payload = ref({
     kpi: [],
@@ -272,22 +284,25 @@ const payload = ref({
 const { data: dropdownProbationData, isLoading: loadingDropdownProbationData } =
     useGetResultProbation();
 
-const { mutate, isLoading, errorMessage } = useCreateProbations();
+const { mutate, isLoading, errorMessage } = useCreateProbations({
+    callback: {
+        onSuccess: () => {
+            store.toggleModal();
+            showSuccessModal.value = true;
+            setTimeout(() => {
+                router.push({ name: "evaluasi" });
+            }, 1000);
+        },
+
+        onError: () => {
+            store.toggleModal();
+            showErrorModal.value = true;
+        },
+    },
+});
 
 const showErrorModal = ref(false);
 const showSuccessModal = ref(false);
-
-watch(
-    () => errorMessage?.value,
-    (newVal) => {
-        if (newVal) {
-            showErrorModal.value = true;
-        } else {
-            showErrorModal.value = false;
-        }
-    },
-    { immediate: true }
-);
 
 const getKPIValues = (newVal) => {
     payload.value.kpi = newVal;
@@ -318,6 +333,8 @@ watchEffect(() => {
         payload.value.prob_score_final =
             payload.value.prob_score_comp + payload.value.prob_score_kpi;
     }
+
+    console.log(selectedNIKValues.value);
 });
 
 const handleSubmit = ({ isDraft }) => {
