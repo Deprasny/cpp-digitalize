@@ -59,7 +59,6 @@ const { data: competenceData } = useGetCompetence();
 watchEffect(() => {
     if (competenceData.length) console.log(competenceData);
 });
-v;
 
 watchDebounced(
     () => values?.value,
