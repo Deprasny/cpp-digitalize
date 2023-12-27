@@ -2,7 +2,7 @@ import useFetch from "../useFetch";
 import { ref, computed, onMounted } from "vue";
 import { createProbations } from "../../services/evaluation.services";
 
-const useCreateProbation = () => {
+const useCreateProbation = ({ callback: { onSuccess, onError } }) => {
     const data = ref([]);
     const isLoading = ref(false);
     const errorMessage = ref("");
@@ -20,12 +20,14 @@ const useCreateProbation = () => {
             });
 
             data.value = response.value;
+            onSuccess?.(response);
         } catch (error) {
             if (error?.response?.data?.message) {
                 errorMessage.value = error?.response?.data?.message;
             } else {
                 errorMessage.value = error?.message;
             }
+            onError?.(error);
         } finally {
             isLoading.value = false;
         }
