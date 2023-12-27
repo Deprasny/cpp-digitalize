@@ -175,6 +175,28 @@
 
                                     <UILoader v-else />
                                 </FormEvaluasiItemWrapper>
+
+                                <div
+                                    class="flex flex-col gap-1 w-full"
+                                    v-if="payload.result.value === '20'"
+                                >
+                                    <FormEvaluasiItemWrapper class="w-[300px]">
+                                        <div
+                                            class="w-full flex gap-2 items-center"
+                                        >
+                                            <FormInputBasic
+                                                label="Masa Perpanjangan Kontrak"
+                                                type="number"
+                                                class="w-full"
+                                            />
+                                            <p class="font-semibold pt-10">
+                                                Bulan
+                                            </p>
+                                        </div>
+                                    </FormEvaluasiItemWrapper>
+
+                                    <FormNotes :on-get-values="getNotes" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -256,6 +278,7 @@ import UILoader from "../../components/ui/UILoader.vue";
 import { watchDebounced } from "@vueuse/core";
 import useCreateProbations from "../../hooks/evaluasi/useCreateProbations";
 import { useRouter } from "vue-router";
+import FormNotes from "../../components/evaluasi/formNotes/FormNotes.vue";
 
 const store = useModalStore();
 const tooltip = ref(false);
@@ -320,6 +343,10 @@ const getTotalCompetenceValues = (newVal) => {
     payload.value.prob_score_comp = newVal;
 };
 
+const getNotes = (newVal) => {
+    payload.value.note = newVal;
+};
+
 watchDebounced(
     () => selectedNIKValues.value?.value,
     (newVal) => {
@@ -334,7 +361,7 @@ watchEffect(() => {
             payload.value.prob_score_comp + payload.value.prob_score_kpi;
     }
 
-    console.log(selectedNIKValues.value);
+    console.log(payload.value);
 });
 
 const handleSubmit = ({ isDraft }) => {
