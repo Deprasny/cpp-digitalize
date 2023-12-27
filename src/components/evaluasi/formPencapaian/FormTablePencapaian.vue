@@ -110,7 +110,11 @@ import IconDownload from "../../icons/IconDownload.vue";
 import FormHeaderPencapaian from "./FormHeaderPenpacapian.vue";
 import FormInputTablePencapaian from "./FormInputTablePencapaian.vue";
 
-const { onGetValues } = defineProps(["formAction", "onGetValues"]);
+const { onGetValues, onGetTotalValues } = defineProps([
+    "formAction",
+    "onGetValues",
+    "onGetTotalValues",
+]);
 
 const tooltipScore = ref(false);
 const tooltipScoreMax = ref(false);
@@ -201,6 +205,10 @@ watchEffect(() => {
             );
 
         onGetValues(transformValuesToPayload);
+    }
+
+    if (onGetTotalValues) {
+        onGetTotalValues(totalScore.value);
     }
 });
 

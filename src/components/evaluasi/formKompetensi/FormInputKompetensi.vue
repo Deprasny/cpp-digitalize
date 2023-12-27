@@ -62,16 +62,10 @@ watchDebounced(
     () => values?.value,
     (newVal) => {
         if (newVal) {
-            const transformValues = newVal
-                .map((item) => ({
-                    ...item,
-                    notes: item?.notes.map((note) => note.val),
-                }))
-                .filter(
-                    (item) =>
-                        item.score !== 0 &&
-                        item.notes.filter((note) => note !== "")
-                );
+            const transformValues = newVal.map((item) => ({
+                ...item,
+                notes: item?.notes.map((note) => note.val),
+            }));
 
             props.onGetValues(transformValues);
         }
