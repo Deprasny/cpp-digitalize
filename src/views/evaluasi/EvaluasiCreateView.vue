@@ -108,13 +108,18 @@
                         <UIDivider />
                         <!-- form pencapaian -->
 
-                        <FormTablePencapaian formAction="mutate" />
+                        <FormTablePencapaian
+                            formAction="mutate"
+                            :on-get-values="getKPIValues"
+                        />
 
                         <UIDivider />
 
                         <!-- form penilaian -->
 
-                        <FormTableKompetensi />
+                        <FormTableKompetensi
+                            :on-get-values="getCompetenceValues"
+                        />
 
                         <UIDivider />
 
@@ -232,9 +237,18 @@ const payload = ref({
 
 const showSuccessModal = ref(false);
 
+const getKPIValues = (newVal) => {
+    payload.value.kpi = newVal;
+};
+
+const getCompetenceValues = (newVal) => {
+    payload.value.competence = newVal;
+};
+
 const handleSubmit = () => {
-    store.toggleModal();
-    showSuccessModal.value = true;
+    // store.toggleModal();
+    // showSuccessModal.value = true;
+    console.log(payload.value);
 };
 
 const tooltip = ref(false);

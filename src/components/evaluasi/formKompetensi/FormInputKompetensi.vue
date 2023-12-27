@@ -1,4 +1,4 @@
-<template>
+<template v-if="numberOfValues">
     <div
         v-for="(item, itemIdx) in values"
         class="flex w-full h-[150px] relative"
@@ -6,11 +6,13 @@
     >
         <div class="w-full h-full border border-black">
             <input
-                v-for="column in item.notes"
+                v-for="(column, columnIdx) in item.notes"
                 placeholder="fill here"
                 type="text"
                 class="w-full h-[30px] border-b-black border-b-2"
-                v-model="column.val"
+                :key="columnIdx"
+                :value="column.val"
+                @input="handleChangesNotes($event, itemIdx, columnIdx)"
             />
         </div>
         <div class="border border-black w-[80px] h-full">
@@ -54,7 +56,7 @@ const repeatedValues = computed(() =>
     Array.from({ length: props.numberOfValues }, () => ({ ...valueOfTable }))
 );
 
-const values = ref(repeatedValues.value);
+const values = ref(JSON.parse(JSON.stringify(repeatedValues.value)));
 
 watchDebounced(
     () => values?.value,
@@ -77,11 +79,15 @@ watchDebounced(
     { debounce: 1000, deep: true }
 );
 
+const handleChangesNotes = (event, itemIdx, columnIdx) => {
+    values.value[itemIdx].notes[columnIdx].val = event.target.value;
+};
+
 const addColumns = (itemIdx) => {
-    values?.value[itemIdx].notes.push({ val: "" });
+    values?.value?.[itemIdx].notes.push({ val: "" });
 };
 
 const removeColumns = (itemIdx) => {
-    values?.value[itemIdx].notes.pop();
+    values?.value?.[itemIdx].notes.pop();
 };
 </script>
