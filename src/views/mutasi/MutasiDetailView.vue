@@ -454,7 +454,7 @@ const onApprove = async (id) => {
         const getMutId = data?.value?.employee?.[0]?.id || "";
         const transformAllowance =
             values?.value?.value?.allowance_now
-                .map((item) => {
+                ?.map((item) => {
                     return {
                         ...item,
                         muta_allow_code: item?.muta_allow_code,
@@ -520,7 +520,7 @@ const onApprove = async (id) => {
             routeName.push({ name: route });
         }, 2000);
     } catch (error) {
-        errorMessages.value = error.response.data.message;
+        errorMessages.value = error?.response?.data?.message;
         isLoading.value = false;
         showErrorModal.value = true;
     } finally {
@@ -529,7 +529,7 @@ const onApprove = async (id) => {
     }
 };
 const handleConditionalSubmit = () => {
-    onApprove(id, statusApproval.value);
+    onApprove(id, statusApproval?.value);
 };
 
 const handleApprove = () => {
