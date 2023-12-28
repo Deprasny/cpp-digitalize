@@ -560,18 +560,17 @@ watchEffect(() => {
         const isOnApproval = approvalButton === "approval";
 
         if (
-            (data?.value?.currentStep?.step_name === "VEROD1" &&
-                isOnApproval) ||
-            (data?.value?.currentStep?.step_name === "VEROD2" && isOnApproval)
+            (data?.value?.currentStep === "VEROD1" && isOnApproval) ||
+            (data?.value?.currentStep === "VEROD2" && isOnApproval)
         ) {
             isODStatuses.value = true;
         }
 
         if (
-            (data?.value?.currentStep?.step_name === "BENEFIT2" &&
+            (data?.value?.currentStep === "BENEFIT2" &&
                 isOnApproval &&
                 formType !== "Kolektif") ||
-            (data?.value?.currentStep?.step_name === "BENEFIT1" &&
+            (data?.value?.currentStep === "BENEFIT1" &&
                 isOnApproval &&
                 formType !== "Kolektif")
         ) {
