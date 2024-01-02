@@ -1,5 +1,9 @@
 <template>
-    <FormTitleTableKompetensi />
+    <FormTitleTableKompetensi
+        :max-values="maxValues"
+        :is-loading-max-val="isLoadingMaxVal"
+        :errors="errors"
+    />
 
     <div class="overflow-auto" v-if="!isCompetenceLoading">
         <div class="flex max-w-6xl min-w-[900px] gap-2">
@@ -21,6 +25,7 @@
                 <FormInputKompetensi
                     :number-of-values="competenceData.length"
                     :on-get-values="(val) => getFormKomptensi(val)"
+                    :errors="errors"
                 />
             </div>
         </div>
@@ -52,7 +57,13 @@ import { watchDebounced } from "@vueuse/core";
 import useGetCompetence from "../../../hooks/evaluasi/useGetCompetence";
 import UILoader from "../../ui/UILoader.vue";
 
-const props = defineProps(["onGetValues", "onGetTotalValues"]);
+const props = defineProps([
+    "onGetValues",
+    "onGetTotalValues",
+    "isLoadingMaxVal",
+    "maxValues",
+    "errors",
+]);
 const { data: competenceData, isLoading: isCompetenceLoading } =
     useGetCompetence();
 

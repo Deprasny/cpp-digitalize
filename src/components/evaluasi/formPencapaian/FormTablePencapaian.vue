@@ -4,20 +4,26 @@
         v-if="formAction === 'mutate'"
     >
         <div
-            class="flex gap-x-3 md:flex-row flex-col gap-2"
+            class="flex gap-x-3 flex-col gap-2"
             :class="{
                 'text-red-500': errors?.length > 0,
             }"
         >
-            <p class="font-bold uppercase">Pencapaian Target</p>
-            <p
-                class="text-[#0A70A9] text-sm md:text-base"
-                :class="{
-                    'text-red-500': errors?.length > 0,
-                }"
-            >
-                (maximum score: 75)
-            </p>
+            <div class="flex gap-2 md:flex-row flex-col">
+                <p class="font-bold uppercase">Pencapaian Target</p>
+
+                <UILoader v-if="isLoadingMaxVal" class="w-5 h-5" />
+
+                <p
+                    class="text-[#0A70A9] text-sm md:text-base"
+                    :class="{
+                        'text-red-500': errors?.length > 0,
+                    }"
+                    v-else
+                >
+                    (maximum score: {{ maxValues || 0 }})
+                </p>
+            </div>
 
             <div
                 v-if="errors?.length > 0"
@@ -59,6 +65,7 @@
                     :inputValue="val.inputVal"
                     @update:inputLabel="(value) => (val.inputLabel = value)"
                     @update:inputValue="(value) => (val.inputVal = value)"
+                    :errors="errors?.length > 0"
                 />
             </div>
 
@@ -81,6 +88,7 @@
                     :inputValue="val.inputVal"
                     @update:inputLabel="(value) => (val.inputLabel = value)"
                     @update:inputValue="(value) => (val.inputVal = value)"
+                    :errors="errors?.length > 0"
                 />
             </div>
             <div
@@ -121,20 +129,24 @@
 </template>
 
 <script setup>
-import { ref, watch, watchEffect } from "vue";
+import { ref, watch, watchEffect, defineProps } from "vue";
 
 import IconPlus from "../../icons/IconPlus.vue";
 import IconMinus from "../../icons/IconMinus.vue";
 import IconDownload from "../../icons/IconDownload.vue";
 import FormHeaderPencapaian from "./FormHeaderPenpacapian.vue";
 import FormInputTablePencapaian from "./FormInputTablePencapaian.vue";
+import UILoader from "../../ui/UILoader.vue";
 
-const { onGetValues, onGetTotalValues, errors } = defineProps([
-    "formAction",
-    "onGetValues",
-    "onGetTotalValues",
-    "errors",
-]);
+const { onGetValues, onGetTotalValues, errors, isLoadingMaxVal, maxValues } =
+    defineProps([
+        "formAction",
+        "onGetValues",
+        "onGetTotalValues",
+        "errors",
+        "isLoadingMaxVal",
+        "maxValues",
+    ]);
 
 const tooltipScore = ref(false);
 const tooltipScoreMax = ref(false);

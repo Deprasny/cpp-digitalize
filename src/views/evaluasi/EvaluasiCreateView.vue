@@ -123,6 +123,8 @@
                             :on-get-total-values="getTotalKPIValues"
                             :on-get-values="getKPIValues"
                             :errors="validations.prob_score_kpi.$errors"
+                            :is-loading-max-val="isFetchingMaxScore"
+                            :max-values="MAX_KPI"
                         />
 
                         <UIDivider />
@@ -132,6 +134,9 @@
                         <FormTableKompetensi
                             :on-get-values="getCompetenceValues"
                             :on-get-total-values="getTotalCompetenceValues"
+                            :is-loading-max-val="isFetchingMaxScore"
+                            :max-values="MAX_COMP"
+                            :errors="validations.prob_score_comp.$errors"
                         />
 
                         <UIDivider />
@@ -181,18 +186,28 @@
                                     class="flex flex-col gap-1 w-full"
                                     v-if="payload.result.value === '20'"
                                 >
-                                    <FormEvaluasiItemWrapper class="w-[300px]">
+                                    <FormEvaluasiItemWrapper
+                                        class="w-[300px] py-6"
+                                    >
                                         <div
                                             class="w-full flex gap-2 items-center"
                                         >
-                                            <FormInputBasic
-                                                label="Masa Perpanjangan Kontrak"
-                                                type="number"
-                                                class="w-full"
+                                            <Dropdown
+                                                class="border border-black rounded-md"
+                                                :dropdown-options="contractTime"
+                                                :selected-option-text="
+                                                    payload.contract_time?.label
+                                                "
+                                                @update:selected-option-text="
+                                                    payload.contract_time =
+                                                        $event
+                                                "
+                                                :is-loading="
+                                                    isFetchingContractTime
+                                                "
                                             />
-                                            <p class="font-semibold pt-10">
-                                                Bulan
-                                            </p>
+
+                                            <p class="font-semibold">Bulan</p>
                                         </div>
                                     </FormEvaluasiItemWrapper>
 
@@ -262,7 +277,6 @@ import FormInputBasic from "../../components/FormInputBasic.vue";
 import IconMagnifier from "../../components/icons/IconMagnifying.vue";
 import UIDivider from "../../components/ui/UIDivider.vue";
 import UIButton from "../../components/ui/UIButton.vue";
-import FormDropdown from "../../components/FormDropdown.vue";
 
 import Modal from "../../components/Modal.vue";
 import { useModalStore } from "../../stores/index.js";
@@ -281,6 +295,9 @@ import useCreateProbations from "../../hooks/evaluasi/useCreateProbations";
 import { useRouter } from "vue-router";
 import FormNotes from "../../components/evaluasi/formNotes/FormNotes.vue";
 import { getEvaluasiValidations } from "../../validations/evaluasi.validation";
+import useGetFormProbationVal from "../../hooks/evaluasi/useGetFormProbationsVal";
+import FormDropdown from "../../components/FormDropdown.vue";
+import Dropdown from "../../components/Dropdown.vue";
 
 const store = useModalStore();
 const tooltip = ref(false);
@@ -306,10 +323,22 @@ const payload = ref({
     draft: false,
 });
 
-const validations = getEvaluasiValidations(payload);
-
 const { data: dropdownProbationData, isLoading: loadingDropdownProbationData } =
     useGetResultProbation();
+
+const { maxScoreState, contractTimeState } = useGetFormProbationVal({
+    payload: payload?.value,
+});
+
+const { MAX_COMP, MAX_KPI, isFetchingMaxScore } = maxScoreState;
+
+const { contractTime, isFetchingContractTime } = contractTimeState;
+
+const validations = getEvaluasiValidations({
+    values: payload,
+    max_prob_score_kpi: MAX_KPI.value,
+    max_prob_score_comp: MAX_COMP.value,
+});
 
 const { mutate, isLoading, errorMessage } = useCreateProbations({
     callback: {

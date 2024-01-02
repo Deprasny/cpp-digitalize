@@ -22,4 +22,31 @@ const createProbations = async ({ body, config }) => {
     }
 };
 
-export { getListResultProbation, createProbations };
+const getMaxScoreEvaluasi = async () => {
+    try {
+        const response = await apiServices.fetchData("/probation_max_score");
+
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const getContractTime = async () => {
+    try {
+        const response = await apiServices.fetchData(
+            "/probation_contract_time"
+        );
+
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export {
+    getListResultProbation,
+    createProbations,
+    getMaxScoreEvaluasi,
+    getContractTime,
+};
