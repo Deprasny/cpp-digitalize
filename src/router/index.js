@@ -18,6 +18,7 @@ import MutasiDetail from "../views/mutasi/MutasiDetailView.vue";
 import Evaluasi from "../views/evaluasi/EvaluasiView.vue";
 import EvaluasiCreate from "../views/evaluasi/EvaluasiCreateView.vue";
 import EvaluasiDetail from "../views/evaluasi/EvaluasiDetailView.vue";
+import EvaluasiProbation from "../views/evaluasi/EvaluasiProbationView.vue";
 
 //Pensiun
 import Pensiun from "../views/pensiun/PensiunView.vue";
@@ -68,6 +69,13 @@ const routes = [
                 path: "/evaluasi",
                 component: Evaluasi,
                 name: "evaluasi",
+                children: [
+                    {
+                        path: "/evaluasi/probation",
+                        component: EvaluasiProbation,
+                        name: "evaluasi-probation",
+                    },
+                ],
             },
             {
                 path: "/evaluasi/create",

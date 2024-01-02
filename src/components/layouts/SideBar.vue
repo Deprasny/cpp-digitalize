@@ -100,7 +100,7 @@ const menu = ref([
     {
         name: "Evaluasi",
         icon: markRaw(IconEvaluation),
-        route: "/evaluasi",
+        route: "/evaluasi/probation",
     },
     {
         name: "Pensiun",

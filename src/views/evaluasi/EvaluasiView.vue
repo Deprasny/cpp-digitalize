@@ -14,94 +14,44 @@
         <div
             class="flex justify-start w-full md:-mb-6 gap-x-4 text-[#0A70A9] text-xl ml-0 md:ml-10"
         >
-            <UIButton variant="tab"
-                ><div class="flex gap-2 text-sm md:gap-x-16 md:text-base">
-                    <span>Kontrak</span>
-                    <span>0</span>
-                </div></UIButton
+            <UIButton
+                :variant="tab.path === currentPath ? 'tab-active' : 'tab'"
+                v-for="tab in tabs"
             >
-            <UIButton variant="tab"
-                ><div class="flex gap-2 text-sm md:gap-x-16 md:text-base">
-                    <span>Probation</span>
-                    <span>0</span>
+                <div class="flex gap-2 text-sm md:gap-x-16 md:text-base">
+                    <span>{{ tab.label }}</span>
+                    <span>{{ tab.length }}</span>
                 </div></UIButton
             >
         </div>
-        <Table @onCellClick="handleDetail" :columns="columns" :data="data" />
+
+        <RouterView />
     </div>
 </template>
 
 <script setup>
-import Table from "@/components/BasicTable.vue";
-import { createColumnHelper } from "@tanstack/table-core";
-import { ref } from "vue";
 import UIButton from "@/components/ui/UIButton.vue";
 import IconPlus from "@/components/icons/IconPlus.vue";
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
-import { useRouter } from "vue-router";
-import { getFormattedDate } from "@/libs/util";
+import { RouterView, useRouter } from "vue-router";
+import { ref, watch, watchEffect } from "vue";
 
 const router = useRouter();
 
-const getRandomName = () => {
-    const names = [
-        "WANI MULYANI",
-        "PAULIN FARIDA",
-        "FEBI SURYATMI",
-        "KAJEN BUDIMAN",
-        "HANI UTAMI",
-    ];
+const currentPath = router.currentRoute.value.name;
 
-    const randomIndex = Math.floor(Math.random() * names.length);
-    return names[randomIndex];
-};
-
-const makeData = (count) => {
-    const data = [];
-    for (let i = 0; i < count; i++) {
-        data.push({
-            mutasi: `000${i}/Evaluasi/INDIVIDU/X/2023`,
-            nama: getRandomName(),
-            tanggal: getFormattedDate(new Date()),
-            status: "Approved",
-            jenis: "Individu",
-            date: getFormattedDate(new Date()),
-        });
-    }
-    return data;
-};
-const data = ref(makeData(4));
-
-const columnHelper = createColumnHelper();
-const columns = [
-    columnHelper.accessor((row) => row.mutasi, {
-        id: "mutasi",
-        cell: (info) => info.getValue(),
-        header: () => "No Evaluasi",
-    }),
-    columnHelper.accessor((row) => row.nama, {
-        id: "nama",
-        cell: (info) => info.getValue(),
-        header: () => "Nama Karyawan",
-    }),
-    columnHelper.accessor((row) => row.tanggal, {
-        id: "tanggal",
-        cell: (info) => info.getValue(),
-        header: () => "Tanggal Pengajuan",
-    }),
-    columnHelper.accessor((row) => row.status, {
-        id: "status",
-        cell: (info) => info.getValue(),
-        header: () => "Status",
-    }),
-    columnHelper.accessor((row) => row.date, {
-        id: "date",
-        cell: (info) => info.getValue(),
-        header: () => "Due Date",
-    }),
-];
-
-const handleDetail = (cell) => {
-    router.push({ name: "evaluasi-detail", params: { id: cell.row.id } });
-};
+const tabs = ref([
+    {
+        label: "Kontrak",
+        path: "evaluasi-kontrak",
+        name: "kontrak",
+        length: 0,
+    },
+    {
+        label: "Probation",
+        path: "evaluasi-probation",
+        name: "probation",
+        length: 0,
+    },
+]);
 </script>

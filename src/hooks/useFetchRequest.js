@@ -1,7 +1,10 @@
 import { computed } from "vue";
 import { ref } from "vue";
 
-const useFetchRequest = ({ service, options: { params, body, config } }) => {
+const useFetchRequest = ({
+    service,
+    options: { params, body, config, id },
+}) => {
     const value = ref({
         data: {},
         isFetching: false,
@@ -12,7 +15,7 @@ const useFetchRequest = ({ service, options: { params, body, config } }) => {
     const fetchData = async () => {
         value.value.isFetching = true;
         try {
-            const response = await service?.({ params, body, config });
+            const response = await service?.({ params, body, config, id });
 
             value.value.data = response?.data;
         } catch (error) {
@@ -25,7 +28,7 @@ const useFetchRequest = ({ service, options: { params, body, config } }) => {
 
     return {
         fetchData,
-        data: computed(() => value.value.data),
+        data: computed(() => value.value),
         isFetching: computed(() => value.value.isFetching),
         isError: computed(() => value.value.isError),
         errorMessage: computed(() => value.value.errorMessage),

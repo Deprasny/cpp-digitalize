@@ -12,6 +12,30 @@ const getListResultProbation = async ({ params }) => {
     }
 };
 
+const getListEvaluasi = async ({ params }) => {
+    try {
+        const response = await apiServices.fetchData("/probations", {
+            ...params,
+        });
+
+        return response;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
+const getDetailEvaluasi = async ({ id }) => {
+    try {
+        const response = await apiServices.fetchData(`/probations/${id}`);
+
+        return response;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
 const createProbations = async ({ body, config }) => {
     try {
         const response = await apiServices.postData("/probation", body, config);
@@ -49,4 +73,6 @@ export {
     createProbations,
     getMaxScoreEvaluasi,
     getContractTime,
+    getListEvaluasi,
+    getDetailEvaluasi,
 };

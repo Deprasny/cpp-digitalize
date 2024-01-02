@@ -7,7 +7,12 @@
         </a>
 
         <UIDivider />
-        <div class="flex my-16">
+
+        <div class="w-full flex justify-center p-10" v-if="isFetching">
+            <UILoader />
+        </div>
+
+        <div class="flex my-16" v-else>
             <BasicCard
                 title="0001/MUTASI/INDIVIDU/X/2023"
                 variant="detail"
@@ -17,47 +22,52 @@
                     <div class="flex w-full">
                         <LabelForm label="Nama & NIK">
                             <p class="w-full">
-                                Zavira Andini - 21900133
+                                {{ data?.prob_name }} - {{ data?.prob_nik }}
                             </p></LabelForm
                         >
                     </div>
                     <div class="flex w-full">
                         <LabelForm label="Usia"
-                            ><p class="w-full">27 Tahun</p>
+                            ><p class="w-full">{{ data?.prob_age }} Tahun</p>
                         </LabelForm>
                     </div>
 
                     <div class="flex w-full">
                         <LabelForm label="Jabatan">
                             <p class="w-full">
-                                Specialist Organization Development
+                                {{ data?.prob_position }}
                             </p>
                         </LabelForm>
                     </div>
                     <div class="flex w-full">
                         <LabelForm label="Level">
-                            <p class="w-full">4A</p></LabelForm
+                            <p class="w-full">
+                                {{ data?.prob_level }}
+                            </p></LabelForm
                         >
                     </div>
 
                     <div class="flex w-full">
                         <LabelForm label="Divisi/Department">
                             <p class="w-full">
-                                Organization Development
+                                {{ data?.prob_division }}
                             </p></LabelForm
                         >
                     </div>
 
                     <div class="flex w-full">
                         <LabelForm label="Tanggal Masuk">
-                            <p class="w-full">1 Januari 2023</p></LabelForm
+                            <p class="w-full">
+                                {{ data?.prob_joint_date }}
+                            </p></LabelForm
                         >
                     </div>
 
-                    <div class="flex w-fukk">
+                    <div class="flex w-full">
                         <LabelForm label="Periode">
                             <p class="w-full">
-                                1 Januari 2023 - 31 Maret 2023
+                                {{ data?.prob_start_date1 }} -
+                                {{ data?.prob_end_date1 }}
                             </p></LabelForm
                         >
                     </div>
@@ -139,29 +149,36 @@
                     class="flex items-start justify-between w-full mx-10 my-10"
                 >
                     <div class="flex flex-col items-start gap-y-5">
-                        <div class="flex justify-between gap-x-5">
+                        <div class="flex justify-between gap-x-5 items-center">
                             <p class="font-semibold">
                                 PENILAIAN AKHIR (GRAND TOTAL SCORE)
                             </p>
-                            <button>-</button>
-                        </div>
-                        <div class="flex items-center gap-x-5">
-                            <p class="font-semibold">Pengajuan Status:</p>
-                            <p class="text-accent-1">
-                                Diperpanjang masa kontraknya | selama 6 bulan
-                            </p>
-                        </div>
-                        <div class="flex max-w-[800px]">
-                            <p class="font-semibold w-[25%]">
-                                Notes / Catatan:
-                            </p>
-                            <div class="flex flex-col gap-y-3">
-                                <p v-for="i in 3">
-                                    {{ i }}. Perlu meningkatkan kemampuan
-                                    menyampaikan laporan dengan sistematis,
-                                    padat, dan jelas
+                            <div
+                                class="flex px-4 py-2 bg-accent-1 w-fit gap-x-10"
+                            >
+                                <p class="text-xl font-semibold text-white">
+                                    {{ data?.prob_score_final || 0 }}
                                 </p>
                             </div>
+                        </div>
+                        <div class="flex items-center gap-x-5">
+                            <LabelForm label="Pengajuan Status">
+                                <p class="text-accent-1">
+                                    {{ data?.prob_result_text }}
+                                </p>
+                            </LabelForm>
+                        </div>
+                        <div class="flex max-w-[800px]">
+                            <LabelForm label="Catatan">
+                                <ul>
+                                    <li
+                                        class="w-full"
+                                        v-for="note in data?.prob_final_note"
+                                    >
+                                        {{ note }}
+                                    </li>
+                                </ul>
+                            </LabelForm>
                         </div>
                     </div>
                 </div>
@@ -174,86 +191,35 @@
             </BasicCard>
 
             <!-- status log -->
-            <Log :data="listLog" />
+            <Log :data="progressData" />
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 import UIButton from "@/components/ui/UIButton.vue";
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
 import UIDivider from "@/components/ui/UIDivider.vue";
 import BasicCard from "../../components/BasicCard.vue";
 import LabelForm from "../../components/LabelForm.vue";
 import Log from "../../components/Log.vue";
+import useGetDetailEvaluasi from "../../hooks/evaluasi/useGetDetailEvaluasi";
 
 import DetailWrapper from "../../components/evaluasi/wrapper/DetailWrapper.vue";
 import FormTablePencapaian from "../../components/evaluasi/formPencapaian/FormTablePencapaian.vue";
+import { useRouter } from "vue-router";
+import UILoader from "../../components/ui/UILoader.vue";
 
-const listLog = ref([
-    { date: "7 Agustus 2023", description: "Approve by BU Head Penerima" },
-    { date: "8 Agustus 2023", description: "Approve by HRD" },
-    { date: "9 Agustus 2023", description: "Approve by HRD" },
-    { date: "10 Agustus 2023", description: "Approve by HRD" },
-    { date: "11 Agustus 2023", description: "Approve by HRD" },
-]);
+const router = useRouter();
 
-const listInfo = ref([
-    "Perusahaan ",
-    "Jabatan ",
-    "Kelas Jabatan ",
-    "Divisi / Departemen ",
-    "Cost Center ",
-    "Lokasi Kerja ",
-    "Melapor Ke ",
-    "Immediate Manager",
-    "Tunjangan",
-]);
+const id = router.currentRoute.value.params.id;
 
-const statusLama = ref([
-    "1450 CP Prima - Jakarta (HO)",
-    "Specialist Organization Development",
-    "4A",
-    "Organization Development",
-    "1450 145766 HR Corporate",
-    "DKI Jakarta_SCBD",
-    "Panca Dias Purnomo - 22000130",
-    "Panca Dias Purnomo - 22000130",
-    [
-        {
-            no: "1",
-            tunjangan: "Transportasi",
-            total: " 1.000.000",
-        },
-        {
-            no: "2",
-            tunjangan: "Transportasi",
-            total: " 1.000.000",
-        },
-    ],
-]);
+const { data, isFetching, progressData } = useGetDetailEvaluasi({
+    id: id,
+});
 
-const statusBaru = ref([
-    "1450 CP Prima - Jakarta 0401",
-    "-",
-    "4A",
-    "Center of Excellence",
-    "-",
-    "-",
-    "22200169 - A.A Sagung ",
-    "Panca Dias Purnomo - 22000131",
-    [
-        {
-            no: "1",
-            tunjangan: "Transportasi",
-            total: " 1.000.000",
-        },
-        {
-            no: "2",
-            tunjangan: "Transportasi",
-            total: " 1.000.000",
-        },
-    ],
-]);
+watchEffect(() => {
+    console.log(progressData?.value);
+});
 </script>
