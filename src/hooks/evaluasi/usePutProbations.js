@@ -3,7 +3,8 @@ import useFetchRequest from "../useFetchRequest";
 import { computed } from "vue";
 
 const usePutProbations = ({ body, id, onSuccess, onError }) => {
-    console.log("body", body);
+    console.log("body", computed(() => body).value);
+
     const { fetchData, errorMessage } = useFetchRequest({
         service: putProbations,
         options: {
