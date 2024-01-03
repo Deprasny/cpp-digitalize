@@ -128,6 +128,7 @@
                                             type="date"
                                             id="mut_date"
                                             v-model="values.mut_date"
+                                            :allowed-dates="allowedDates"
                                         />
                                     </div>
                                     <div class="flex flex-col w-full" v-else>
@@ -387,6 +388,7 @@ import FormInputBasic from "../../components/FormInputBasic.vue";
 import DownloadFiles from "../../components/DownloadFiles.vue";
 import FormDetailLabelContainer from "../../components/mutations/FormDetailLabelContainer.vue";
 import { allowedDates } from "../../utils/allowedDates";
+import formatDateToPayload from "../../utils/formatDateToPayload";
 
 const store = useModalStore();
 
@@ -472,7 +474,7 @@ const onApprove = async (id) => {
 
         const commonValues = {
             mut_reason: values?.value?.mut_reason,
-            mut_date: values.value.mut_date,
+            mut_date: formatDateToPayload(values.value.mut_date),
             companyTo: values.value.value.mutd_to_company,
             positionTo: values.value.value.mutd_to_position,
             buTo: values.value.value.mutd_to_division,

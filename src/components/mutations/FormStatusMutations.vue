@@ -235,6 +235,7 @@
                     <FormStatusBaruItem>
                         <FormAutoCompleteCompany
                             v-model="values.mutd_to_company"
+                            :values="values.mutd_to_company"
                         />
                     </FormStatusBaruItem>
                     <FormStatusBaruItem>
@@ -497,18 +498,29 @@ watchEffect(() => {
             ...columnsTunjanganBaru.value,
         ];
     }
+});
 
-    if (props?.detailData && props.formType === "edit") {
-        values.value.mutd_to_company = props.detailData.companyTo;
-        values.value.mutd_to_position = props.detailData.positionTo;
-        values.value.mutd_to_division = props.detailData.buTo;
-        values.value.mutd_to_costcenter = props.detailData.ccTo;
-        values.value.mutd_to_work_location = props.detailData.locTo;
-        values.value.mutd_to_direct_spv = props.detailData.spvTo;
-        values.value.mutd_to_immed_mgr = props.detailData.mgrTo;
-
-        props.values.value = values.value;
-    }
+onMounted(() => {
+    watchDebounced(
+        () => props.detailData,
+        (newVal) => {
+            if (newVal) {
+                values.value.mutd_to_company = newVal.companyTo;
+                values.value.mutd_to_position = newVal.positionTo;
+                values.value.mutd_to_division = newVal.buTo;
+                values.value.mutd_to_costcenter = newVal.ccTo;
+                values.value.mutd_to_work_location = newVal.locTo;
+                values.value.mutd_to_direct_spv = `${newVal.spvTo} - ${newVal.spvToName}`;
+                values.value.mutd_to_immed_mgr = `${newVal.mgrTo} - ${newVal.mgrToName}`;
+                props.values.value = values.value;
+            }
+        },
+        {
+            debounce: 500,
+            immediate: true,
+            deep: true,
+        }
+    );
 });
 
 const fetchAutoFillFormParams = async () => {
@@ -561,7 +573,8 @@ watch(
         if (newValue) {
             await fetchAutoFillFormParams();
         }
-    }
+    },
+    { immediate: true, deep: true }
 );
 
 watchDebounced(

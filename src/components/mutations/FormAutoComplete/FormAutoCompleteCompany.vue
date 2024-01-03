@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch, watchEffect } from "vue";
 
 import useFetch from "../../../hooks/useFetch";
 import FormAutocomplete from "../../FormAutocomplete.vue";
@@ -21,7 +21,7 @@ import debounce from "../../../utils/debounce";
 import { getAllCompany, getAllPosition } from "../../../services/form.services";
 import { refDebounced, useDebounceFn, watchDebounced } from "@vueuse/core";
 
-const props = defineProps(["isError", "errorMessage"]);
+const props = defineProps(["isError", "errorMessage", "values"]);
 const emit = defineEmits(["update:modelValue"]);
 
 function updateModelValue(newValue) {
@@ -78,5 +78,15 @@ watchDebounced(
 
 onMounted(() => {
     fetchData();
+
+    // watchDebounced(
+    //     () => props.values,
+    //     (newValue) => {
+    //         if (newValue) {
+    //             input.value = newValue;
+    //         }
+    //     },
+    //     { debounce: 1000, immediate: true }
+    // );
 });
 </script>
