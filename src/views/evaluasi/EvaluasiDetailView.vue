@@ -78,7 +78,10 @@
                 <!-- form penilaian -->
 
                 <DetailWrapper>
-                    <FormTablePencapaian :data="data?.kpi" />
+                    <FormTablePencapaian
+                        :data="data?.kpi"
+                        formAction="detail"
+                    />
                 </DetailWrapper>
 
                 <UIDivider />

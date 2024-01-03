@@ -1,11 +1,21 @@
 import { useVuelidate } from "@vuelidate/core";
 import { required, minValue, helpers, maxValue } from "@vuelidate/validators";
+import { ref } from "vue";
+import { watchEffect } from "vue";
 
 export const getEvaluasiValidations = ({
     values,
-    max_prob_score_kpi,
-    max_prob_score_comp,
+
+    maxScoreState,
 }) => {
+    const maxScoreKPI = ref(maxScoreState?.MAX_KPI?.value);
+    const maxScoreComp = ref(maxScoreState?.MAX_COMP?.value);
+
+    watchEffect(() => {
+        maxScoreKPI.value = maxScoreState?.MAX_KPI?.value;
+        maxScoreComp.value = maxScoreState?.MAX_COMP?.value;
+    });
+
     const rules = {
         prob_score_kpi: {
             required: helpers.withMessage(
@@ -14,7 +24,7 @@ export const getEvaluasiValidations = ({
             ),
             maxValue: helpers.withMessage(
                 "Nilai Pencapaian Target KPI Melebihi Nilai Target KPI",
-                maxValue(max_prob_score_kpi)
+                maxValue(maxScoreKPI)
             ),
         },
         prob_score_comp: {
@@ -24,7 +34,7 @@ export const getEvaluasiValidations = ({
             ),
             maxValue: helpers.withMessage(
                 "Nilai Pencapaian Target Kompetensi Melebihi Nilai Target Kompetensi",
-                maxValue(max_prob_score_comp)
+                maxValue(maxScoreComp)
             ),
         },
     };

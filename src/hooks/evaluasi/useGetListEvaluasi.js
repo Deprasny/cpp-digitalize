@@ -7,7 +7,11 @@ const useGetListEvaluasi = () => {
     const { data, isFetching, errorMessage, fetchData, isError } =
         useFetchRequest({
             service: getListEvaluasi,
-            options: {},
+            options: {
+                params: {
+                    jenis: "probation",
+                },
+            },
         });
 
     onMounted(() => {
