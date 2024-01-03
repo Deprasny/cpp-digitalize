@@ -1,9 +1,11 @@
-import { computed } from "vue";
+import { callWithAsyncErrorHandling, computed } from "vue";
 import { ref } from "vue";
 
 const useFetchRequest = ({
     service,
     options: { params, body, config, id },
+    onSuccess,
+    onError,
 }) => {
     const value = ref({
         data: {},
@@ -18,7 +20,9 @@ const useFetchRequest = ({
             const response = await service?.({ params, body, config, id });
 
             value.value.data = response?.data;
+            onSuccess && onSuccess(response?.data);
         } catch (error) {
+            onError && onError(error);
             value.value.isError = true;
             value.value.errorMessage = error;
         } finally {

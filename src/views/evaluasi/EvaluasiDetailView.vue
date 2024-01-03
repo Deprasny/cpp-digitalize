@@ -183,11 +183,7 @@
                     </div>
                 </div>
 
-                <div class="flex justify-end mx-10">
-                    <UIButton @click="$router.back()" variant="form">
-                        Kembali
-                    </UIButton>
-                </div>
+                <RouterView />
             </BasicCard>
 
             <!-- status log -->
@@ -208,7 +204,7 @@ import useGetDetailEvaluasi from "../../hooks/evaluasi/useGetDetailEvaluasi";
 
 import DetailWrapper from "../../components/evaluasi/wrapper/DetailWrapper.vue";
 import FormTablePencapaian from "../../components/evaluasi/formPencapaian/FormTablePencapaian.vue";
-import { useRouter } from "vue-router";
+import { RouterView, useRouter } from "vue-router";
 import UILoader from "../../components/ui/UILoader.vue";
 
 const router = useRouter();
@@ -217,9 +213,5 @@ const id = router.currentRoute.value.params.id;
 
 const { data, isFetching, progressData } = useGetDetailEvaluasi({
     id: id,
-});
-
-watchEffect(() => {
-    console.log(progressData?.value);
 });
 </script>

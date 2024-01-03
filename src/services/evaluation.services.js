@@ -25,6 +25,19 @@ const getListEvaluasi = async ({ params }) => {
     }
 };
 
+const getListEvaluasiApproval = async ({ params }) => {
+    try {
+        const response = await apiServices.fetchData("/probations_approve", {
+            ...params,
+        });
+
+        return response;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
+};
+
 const getDetailEvaluasi = async ({ id }) => {
     try {
         const response = await apiServices.fetchData(`/probations/${id}`);
@@ -75,4 +88,5 @@ export {
     getContractTime,
     getListEvaluasi,
     getDetailEvaluasi,
+    getListEvaluasiApproval,
 };
