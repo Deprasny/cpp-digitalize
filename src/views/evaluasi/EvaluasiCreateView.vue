@@ -116,15 +116,20 @@
                         </div>
 
                         <UIDivider />
+
                         <!-- form pencapaian -->
 
+                        <div class="w-full py-20" v-if="isFetchingMaxScore">
+                            <UILoader class="w-10 h-10" />
+                        </div>
                         <FormTablePencapaian
+                            v-else
                             formAction="mutate"
                             :on-get-total-values="getTotalKPIValues"
                             :on-get-values="getKPIValues"
                             :errors="validations.prob_score_kpi.$errors"
-                            :is-loading-max-val="isFetchingMaxScore"
-                            :max-values="MAX_KPI"
+                            :maxValues="MAX_KPI"
+                            :fetchingMaxVal="isFetchingMaxScore"
                         />
 
                         <UIDivider />
@@ -270,7 +275,7 @@
 <script setup>
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
 
-import { ref, watch, watchEffect } from "vue";
+import { computed, ref, watch, watchEffect } from "vue";
 import BasicCard from "../../components/BasicCard.vue";
 import BasicForm from "../../components/BasicForm.vue";
 import FormInputBasic from "../../components/FormInputBasic.vue";
@@ -336,8 +341,7 @@ const { contractTime, isFetchingContractTime } = contractTimeState;
 
 const validations = getEvaluasiValidations({
     values: payload,
-    max_prob_score_kpi: MAX_KPI.value,
-    max_prob_score_comp: MAX_COMP.value,
+    maxScoreState: maxScoreState,
 });
 
 const { mutate, isLoading, errorMessage } = useCreateProbations({

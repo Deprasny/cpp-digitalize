@@ -12,16 +12,13 @@
             <div class="flex gap-2 md:flex-row flex-col">
                 <p class="font-bold uppercase">Pencapaian Target</p>
 
-                <UILoader v-if="isLoadingMaxVal" class="w-5 h-5" />
-
                 <p
                     class="text-[#0A70A9] text-sm md:text-base"
                     :class="{
                         'text-red-500': errors?.length > 0,
                     }"
-                    v-else
                 >
-                    (maximum score: {{ maxValues || 0 }})
+                    (maximum score: {{ maxValues ? maxValues : 0 }})
                 </p>
             </div>
 
@@ -98,13 +95,13 @@
                 <button
                     class="w-6 h-6 grid place-items-center border rounded-full bg-white"
                     @click="addColumns"
-                    v-if="inputTarget.length < 5"
+                    v-if="inputTarget?.length < 5"
                 >
                     <component :is="IconPlus" class="text-xs text-accent-1" />
                 </button>
 
                 <button
-                    v-if="inputTarget.length > 3"
+                    v-if="inputTarget?.length > 3"
                     class="w-6 h-6 grid place-items-center border rounded-full bg-white"
                     @click="removeColumns"
                 >
@@ -129,7 +126,7 @@
 </template>
 
 <script setup>
-import { ref, watch, watchEffect, defineProps } from "vue";
+import { ref, watch, watchEffect, defineProps, onMounted, computed } from "vue";
 
 import IconPlus from "../../icons/IconPlus.vue";
 import IconMinus from "../../icons/IconMinus.vue";
@@ -137,19 +134,40 @@ import IconDownload from "../../icons/IconDownload.vue";
 import FormHeaderPencapaian from "./FormHeaderPenpacapian.vue";
 import FormInputTablePencapaian from "./FormInputTablePencapaian.vue";
 import UILoader from "../../ui/UILoader.vue";
+import { watchDebounced } from "@vueuse/core";
 
-const { onGetValues, onGetTotalValues, errors, isLoadingMaxVal, maxValues } =
-    defineProps([
-        "formAction",
-        "onGetValues",
-        "onGetTotalValues",
-        "errors",
-        "isLoadingMaxVal",
-        "maxValues",
-    ]);
+const {
+    onGetValues,
+    onGetTotalValues,
+    errors,
+    maxValues,
+    data,
+    formAction,
+    ...props
+} = defineProps([
+    "formAction",
+    "onGetValues",
+    "onGetTotalValues",
+    "errors",
+    "maxValues",
+    "data",
+    "fetchingMaxVal",
+]);
 
 const tooltipScore = ref(false);
 const tooltipScoreMax = ref(false);
+
+watchDebounced(
+    () => data,
+    (newValue) => {
+        if (formAction === "detail") {
+            inputTarget.value = newValue?.target;
+
+            inputActual.value = newValue?.actual;
+        }
+    },
+    { deep: true, debounce: 200, immediate: true }
+);
 
 const inputTarget = ref([
     {
@@ -212,9 +230,9 @@ const addColumns = () => {
 const totalScore = ref(0);
 
 watch(
-    () => inputActual.value.map((item) => item.inputVal),
+    () => inputActual?.value?.map((item) => item.inputVal),
     (newColumns) => {
-        totalScore.value = newColumns.reduce(
+        totalScore.value = newColumns?.reduce(
             (acc, curr) => acc + Number(curr),
             0
         );

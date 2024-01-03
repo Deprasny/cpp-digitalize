@@ -18,13 +18,14 @@
         @toggleModal="store.toggleModal"
         @submit="onSubmit"
         modalTitle="Anda yakin untuk melakukan proses berikut?"
+        :isLoading="isFetching"
     />
 
     <Modal
         v-if="showSuccessModal"
         :isModalOpen="showSuccessModal"
         @toggleModal="showSuccessModal = false"
-        modalTitle="Form Evaluasi Anda telah berhasil disubmit"
+        modalTitle="Form Evaluasi Anda telah berhasil di approve"
         modalType="success"
     />
 
@@ -63,14 +64,11 @@ const props = defineProps({
     },
 });
 
-const { mutate, errorMessage } = usePutProbations({
-    id: props.data?.id,
-    body: {
-        ...values.value,
-    },
-    onSuccess: () => {
+const { mutate, errorMessage, isFetching } = usePutProbations({
+    onSuccess: (res) => {
         store.toggleModal();
         showSuccessModal.value = true;
+        console.log("hai");
     },
 
     onError: () => {
@@ -85,6 +83,13 @@ const handleSubmit = ({ statusApprovalValue }) => {
 };
 
 const onSubmit = () => {
-    if (values.value.statusApproval) mutate();
+    // console.log(values.value);
+
+    mutate({
+        id: props.data?.id,
+        body: {
+            ...values.value,
+        },
+    });
 };
 </script>

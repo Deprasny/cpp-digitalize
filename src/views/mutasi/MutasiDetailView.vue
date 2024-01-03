@@ -187,7 +187,9 @@
                                     {{
                                         data?.famMove === "YES"
                                             ? "Ikut pindah kelokasi kerja baru"
-                                            : "Tidak Ikut pindah kelokasi kerja baru"
+                                            : data?.famMove === "NO"
+                                            ? "Tidak Ikut pindah kelokasi kerja baru"
+                                            : ""
                                     }}
                                 </p>
                             </LabelForm>
@@ -199,7 +201,9 @@
                                             ? "Diambil per 1 Tahun"
                                             : data?.houseAllow === "Monthly"
                                             ? "Diambil Bulanan"
-                                            : "Diambil per 2 Tahun"
+                                            : data?.houseAllow === "2 Years"
+                                            ? "Diambil per 2 Tahun"
+                                            : ""
                                     }}
                                 </p>
                             </LabelForm>
@@ -209,7 +213,9 @@
                                     {{
                                         data?.transport === "Tunai"
                                             ? "Ambil Tunai"
-                                            : "Difasilitasi Perusahaan"
+                                            : data?.transport === "Perusahaan"
+                                            ? "Difasilitasi Perusahaan"
+                                            : ""
                                     }}
                                 </p>
                             </LabelForm>

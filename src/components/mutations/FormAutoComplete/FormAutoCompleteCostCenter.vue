@@ -48,8 +48,8 @@ const fetchData = async (searchValue) => {
 
         function transformCostCenterValues(response) {
             return response?.value.map((item) => ({
-                label: `${item?.dept_id} ${item?.division_id} ${item?.dept_name}`,
-                value: `${item?.dept_id} ${item?.division_id} ${item?.dept_name}`,
+                label: `${item?.company_id} ${item?.dept_id} ${item?.dept_name}`,
+                value: `${item?.company_id} ${item?.dept_id} ${item?.dept_name}`,
             }));
         }
         data.value.val = transformCostCenterValues(response);
