@@ -18,6 +18,9 @@ import MutasiDetail from "../views/mutasi/MutasiDetailView.vue";
 import Evaluasi from "../views/evaluasi/EvaluasiView.vue";
 import EvaluasiCreate from "../views/evaluasi/EvaluasiCreateView.vue";
 import EvaluasiDetail from "../views/evaluasi/EvaluasiDetailView.vue";
+import EvaluasiProbation from "../views/evaluasi/EvaluasiProbationView.vue";
+import EvaluasiDefaultDetail from "../views/evaluasi/EvaluasiDefaultDetailView.vue";
+import EvaluasiDetailApproval from "../views/evaluasi/EvaluasiDetailApproval.vue";
 
 //Pensiun
 import Pensiun from "../views/pensiun/PensiunView.vue";
@@ -68,6 +71,13 @@ const routes = [
                 path: "/evaluasi",
                 component: Evaluasi,
                 name: "evaluasi",
+                children: [
+                    {
+                        path: "/evaluasi/probation",
+                        component: EvaluasiProbation,
+                        name: "evaluasi-probation",
+                    },
+                ],
             },
             {
                 path: "/evaluasi/create",
@@ -75,9 +85,22 @@ const routes = [
                 name: "evaluasi-create",
             },
             {
-                path: "/evaluasi/detail/:id",
+                path: "/evaluasi/:id",
                 component: EvaluasiDetail,
-                name: "evaluasi-detail",
+                name: "evaluasi-details",
+                children: [
+                    {
+                        path: "/evaluasi/:id/approval",
+                        name: "evaluasi-detail-approval",
+                        component: EvaluasiDetailApproval,
+                    },
+
+                    {
+                        path: "/evaluasi/:id/detail",
+                        name: "evaluasi-detail",
+                        component: EvaluasiDefaultDetail,
+                    },
+                ],
             },
             {
                 path: "/pensiun",

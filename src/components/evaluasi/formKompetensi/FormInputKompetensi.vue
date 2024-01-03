@@ -4,18 +4,28 @@
         class="flex w-full h-[150px] relative"
         :key="itemIdx"
     >
-        <div class="w-full h-full border border-black">
+        <div
+            class="w-full h-full border border-black"
+            :class="{
+                'border-red-500': errors.length > 0,
+            }"
+        >
             <input
                 v-for="(column, columnIdx) in item.notes"
                 placeholder="fill here"
                 type="text"
-                class="w-full h-[30px] border-b-black border-b-2"
+                class="w-full h-[30px] border border-gray-200"
                 :key="columnIdx"
                 :value="column.val"
                 @input="handleChangesNotes($event, itemIdx, columnIdx)"
             />
         </div>
-        <div class="border border-black w-[80px] h-full">
+        <div
+            class="border border-black w-[80px] h-full"
+            :class="{
+                'border-red-500': errors.length > 0,
+            }"
+        >
             <input class="w-full h-full" type="number" v-model="item.score" />
         </div>
 
@@ -45,7 +55,12 @@ import IconPlus from "../../icons/IconPlus.vue";
 import IconMinus from "../../icons/IconMinus.vue";
 import { watchDebounced } from "@vueuse/core";
 
-const props = defineProps(["values", "onGetValues", "numberOfValues"]);
+const props = defineProps([
+    "values",
+    "onGetValues",
+    "numberOfValues",
+    "errors",
+]);
 
 const valueOfTable = {
     notes: [{ val: "" }],

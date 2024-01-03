@@ -1,11 +1,21 @@
 <template>
     <div class="flex w-full">
         <div
-            class="w-[20%] text-center h-20 border border-black flex items-center justify-center font-semibold"
+            class="w-[20%] text-center h-20 border flex items-center justify-center font-semibold"
+            :class="{
+                'border-red-600': errors,
+                'border-black': !errors,
+            }"
         >
             {{ number }}
         </div>
-        <div class="w-full h-20 border border-black">
+        <div
+            class="w-full h-20 border"
+            :class="{
+                'border-red-600': errors,
+                'border-black': !errors,
+            }"
+        >
             <input
                 v-if="formAction === 'mutate'"
                 placeholder="fill here"
@@ -19,12 +29,18 @@
                 Mencapai target revenue total selama 3 bulan pertama adalah 1M
             </p>
         </div>
-        <div class="w-full h-20 border border-black">
+        <div
+            class="w-full h-20 border"
+            :class="{
+                'border-red-600': errors,
+                'border-black': !errors,
+            }"
+        >
             <input
                 v-if="formAction === 'mutate'"
                 placeholder="fill here"
-                type="text"
-                class="w-full h-full"
+                type="number"
+                class="w-full h-full text-center"
                 :value="inputValue"
                 @input="emit('update:inputValue', $event.target.value)"
             />
@@ -42,11 +58,12 @@
 <script setup>
 import { defineProps } from "vue";
 
-const { number } = defineProps([
+const { number, errors } = defineProps([
     "number",
     "inputLabel",
     "inputValue",
     "formAction",
+    "errors",
 ]);
 
 const emit = defineEmits(["update:inputLabel", "update:inputValue"]);

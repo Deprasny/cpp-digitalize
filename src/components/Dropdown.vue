@@ -1,10 +1,10 @@
 <template>
-    <div class="relative h-full flex items-center gap-2 px-2">
+    <div class="relative h-full w-full" :class="class">
         <select
             v-if="!isLoading"
             :disabled="disabled"
             @click="toggleDropdown"
-            class="w-full px-4 py-3 mb-1 appearance-none rounded-lg text-gray-800 select-container focus:outline-none"
+            class="w-full px-4 py-3 mb-1 appearance-none rounded-lg text-gray-800 select-container focus:outline-none cursor-pointer"
             :value="modelValue"
             @input="emit('update:modelValue', $event.target.value)"
         >
@@ -17,9 +17,13 @@
             </option>
         </select>
 
-        <UILoader class="w-6 h-6" v-else />
+        <div v-else class="px-4 py-3">
+            <UILoader class="w-6 h-6" />
+        </div>
 
-        <IconChevronLeft class="text-accent-1" />
+        <IconChevronLeft
+            class="text-accent-1 absolute top-0 bottom-0 m-auto right-3"
+        />
     </div>
 </template>
 
@@ -43,5 +47,6 @@ const { disabled, isLoading, modelValue, dropdownOptions } = defineProps([
     "dropdownOptions",
     "disabled",
     "isLoading",
+    "class",
 ]);
 </script>
