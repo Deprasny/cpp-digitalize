@@ -2,24 +2,21 @@ import { putProbations } from "../../services/evaluation.services";
 import useFetchRequest from "../useFetchRequest";
 import { computed } from "vue";
 
-const usePutProbations = ({ body, id, onSuccess, onError }) => {
-    console.log("body", computed(() => body).value);
-
-    const { fetchData, errorMessage } = useFetchRequest({
+const usePutProbations = ({ onSuccess, onError }) => {
+    const { mutate, errorMessage, isFetching } = useFetchRequest({
         service: putProbations,
-        options: {
-            body: computed(() => body).value,
-            id: id,
-        },
+        options: {},
         onSuccess: (res) => onSuccess(res),
         onError: (res) => onError(res),
     });
 
-    const mutate = () => {
-        fetchData();
+    return {
+        mutate,
+        errorMessage: computed(
+            () => errorMessage.value?.response?.data?.message
+        ),
+        isFetching: computed(() => isFetching.value),
     };
-
-    return { mutate, errorMessage: computed(() => errorMessage.value) };
 };
 
 export default usePutProbations;
