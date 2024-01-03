@@ -485,6 +485,18 @@ watchEffect(() => {
                 return item.muta_type === "NEW";
             }
         );
+
+        columnsTunjanganLama.value = props.detailData.allowance.filter(
+            (item) => {
+                return item.muta_type === "PAST";
+            }
+        );
+
+        columnsTunjanganBaru.value = props.detailData.allowance.filter(
+            (item) => {
+                return item.muta_type === "NEW";
+            }
+        );
     }
 
     if (props.isShowTunjangan) {
