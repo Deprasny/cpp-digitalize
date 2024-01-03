@@ -2,11 +2,12 @@ import { computed, onMounted } from "vue";
 import { getListEvaluasiApproval } from "../../services/evaluation.services";
 import useFetchRequest from "../useFetchRequest";
 
-const useGetlistApprovalEvaluasi = () => {
+const useGetlistApprovalEvaluasi = ({ onError }) => {
     const { data, errorMessage, fetchData, isError, isFetching } =
         useFetchRequest({
             service: getListEvaluasiApproval,
             options: {},
+            onError: (res) => onError(res),
         });
 
     onMounted(() => {

@@ -69,6 +69,16 @@ const getMaxScoreEvaluasi = async () => {
     }
 };
 
+const putProbations = async ({ id, body }) => {
+    try {
+        const response = await apiServices.putData(`/probation/${id}`, body);
+
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 const getContractTime = async () => {
     try {
         const response = await apiServices.fetchData(
@@ -89,4 +99,5 @@ export {
     getListEvaluasi,
     getDetailEvaluasi,
     getListEvaluasiApproval,
+    putProbations,
 };

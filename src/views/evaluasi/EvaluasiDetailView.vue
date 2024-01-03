@@ -8,7 +8,7 @@
 
         <UIDivider />
 
-        <div class="w-full flex justify-center p-10" v-if="isFetching">
+        <div class="flex justify-center w-full p-10" v-if="isFetching">
             <UILoader />
         </div>
 
@@ -149,7 +149,7 @@
                     class="flex items-start justify-between w-full mx-10 my-10"
                 >
                     <div class="flex flex-col items-start gap-y-5">
-                        <div class="flex justify-between gap-x-5 items-center">
+                        <div class="flex items-center justify-between gap-x-5">
                             <p class="font-semibold">
                                 PENILAIAN AKHIR (GRAND TOTAL SCORE)
                             </p>
@@ -183,7 +183,7 @@
                     </div>
                 </div>
 
-                <RouterView />
+                <RouterView :data="data" />
             </BasicCard>
 
             <!-- status log -->

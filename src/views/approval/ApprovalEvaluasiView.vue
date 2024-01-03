@@ -1,6 +1,6 @@
 <template>
     <div
-        class="w-full py-10 flex justify-center items-center"
+        class="flex items-center justify-center w-full py-10"
         v-if="isFetching"
     >
         <UILoader />
@@ -11,10 +11,25 @@
         :data="data"
         v-if="!isFetching && data?.length > 0"
     />
+
+    <div
+        class="flex items-center justify-center w-full py-10"
+        v-if="!isFetching && data?.length === 0"
+    >
+        <p class="text-2xl">Tidak ada data</p>
+    </div>
+
+    <Modal
+        v-if="isErrorModal"
+        :isModalOpen="isErrorModal"
+        @toggleModal="isErrorModal = false"
+        modalTitle="Terjadi Kesalahan Saat Mengambil Data"
+        modalType="danger"
+    />
 </template>
 
 <script setup>
-import { watchEffect } from "vue";
+import { watchEffect, ref } from "vue";
 import { createColumnHelper } from "@tanstack/table-core";
 import useGetListApprovalEvaluasi from "../../hooks/evaluasi/useGetListApprovalEvaluasi.js";
 import UILoader from "../../components/ui/UILoader.vue";
@@ -22,8 +37,13 @@ import Table from "@/components/BasicTable.vue";
 import { useRouter } from "vue-router";
 import Modal from "../../components/Modal.vue";
 
-const { data, isFetching, errorMessage, isError, revalidate } =
-    useGetListApprovalEvaluasi();
+const isErrorModal = ref(false);
+
+const { data, isFetching } = useGetListApprovalEvaluasi({
+    onError: () => {
+        isErrorModal.value = true;
+    },
+});
 
 const router = useRouter();
 
