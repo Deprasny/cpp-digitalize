@@ -4,7 +4,11 @@
             v-if="!isLoading"
             :disabled="disabled"
             @click="toggleDropdown"
-            class="w-full px-4 py-3 mb-1 appearance-none rounded-lg text-gray-800 select-container focus:outline-none cursor-pointer"
+            class="w-full px-4 py-3 mb-1 appearance-none text-gray-800 select-container focus:outline-none cursor-pointer h-full"
+            :class="{
+                'bg-gray-100': disabled,
+                'bg-white': !disabled,
+            }"
             :value="modelValue"
             @input="emit('update:modelValue', $event.target.value)"
         >
