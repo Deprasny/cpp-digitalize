@@ -1,5 +1,13 @@
 <template>
-    <input ref="inputRef" type="text" />
+    <input
+        ref="inputRef"
+        type="text"
+        class="text-right w-full h-full"
+        :class="{
+            'bg-gray-100': disabled,
+            'bg-white': !disabled,
+        }"
+    />
 </template>
 
 <script>
@@ -11,6 +19,7 @@ export default {
     props: {
         modelValue: Number, // Vue 2: value
         options: Object,
+        disabled: Boolean,
     },
     setup(props, { emit }) {
         const { inputRef, numberValue } = useCurrencyInput(

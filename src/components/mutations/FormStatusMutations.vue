@@ -166,10 +166,14 @@
                                 :is-loading="options.isLoading"
                                 :dropdown-options="options.allowance"
                                 v-model="item.muta_allow_code"
+                                disabled="true"
                             />
                         </FormItemTunjangan>
                         <FormItemTunjangan>
-                            <FormCurrency v-model="item.muta_allow_amount" />
+                            <FormCurrency
+                                v-model="item.muta_allow_amount"
+                                disabled="true"
+                            />
                         </FormItemTunjangan>
                     </div>
                     <p class="self-start mt-5 font-semibold">
@@ -485,18 +489,6 @@ watchEffect(() => {
                 return item.muta_type === "NEW";
             }
         );
-
-        columnsTunjanganLama.value = props.detailData.allowance.filter(
-            (item) => {
-                return item.muta_type === "PAST";
-            }
-        );
-
-        columnsTunjanganBaru.value = props.detailData.allowance.filter(
-            (item) => {
-                return item.muta_type === "NEW";
-            }
-        );
     }
 
     if (props.isShowTunjangan) {
@@ -616,6 +608,54 @@ watchDebounced(
         deep: true,
     }
 );
+watchDebounced(
+    () => props?.detailData?.allowance,
+    (newValue) => {
+        if (newValue.length > 0) {
+            console.log(newValue);
+
+            columnsTunjanganBaru.value = newValue.filter((item) => {
+                return item.muta_type === "NEW";
+            });
+
+            columnsTunjanganLama.value = newValue.filter((item) => {
+                return item.muta_type === "PAST";
+            });
+
+            if (
+                statusLamaTunjangan.value.length !==
+                statusBaruTunjangan.value.length
+            ) {
+                const difference =
+                    statusLamaTunjangan.value.length -
+                    statusBaruTunjangan.value.length;
+
+                if (difference > 0) {
+                    for (let i = 0; i < difference; i++) {
+                        columnsTunjanganBaru.value.push({
+                            muta_allow_amount: 0,
+                            muta_allow_code: "",
+                            muta_type: "NEW",
+                        });
+                    }
+                } else {
+                    for (let i = 0; i < Math.abs(difference); i++) {
+                        columnsTunjanganLama.value.push({
+                            muta_allow_amount: 0,
+                            muta_allow_code: "",
+                            muta_type: "PAST",
+                        });
+                    }
+                }
+            }
+        }
+    },
+    {
+        debounce: 1000,
+        deep: true,
+        immediate: true,
+    }
+);
 
 const fetchAllowanceOptions = async () => {
     const { data: allowanceResponse } = await useFetch({
@@ -638,22 +678,12 @@ const onReduceOptions = (option) => {
 watchDebounced(
     () => allowance_now.value,
     (newValue) => {
-        if (newValue.length === 0) {
-            props.values.value.allowance_now = [];
-        } else {
-            props.values.value.allowance_now = allowance_now.value.filter(
-                (item) => {
-                    return (
-                        item.muta_allow_amount !== 0 &&
-                        item.muta_allow_code !== ""
-                    );
-                }
-            );
-        }
+        props.values.value.allowance_now = newValue;
     },
     {
         debounce: 1000,
         deep: true,
+        immediate: true,
     }
 );
 
