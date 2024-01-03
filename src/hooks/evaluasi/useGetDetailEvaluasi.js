@@ -19,9 +19,27 @@ const useGetDetailEvaluation = ({ id }) => {
             return val ? JSON.parse(val) : "";
         };
 
+        const parseStringToNumber = (val) => {
+            return val ? Number(val) : 0;
+        };
+
         const newVal = {
             ...value,
             prob_final_note: parseStringToJson(value?.prob_final_note),
+            kpi:
+                {
+                    target: value?.kpi?.map((item) => ({
+                        details: { ...item },
+                        inputLabel: item?.probt_kpi,
+                        inputVal: parseStringToNumber(item?.probt_kpi_score),
+                    })),
+
+                    actual: value?.kpi?.map((item) => ({
+                        details: { ...item },
+                        inputLabel: item?.probt_actual,
+                        inputVal: parseStringToNumber(item?.probt_actual_score),
+                    })),
+                } || [],
         };
 
         return newVal;

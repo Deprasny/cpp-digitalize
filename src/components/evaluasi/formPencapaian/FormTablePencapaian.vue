@@ -137,19 +137,37 @@ import IconDownload from "../../icons/IconDownload.vue";
 import FormHeaderPencapaian from "./FormHeaderPenpacapian.vue";
 import FormInputTablePencapaian from "./FormInputTablePencapaian.vue";
 import UILoader from "../../ui/UILoader.vue";
+import { watchDebounced } from "@vueuse/core";
 
-const { onGetValues, onGetTotalValues, errors, isLoadingMaxVal, maxValues } =
-    defineProps([
-        "formAction",
-        "onGetValues",
-        "onGetTotalValues",
-        "errors",
-        "isLoadingMaxVal",
-        "maxValues",
-    ]);
+const {
+    onGetValues,
+    onGetTotalValues,
+    errors,
+    isLoadingMaxVal,
+    maxValues,
+    data,
+} = defineProps([
+    "formAction",
+    "onGetValues",
+    "onGetTotalValues",
+    "errors",
+    "isLoadingMaxVal",
+    "maxValues",
+    "data",
+]);
 
 const tooltipScore = ref(false);
 const tooltipScoreMax = ref(false);
+
+watchDebounced(
+    () => data,
+    (newValue) => {
+        inputTarget.value = newValue?.target;
+
+        inputActual.value = newValue?.actual;
+    },
+    { deep: true, debounce: 200, immediate: true }
+);
 
 const inputTarget = ref([
     {

@@ -26,7 +26,7 @@
             />
 
             <p v-else class="text-sm flex items-center h-full px-2">
-                Mencapai target revenue total selama 3 bulan pertama adalah 1M
+                {{ inputLabel }}
             </p>
         </div>
         <div
@@ -49,7 +49,7 @@
                 v-else
                 class="text-lg flex items-center justify-center font-semibold h-full px-2"
             >
-                30
+                {{ inputValue }}
             </p>
         </div>
     </div>

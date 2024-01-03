@@ -14,7 +14,7 @@
 
         <div class="flex my-16" v-else>
             <BasicCard
-                title="0001/MUTASI/INDIVIDU/X/2023"
+                :title="data?.prob_req_no"
                 variant="detail"
                 class="w-[95%]"
             >
@@ -78,7 +78,7 @@
                 <!-- form penilaian -->
 
                 <DetailWrapper>
-                    <FormTablePencapaian />
+                    <FormTablePencapaian :data="data?.kpi" />
                 </DetailWrapper>
 
                 <UIDivider />
@@ -190,10 +190,18 @@
             <Log :data="progressData" />
         </div>
     </div>
+
+    <Modal
+        v-if="isError"
+        :isModalOpen="isError"
+        @toggleModal="$router.back()"
+        modalTitle="Terjadi Kesalahan Saat Mengambil Data"
+        modalType="danger"
+    />
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref, watch, watchEffect } from "vue";
 import UIButton from "@/components/ui/UIButton.vue";
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
 import UIDivider from "@/components/ui/UIDivider.vue";
@@ -206,12 +214,13 @@ import DetailWrapper from "../../components/evaluasi/wrapper/DetailWrapper.vue";
 import FormTablePencapaian from "../../components/evaluasi/formPencapaian/FormTablePencapaian.vue";
 import { RouterView, useRouter } from "vue-router";
 import UILoader from "../../components/ui/UILoader.vue";
+import Modal from "../../components/Modal.vue";
 
 const router = useRouter();
 
 const id = router.currentRoute.value.params.id;
 
-const { data, isFetching, progressData } = useGetDetailEvaluasi({
+const { data, isFetching, progressData, isError } = useGetDetailEvaluasi({
     id: id,
 });
 </script>
