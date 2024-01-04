@@ -475,7 +475,10 @@ const allowance_now = ref([]);
 watchEffect(() => {
     props.values.value = {
         ...values.value,
-        mutd_to_division: values.value.mutd_to_division,
+        mutd_to_division:
+            props.formType === "detail"
+                ? values.value.mutd_to_division
+                : values.value.mutd_to_division?.label,
     };
 
     if (props?.detailData?.allowance.length > 0) {
