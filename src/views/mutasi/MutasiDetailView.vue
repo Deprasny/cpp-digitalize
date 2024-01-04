@@ -474,7 +474,7 @@ const onApprove = async (id) => {
 
         const commonValues = {
             mut_reason: values?.value?.mut_reason,
-            mut_date: formatDateToPayload(values.value.mut_date),
+            mut_date: formatDateToPayload(new Date(values?.value.mut_date)),
             companyTo: values.value.value.mutd_to_company,
             positionTo: values.value.value.mutd_to_position,
             buTo: values.value.value.mutd_to_division,
@@ -528,6 +528,7 @@ const onApprove = async (id) => {
             routeName.push({ name: route });
         }, 2000);
     } catch (error) {
+        console.log(error);
         errorMessages.value = error?.response?.data?.message;
         isLoading.value = false;
         showErrorModal.value = true;

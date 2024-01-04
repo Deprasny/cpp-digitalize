@@ -222,7 +222,7 @@ const isErrorNIK = ref(false);
 const onSubmit = async () => {
     const transformDateData = {
         ...values.value,
-        mut_date: formatDateToPayload(values?.value?.mut_date),
+        mut_date: formatDateToPayload(new Date(values?.value?.mut_date)),
     };
 
     const formData = new FormData();
