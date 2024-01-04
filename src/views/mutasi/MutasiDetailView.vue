@@ -470,7 +470,7 @@ const onApprove = async (id) => {
                         muta_id: getMutId,
                     };
                 })
-                .filter((item) => item.muta_allow_amount !== "") || [];
+                .filter((item) => item.muta_allow_amount !== 0) || [];
 
         const commonValues = {
             mut_reason: values?.value?.mut_reason,
@@ -483,8 +483,6 @@ const onApprove = async (id) => {
             spvTo: values.value.value.mutd_to_direct_spv,
             mgrTo: values.value.value.mutd_to_immed_mgr,
         };
-
-        console.log(values?.value);
 
         if (isODStatuses.value) {
             return {
