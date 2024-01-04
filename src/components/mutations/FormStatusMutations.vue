@@ -625,8 +625,6 @@ watchDebounced(
     () => props?.detailData?.allowance,
     (newValue) => {
         if (newValue.length > 0) {
-            console.log(newValue);
-
             columnsTunjanganBaru.value = newValue.filter((item) => {
                 return item.muta_type === "NEW";
             });
