@@ -484,6 +484,8 @@ const onApprove = async (id) => {
             mgrTo: values.value.value.mutd_to_immed_mgr,
         };
 
+        console.log(values?.value);
+
         if (isODStatuses.value) {
             return {
                 statusApproval: statusApproval.value,
