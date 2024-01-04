@@ -510,8 +510,8 @@ onMounted(() => {
                 values.value.mutd_to_division = newVal.buTo;
                 values.value.mutd_to_costcenter = newVal.ccTo;
                 values.value.mutd_to_work_location = newVal.locTo;
-                values.value.mutd_to_direct_spv = `${newVal.spvTo} - ${newVal.spvToName}`;
-                values.value.mutd_to_immed_mgr = `${newVal.mgrTo} - ${newVal.mgrToName}`;
+                values.value.mutd_to_direct_spv = newVal.spvTo;
+                values.value.mutd_to_immed_mgr = newVal.mgrTo;
                 props.values.value = values.value;
             }
         },
