@@ -389,6 +389,7 @@ import FormAutoCompleteCostCenter from "./FormAutoComplete/FormAutoCompleteCostC
 import FormAutocompleteWorkLocation from "./FormAutoComplete/FormAutocompleteWorkLocation.vue";
 import FormCurrency from "../FormCurrency.vue";
 import { watchDebounced } from "@vueuse/core";
+import { useRouter } from "vue-router";
 
 const props = defineProps([
     "isShowTunjangan",
@@ -472,11 +473,15 @@ const values = ref({
 
 const allowance_now = ref([]);
 
+const router = useRouter();
+
+const type = router.currentRoute.value.query.type;
+
 watchEffect(() => {
     props.values.value = {
         ...values.value,
         mutd_to_division:
-            props.formType === "detail"
+            type === "approval"
                 ? values.value.mutd_to_division
                 : values.value.mutd_to_division?.label,
     };
