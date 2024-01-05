@@ -633,21 +633,7 @@ watchDebounced(
                 return item.muta_type === "PAST";
             });
         } else {
-            columnsTunjanganBaru.value = [
-                {
-                    muta_allow_amount: 0,
-                    muta_allow_code: "",
-                    muta_type: "NEW",
-                },
-            ];
-
-            columnsTunjanganLama.value = [
-                {
-                    muta_allow_amount: 0,
-                    muta_allow_code: "",
-                    muta_type: "PAST",
-                },
-            ];
+            allowance_now.value = [];
         }
     },
     {
