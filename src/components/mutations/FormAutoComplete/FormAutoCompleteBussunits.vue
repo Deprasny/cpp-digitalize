@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch, watchEffect } from "vue";
 
 import useFetch from "../../../hooks/useFetch";
 import FormAutocomplete from "../../FormAutocomplete.vue";
@@ -66,8 +66,8 @@ const handleChangesValue = (event) => {
 
 watchDebounced(
     () => input.value,
-    () => {
-        fetchData(input.value);
+    (newVal) => {
+        fetchData(newVal);
     },
     { debounce: 1000 }
 );
