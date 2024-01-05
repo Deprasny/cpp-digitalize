@@ -7,7 +7,7 @@
         "dev": "vite",
         "build": "vite build",
         "preview": "vite preview",
-        "push-cpp": "npm run build && rsync -av --exclude={node_modules,dist} ./ ../web_digidoc_hr_fe && cd ../web_digidoc_hr_fe && git add . && git commit -m 'pushed from staging repo' && git pull && git push"
+        "push-cpp": "rsync -av --exclude={node_modules,dist} ./ ../web_digidoc_hr_fe && cd ../web_digidoc_hr_fe && git add . && git commit -m 'pushed from staging repo' && git pull && git push"
     },
     "dependencies": {
         "@tanstack/vue-table": "^8.10.7",
