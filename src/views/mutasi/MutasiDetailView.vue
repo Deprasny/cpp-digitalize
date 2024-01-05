@@ -389,6 +389,7 @@ import DownloadFiles from "../../components/DownloadFiles.vue";
 import FormDetailLabelContainer from "../../components/mutations/FormDetailLabelContainer.vue";
 import { allowedDates } from "../../utils/allowedDates";
 import formatDateToPayload from "../../utils/formatDateToPayload";
+import { watchDebounced } from "@vueuse/core";
 
 const store = useModalStore();
 
@@ -443,6 +444,7 @@ const handleFetch = async () => {
         });
 
         data.value = response.value;
+
         docsUrl.value.body.url = response.value.mut_file_request;
     } catch (error) {
         console.error(error);
@@ -556,6 +558,8 @@ const handleReject = () => {
 const listLog = ref([]);
 
 watchEffect(() => {
+    console.log(data?.value?.allowance);
+
     if (data.value) {
         values.value.mut_reason = data.value.mut_reason;
         values.value.mut_date = data.value.mut_date;
@@ -565,26 +569,29 @@ watchEffect(() => {
                 description: item?.step_description,
             };
         });
+    }
+});
 
+watchDebounced(
+    () => data?.value?.currentStep,
+    (newVal) => {
         const isOnApproval = approvalButton === "approval";
 
         if (
-            (data?.value?.currentStep === "VEROD1" && isOnApproval) ||
-            (data?.value?.currentStep === "VEROD2" && isOnApproval)
+            (newVal === "VEROD1" && isOnApproval) ||
+            (newVal === "VEROD2" && isOnApproval)
         ) {
             isODStatuses.value = true;
         }
-
         if (
-            (data?.value?.currentStep === "BENEFIT2" &&
+            (newVal === "BENEFIT2" &&
                 isOnApproval &&
                 formType !== "Kolektif") ||
-            (data?.value?.currentStep === "BENEFIT1" &&
-                isOnApproval &&
-                formType !== "Kolektif")
+            (newVal === "BENEFIT1" && isOnApproval && formType !== "Kolektif")
         ) {
             isCOMBENStatuses.value = true;
         }
-    }
-});
+    },
+    { debounce: 1000 }
+);
 </script>
