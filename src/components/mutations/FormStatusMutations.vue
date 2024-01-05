@@ -726,6 +726,8 @@ watchDebounced(
     (newValue) => {
         props.values.value.allowance_now =
             newValue.filter((item) => item.muta_allow_amount !== 0) || [];
+
+        console.log(props.values.value.allowance_now);
     },
     {
         debounce: 1000,
