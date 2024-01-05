@@ -241,6 +241,7 @@
                     <FormStatusBaruItem>
                         <FormAutoCompleteBussunits
                             v-model="values.mutd_to_division"
+                            :values="values.mutd_to_division"
                         />
                     </FormStatusBaruItem>
 
@@ -480,10 +481,15 @@ const type = router.currentRoute.value.query.type;
 watchEffect(() => {
     props.values.value = {
         ...values.value,
-        mutd_to_division:
-            type === "approval"
-                ? values.value.mutd_to_division
-                : values.value.mutd_to_division?.label,
+        mutd_to_division: values.value.mutd_to_division?.label
+            ? values.value.mutd_to_division?.label
+            : values.value.mutd_to_division,
+        mutd_to_direct_spv: values.value.mutd_to_direct_spv?.value
+            ? values.value.mutd_to_direct_spv?.value
+            : values.value.mutd_to_direct_spv,
+        mutd_to_immed_mgr: values.value.mutd_to_immed_mgr?.value
+            ? values.value.mutd_to_immed_mgr?.value
+            : values.value.mutd_to_immed_mgr,
     };
 
     if (props?.detailData?.allowance.length > 0) {
@@ -500,12 +506,10 @@ watchEffect(() => {
         );
     }
 
-    if (props.isShowTunjangan) {
-        allowance_now.value = [
-            ...columnsTunjanganLama.value,
-            ...columnsTunjanganBaru.value,
-        ];
-    }
+    allowance_now.value = [
+        ...columnsTunjanganLama.value,
+        ...columnsTunjanganBaru.value,
+    ];
 });
 
 onMounted(() => {
@@ -518,8 +522,14 @@ onMounted(() => {
                 values.value.mutd_to_division = newVal.buTo;
                 values.value.mutd_to_costcenter = newVal.ccTo;
                 values.value.mutd_to_work_location = newVal.locTo;
-                values.value.mutd_to_direct_spv = newVal.spvTo;
-                values.value.mutd_to_immed_mgr = newVal.mgrTo;
+                values.value.mutd_to_direct_spv = {
+                    value: newVal.spvTo,
+                    label: `${newVal.spvTo} - ${newVal.spvToName}`,
+                };
+                values.value.mutd_to_immed_mgr = {
+                    value: newVal.mgrTo,
+                    label: `${newVal.mgrTo} - ${newVal.mgrToName}`,
+                };
                 props.values.value = values.value;
             }
         },
@@ -531,14 +541,14 @@ onMounted(() => {
     );
 });
 
-const fetchAutoFillFormParams = async () => {
+const fetchAutoFillFormParams = async (values) => {
     conditionalOptions.value.isLoading = true;
     try {
         const { data: directSpvResponse } = await useFetch({
             services: getDirectSpv,
             options: {
                 params: {
-                    bu: values.value.mutd_to_division?.value,
+                    bu: values,
                 },
             },
         });
@@ -547,7 +557,7 @@ const fetchAutoFillFormParams = async () => {
             services: getImmediateManager,
             options: {
                 params: {
-                    bu: values.value.mutd_to_division?.value,
+                    bu: values,
                 },
             },
         });
@@ -579,7 +589,7 @@ watch(
     () => values.value.mutd_to_division,
     async (newValue) => {
         if (newValue) {
-            await fetchAutoFillFormParams();
+            await fetchAutoFillFormParams(newValue?.value);
         }
     },
     { immediate: true, deep: true }
@@ -612,21 +622,38 @@ watchDebounced(
 );
 
 watchDebounced(
-    () => props?.selectedNik,
+    () => props?.selectedNik?.allowance,
     (newValue) => {
-        if (newValue.allowance.length > 0) {
-            statusBaruTunjangan.value = newValue.allowance.filter((item) => {
+        if (newValue.length > 0) {
+            columnsTunjanganBaru.value = newValue.filter((item) => {
                 return item.muta_type === "NEW";
             });
 
-            statusLamaTunjangan.value = newValue.allowance.filter((item) => {
+            columnsTunjanganLama.value = newValue.filter((item) => {
                 return item.muta_type === "PAST";
             });
+        } else {
+            columnsTunjanganBaru.value = [
+                {
+                    muta_allow_amount: 0,
+                    muta_allow_code: "",
+                    muta_type: "NEW",
+                },
+            ];
+
+            columnsTunjanganLama.value = [
+                {
+                    muta_allow_amount: 0,
+                    muta_allow_code: "",
+                    muta_type: "PAST",
+                },
+            ];
         }
     },
     {
         debounce: 1000,
         deep: true,
+        immediate: true,
     }
 );
 watchDebounced(
@@ -697,7 +724,8 @@ const onReduceOptions = (option) => {
 watchDebounced(
     () => allowance_now.value,
     (newValue) => {
-        props.values.value.allowance_now = newValue;
+        props.values.value.allowance_now =
+            newValue.filter((item) => item.muta_allow_amount !== 0) || [];
     },
     {
         debounce: 1000,
