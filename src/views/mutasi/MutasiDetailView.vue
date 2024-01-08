@@ -172,7 +172,10 @@
                                 isODStatuses || isEdit ? 'edit' : 'detail'
                             "
                             :isShowTunjangan="isCOMBENStatuses"
-                            is-show-jabatan="true"
+                            :is-show-jabatan="
+                                formType === 'Kolektif' ? false : true
+                            "
+                            :is-group="formType === 'Kolektif' ? false : true"
                         />
                     </div>
 
@@ -275,9 +278,13 @@
                                 <p
                                     class="overflow-hidden whitespace-wrap overflow-ellipsis w-60"
                                 >
-                                    {{ docsUrl.body.url.split("/").pop() }}
+                                    {{
+                                        docsUrl?.body?.url?.split("/")?.pop() ||
+                                        ""
+                                    }}
                                 </p>
                                 <DownloadFiles
+                                    v-if="docsUrl?.body?.url"
                                     :services="getFileDocsMutations"
                                     :options="docsUrl"
                                     :fileName="`${data?.mut_req_no}-lampiran`"
@@ -389,6 +396,7 @@ import DownloadFiles from "../../components/DownloadFiles.vue";
 import FormDetailLabelContainer from "../../components/mutations/FormDetailLabelContainer.vue";
 import { allowedDates } from "../../utils/allowedDates";
 import formatDateToPayload from "../../utils/formatDateToPayload";
+import { watchDebounced } from "@vueuse/core";
 
 const store = useModalStore();
 
@@ -443,6 +451,7 @@ const handleFetch = async () => {
         });
 
         data.value = response.value;
+
         docsUrl.value.body.url = response.value.mut_file_request;
     } catch (error) {
         console.error(error);
@@ -456,6 +465,8 @@ const handleFetch = async () => {
 onMounted(() => {
     handleFetch();
 });
+
+console.log(docsUrl?.value);
 
 const onApprove = async (id) => {
     const getValues = () => {
@@ -565,26 +576,29 @@ watchEffect(() => {
                 description: item?.step_description,
             };
         });
+    }
+});
 
+watchDebounced(
+    () => data?.value?.currentStep,
+    (newVal) => {
         const isOnApproval = approvalButton === "approval";
 
         if (
-            (data?.value?.currentStep === "VEROD1" && isOnApproval) ||
-            (data?.value?.currentStep === "VEROD2" && isOnApproval)
+            (newVal === "VEROD1" && isOnApproval) ||
+            (newVal === "VEROD2" && isOnApproval)
         ) {
             isODStatuses.value = true;
         }
-
         if (
-            (data?.value?.currentStep === "BENEFIT2" &&
+            (newVal === "BENEFIT2" &&
                 isOnApproval &&
                 formType !== "Kolektif") ||
-            (data?.value?.currentStep === "BENEFIT1" &&
-                isOnApproval &&
-                formType !== "Kolektif")
+            (newVal === "BENEFIT1" && isOnApproval && formType !== "Kolektif")
         ) {
             isCOMBENStatuses.value = true;
         }
-    }
-});
+    },
+    { debounce: 1000 }
+);
 </script>

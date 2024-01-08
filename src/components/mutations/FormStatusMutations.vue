@@ -171,7 +171,7 @@
                         </FormItemTunjangan>
                         <FormItemTunjangan>
                             <FormCurrency
-                                v-model="item.muta_allow_amount"
+                                v-model.lazy="item.muta_allow_amount"
                                 disabled="true"
                             />
                         </FormItemTunjangan>
@@ -325,7 +325,9 @@
                             />
                         </FormItemTunjangan>
                         <FormItemTunjangan>
-                            <FormCurrency v-model="item.muta_allow_amount" />
+                            <FormCurrency
+                                v-model.lazy="item.muta_allow_amount"
+                            />
                         </FormItemTunjangan>
 
                         <div class="relative">
@@ -388,9 +390,10 @@ import FormAutoCompletePosition from "./FormAutoComplete/FormAutoCompletePositio
 import FormAutoCompleteBussunits from "./FormAutoComplete/FormAutoCompleteBussunits.vue";
 import FormAutoCompleteCostCenter from "./FormAutoComplete/FormAutoCompleteCostCenter.vue";
 import FormAutocompleteWorkLocation from "./FormAutoComplete/FormAutocompleteWorkLocation.vue";
-import FormCurrency from "../FormCurrency.vue";
+
 import { watchDebounced } from "@vueuse/core";
 import { useRouter } from "vue-router";
+import FormCurrency from "../FormCurrency.vue";
 
 const props = defineProps([
     "isShowTunjangan",
@@ -402,6 +405,7 @@ const props = defineProps([
     "isShowJabatan",
     "selectedNik",
     "isShowTunjanganDetail",
+    "isGroup",
 ]);
 
 const headerTunjangan = ref(tunjanganLabelTitle);
@@ -474,10 +478,6 @@ const values = ref({
 
 const allowance_now = ref([]);
 
-const router = useRouter();
-
-const type = router.currentRoute.value.query.type;
-
 watchEffect(() => {
     props.values.value = {
         ...values.value,
@@ -490,7 +490,12 @@ watchEffect(() => {
         mutd_to_immed_mgr: values.value.mutd_to_immed_mgr?.value
             ? values.value.mutd_to_immed_mgr?.value
             : values.value.mutd_to_immed_mgr,
+        mutd_to_position: props.isGroup
+            ? props.statusLamaData?.posisi
+            : values?.value?.mutd_to_position,
     };
+
+    // console.log(props.statusLamaData?.posisi);
 
     if (props?.detailData?.allowance.length > 0) {
         statusLamaTunjangan.value = props.detailData.allowance.filter(
@@ -645,7 +650,7 @@ watchDebounced(
 watchDebounced(
     () => props?.detailData?.allowance,
     (newValue) => {
-        if (newValue.length > 0) {
+        if (newValue?.length > 0) {
             columnsTunjanganBaru.value = newValue.filter((item) => {
                 return item.muta_type === "NEW";
             });
@@ -712,8 +717,6 @@ watchDebounced(
     (newValue) => {
         props.values.value.allowance_now =
             newValue.filter((item) => item.muta_allow_amount !== 0) || [];
-
-        console.log(props.values.value.allowance_now);
     },
     {
         debounce: 1000,

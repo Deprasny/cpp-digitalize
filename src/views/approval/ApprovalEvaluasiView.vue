@@ -39,6 +39,8 @@ import Modal from "../../components/Modal.vue";
 
 const isErrorModal = ref(false);
 
+console.log(isErrorModal.value);
+
 const { data, isFetching } = useGetListApprovalEvaluasi({
     onError: () => {
         isErrorModal.value = true;
