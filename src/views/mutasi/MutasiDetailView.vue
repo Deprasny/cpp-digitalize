@@ -172,7 +172,10 @@
                                 isODStatuses || isEdit ? 'edit' : 'detail'
                             "
                             :isShowTunjangan="isCOMBENStatuses"
-                            is-show-jabatan="true"
+                            :is-show-jabatan="
+                                formType === 'Kolektif' ? false : true
+                            "
+                            :is-group="formType === 'Kolektif' ? false : true"
                         />
                     </div>
 
@@ -275,9 +278,13 @@
                                 <p
                                     class="overflow-hidden whitespace-wrap overflow-ellipsis w-60"
                                 >
-                                    {{ docsUrl.body.url.split("/").pop() }}
+                                    {{
+                                        docsUrl?.body?.url?.split("/")?.pop() ||
+                                        ""
+                                    }}
                                 </p>
                                 <DownloadFiles
+                                    v-if="docsUrl?.body?.url"
                                     :services="getFileDocsMutations"
                                     :options="docsUrl"
                                     :fileName="`${data?.mut_req_no}-lampiran`"
@@ -459,6 +466,8 @@ onMounted(() => {
     handleFetch();
 });
 
+console.log(docsUrl?.value);
+
 const onApprove = async (id) => {
     const getValues = () => {
         const getMutId = data?.value?.employee?.[0]?.id || "";
@@ -558,8 +567,6 @@ const handleReject = () => {
 const listLog = ref([]);
 
 watchEffect(() => {
-    console.log(data?.value?.allowance);
-
     if (data.value) {
         values.value.mut_reason = data.value.mut_reason;
         values.value.mut_date = data.value.mut_date;

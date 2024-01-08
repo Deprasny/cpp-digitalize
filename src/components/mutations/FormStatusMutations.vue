@@ -405,6 +405,7 @@ const props = defineProps([
     "isShowJabatan",
     "selectedNik",
     "isShowTunjanganDetail",
+    "isGroup",
 ]);
 
 const headerTunjangan = ref(tunjanganLabelTitle);
@@ -489,7 +490,12 @@ watchEffect(() => {
         mutd_to_immed_mgr: values.value.mutd_to_immed_mgr?.value
             ? values.value.mutd_to_immed_mgr?.value
             : values.value.mutd_to_immed_mgr,
+        mutd_to_position: props.isGroup
+            ? props.statusLamaData?.posisi
+            : values?.value?.mutd_to_position,
     };
+
+    // console.log(props.statusLamaData?.posisi);
 
     if (props?.detailData?.allowance.length > 0) {
         statusLamaTunjangan.value = props.detailData.allowance.filter(
@@ -644,7 +650,7 @@ watchDebounced(
 watchDebounced(
     () => props?.detailData?.allowance,
     (newValue) => {
-        if (newValue.length > 0) {
+        if (newValue?.length > 0) {
             columnsTunjanganBaru.value = newValue.filter((item) => {
                 return item.muta_type === "NEW";
             });
