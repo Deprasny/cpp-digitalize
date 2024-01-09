@@ -2,6 +2,9 @@
 # Ignore Node.js modules
 node_modules/
 
+.env
+
 # Optionally, you can ignore npm's lock files if you want
 package-lock.json
 yarn.lock
+```
