@@ -23,8 +23,11 @@
                 />
 
                 <FormInputKompetensi
+                    v-if="!fetchingScoreListValues"
                     :number-of-values="competenceData.length"
                     :on-get-values="(val) => getFormKomptensi(val)"
+                    :score-list-values="scoreListValues"
+                    :fetching-score-list-values="fetchingScoreListValues"
                     :errors="errors"
                 />
             </div>
@@ -63,6 +66,8 @@ const props = defineProps([
     "isLoadingMaxVal",
     "maxValues",
     "errors",
+    "scoreListValues",
+    "fetchingScoreListValues",
 ]);
 const { data: competenceData, isLoading: isCompetenceLoading } =
     useGetCompetence();

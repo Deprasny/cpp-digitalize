@@ -141,6 +141,10 @@
                             :on-get-total-values="getTotalCompetenceValues"
                             :is-loading-max-val="isFetchingMaxScore"
                             :max-values="MAX_COMP"
+                            :score-list-values="listProbationScoreComp"
+                            :fetching-score-list-values="
+                                isFetchingListProbationScoreComp
+                            "
                             :errors="validations.prob_score_comp.$errors"
                         />
 
@@ -331,13 +335,17 @@ const payload = ref({
 const { data: dropdownProbationData, isLoading: loadingDropdownProbationData } =
     useGetResultProbation();
 
-const { maxScoreState, contractTimeState } = useGetFormProbationVal({
-    payload: payload?.value,
-});
+const { maxScoreState, contractTimeState, listProbationScoreCompState } =
+    useGetFormProbationVal({
+        payload: payload?.value,
+    });
 
 const { MAX_COMP, MAX_KPI, isFetchingMaxScore } = maxScoreState;
 
 const { contractTime, isFetchingContractTime } = contractTimeState;
+
+const { listProbationScoreComp, isFetchingListProbationScoreComp } =
+    listProbationScoreCompState;
 
 const validations = getEvaluasiValidations({
     values: payload,
@@ -393,6 +401,8 @@ watchDebounced(
 );
 
 watchEffect(() => {
+    console.log(listProbationScoreComp?.value);
+
     if (payload.value.prob_score_comp && payload.value.prob_score_kpi) {
         payload.value.prob_score_final =
             payload.value.prob_score_comp + payload.value.prob_score_kpi;

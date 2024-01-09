@@ -21,6 +21,7 @@ import EvaluasiDetail from "../views/evaluasi/EvaluasiDetailView.vue";
 import EvaluasiProbation from "../views/evaluasi/EvaluasiProbationView.vue";
 import EvaluasiDefaultDetail from "../views/evaluasi/EvaluasiDefaultDetailView.vue";
 import EvaluasiDetailApproval from "../views/evaluasi/EvaluasiDetailApproval.vue";
+import EvaluasiKontrak from "../views/evaluasi/EvaluasiKontrakView.vue";
 
 //Pensiun
 import Pensiun from "../views/pensiun/PensiunView.vue";
@@ -76,6 +77,11 @@ const routes = [
                         path: "/evaluasi/probation",
                         component: EvaluasiProbation,
                         name: "evaluasi-probation",
+                    },
+                    {
+                        path: "/evaluasi/kontrak",
+                        component: EvaluasiKontrak,
+                        name: "evaluasi-kontrak",
                     },
                 ],
             },

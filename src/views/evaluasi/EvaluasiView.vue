@@ -17,6 +17,7 @@
             <UIButton
                 :variant="tab.path === currentPath ? 'tab-active' : 'tab'"
                 v-for="tab in tabs"
+                @click="$router.push({ name: tab.path })"
             >
                 <div class="flex gap-2 text-sm md:gap-x-16 md:text-base">
                     <span>{{ tab.label }}</span>
@@ -34,11 +35,11 @@ import UIButton from "@/components/ui/UIButton.vue";
 import IconPlus from "@/components/icons/IconPlus.vue";
 import IconChevronLeft from "@/components/icons/IconChevronLeft.vue";
 import { RouterView, useRouter } from "vue-router";
-import { ref, watch, watchEffect } from "vue";
+import { ref, watch, watchEffect, computed } from "vue";
 
 const router = useRouter();
 
-const currentPath = router.currentRoute.value.name;
+const currentPath = computed(() => router.currentRoute.value.name);
 
 const tabs = ref([
     {

@@ -34,7 +34,11 @@ const columns = [
     }),
     columnHelper.accessor((row) => row.jenis_mutasi, {
         id: "jenis_mutasi",
-        cell: (info) => info.getValue(),
+        cell: (info) => {
+            const value = info.getValue();
+
+            return value === "Group" ? "Kolektif" : value;
+        },
         header: () => "Jenis Mutasi",
     }),
     columnHelper.accessor((row) => row.tgl_pengajuan, {
@@ -87,7 +91,13 @@ const handleDetail = (cell) => {
     router.push({
         name: "mutasi-detail",
         params: { id: cell.row.original?.mut_id },
-        query: { type: "approval", form_type: cell.row.original?.jenis_mutasi },
+        query: {
+            type: "approval",
+            form_type:
+                cell.row.original?.jenis_mutasi === "Group"
+                    ? "Kolektif"
+                    : cell.row.original?.jenis_mutasi,
+        },
     });
 };
 </script>

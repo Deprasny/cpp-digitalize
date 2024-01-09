@@ -27,7 +27,11 @@ import UILoader from "../../components/ui/UILoader.vue";
 
 const router = useRouter();
 
-const { data, errorMessage, isError, isFetching } = useGetListEvaluasi();
+const { data, errorMessage, isError, isFetching } = useGetListEvaluasi({
+    params: {
+        jenis: "probation",
+    },
+});
 
 const columnHelper = createColumnHelper();
 const columns = [

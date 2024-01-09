@@ -200,7 +200,7 @@
                         {{ detailData?.positionTo }}
                     </FormStatusLamaItem>
 
-                    <FormStatusLamaItem v-if="isShowJabatan" bv>
+                    <FormStatusLamaItem v-if="isShowJabatan">
                         {{ detailData?.levelTo }}
                     </FormStatusLamaItem>
 
@@ -209,7 +209,7 @@
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem>
-                        {{ detailData?.locToName }}
+                        {{ `${detailData?.locTo} - ${detailData?.locToName}` }}
                     </FormStatusLamaItem>
 
                     <FormStatusLamaItem>
@@ -251,7 +251,7 @@
                         />
                     </FormStatusBaruItem>
                     <FormStatusBaruItem v-if="isShowJabatan">
-                        <div class="px-4 h-full py-2 pl-10 flex items-center">
+                        <div class="px-4 h-full py-2 flex items-center">
                             {{ statusLamaData?.level || detailData?.levelFr }}
                         </div>
                     </FormStatusBaruItem>
@@ -481,8 +481,8 @@ const allowance_now = ref([]);
 watchEffect(() => {
     props.values.value = {
         ...values.value,
-        mutd_to_division: values.value?.mutd_to_division?.label
-            ? values.value?.mutd_to_division?.label
+        mutd_to_division: values.value.mutd_to_division?.label
+            ? values.value.mutd_to_division?.label
             : values.value.mutd_to_division,
         mutd_to_direct_spv: values.value.mutd_to_direct_spv?.value
             ? values.value.mutd_to_direct_spv?.value
@@ -490,13 +490,13 @@ watchEffect(() => {
         mutd_to_immed_mgr: values.value.mutd_to_immed_mgr?.value
             ? values.value.mutd_to_immed_mgr?.value
             : values.value.mutd_to_immed_mgr,
-        mutd_to_position:
-            props.isGroup && props?.statusLamaData?.posisi
-                ? props.statusLamaData?.posisi
-                : values?.value?.mutd_to_position,
+        mutd_to_work_location: values.value.mutd_to_work_location?.value
+            ? values.value.mutd_to_work_location?.value
+            : values.value.mutd_to_work_location,
+        mutd_to_position: props.isGroup
+            ? props.statusLamaData?.posisi
+            : values?.value?.mutd_to_position,
     };
-
-    // console.log(props.statusLamaData?.posisi);
 
     if (props?.detailData?.allowance.length > 0) {
         statusLamaTunjangan.value = props.detailData.allowance.filter(
@@ -527,7 +527,10 @@ onMounted(() => {
                 values.value.mutd_to_position = newVal.positionTo;
                 values.value.mutd_to_division = newVal.buTo;
                 values.value.mutd_to_costcenter = newVal.ccTo;
-                values.value.mutd_to_work_location = newVal.locTo;
+                values.value.mutd_to_work_location = {
+                    value: newVal.locTo,
+                    label: `${newVal?.locTo} - ${newVal?.locToName}`,
+                };
                 values.value.mutd_to_direct_spv = {
                     value: newVal.spvTo,
                     label: `${newVal.spvTo} - ${newVal.spvToName}`,
@@ -595,8 +598,6 @@ watch(
     () => values.value.mutd_to_division,
     async (newValue) => {
         if (newValue) {
-            console.log(newValue);
-
             await fetchAutoFillFormParams(newValue?.value);
         }
     },

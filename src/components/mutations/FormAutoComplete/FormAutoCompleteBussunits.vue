@@ -20,7 +20,7 @@ import debounce from "../../../utils/debounce";
 import { getAllBusinessUnit } from "../../../services/form.services";
 import { watchDebounced } from "@vueuse/core";
 
-const props = defineProps(["isError", "errorMessage", "values"]);
+const props = defineProps(["isError", "errorMessage"]);
 const emit = defineEmits(["update:modelValue"]);
 
 function updateModelValue(newValue) {
@@ -70,20 +70,6 @@ watchDebounced(
         fetchData(newVal);
     },
     { debounce: 1000 }
-);
-
-watchDebounced(
-    () => props.values && data?.value?.val?.length > 0,
-    (newVal) => {
-        if (newVal) {
-            const selected = data?.value?.val?.find(
-                (item) => item?.label === props?.values
-            );
-
-            updateModelValue(selected);
-        }
-    },
-    { debounce: 1000, immediate: true }
 );
 
 onMounted(() => {

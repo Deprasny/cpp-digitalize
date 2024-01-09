@@ -3,19 +3,19 @@ import useFetchRequest from "../../hooks/useFetchRequest";
 import { getListEvaluasi } from "../../services/evaluation.services";
 import { computed } from "vue";
 
-const useGetListEvaluasi = () => {
+const useGetListEvaluasi = ({ params: { jenis } }) => {
     const { data, isFetching, errorMessage, fetchData, isError } =
         useFetchRequest({
             service: getListEvaluasi,
             options: {
                 params: {
-                    jenis: "probation",
+                    jenis,
                 },
             },
         });
 
     onMounted(() => {
-        fetchData();
+        if (jenis) fetchData();
     });
 
     return {

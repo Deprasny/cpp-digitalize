@@ -2,6 +2,7 @@ import { onMounted, ref, watchEffect } from "vue";
 
 import {
     getContractTime,
+    getListProbationScoreComp,
     getMaxScoreEvaluasi,
 } from "../../services/evaluation.services";
 import useFetchRequest from "../useFetchRequest";
@@ -29,8 +30,19 @@ const useGetFormProbationVal = ({ payload }) => {
         options: {},
     });
 
+    const {
+        fetchData: fetchListProbationScoreComp,
+        data: listProbationScoreCompData,
+        isFetching: isFetchingListProbationScoreComp,
+        isError: isErrorListProbationScoreComp,
+    } = useFetchRequest({
+        service: getListProbationScoreComp,
+        options: {},
+    });
+
     onMounted(() => {
         fetchMaxScore();
+        fetchListProbationScoreComp();
     });
 
     watchEffect(() => {
@@ -54,6 +66,15 @@ const useGetFormProbationVal = ({ payload }) => {
         );
     };
 
+    const getProbationScore = (data) => {
+        return data?.data
+            ?.filter((item) => item.key1 === "SCORE_COMP")
+            .map((item) => ({
+                label: Number(item.num1),
+                value: Number(item.num1),
+            }));
+    };
+
     return {
         maxScoreState: {
             MAX_KPI: computed(() => getMaxScoreValues("MAX_KPI")),
@@ -68,6 +89,21 @@ const useGetFormProbationVal = ({ payload }) => {
                 () => isFetchingContractTime.value
             ),
             isErrorContractTime: computed(() => isErrorContractTime.value),
+        },
+
+        listProbationScoreCompState: {
+            listProbationScoreComp: computed(
+                () =>
+                    getProbationScore(
+                        listProbationScoreCompData?.value?.data
+                    ) || []
+            ),
+            isFetchingListProbationScoreComp: computed(
+                () => isFetchingListProbationScoreComp.value
+            ),
+            isErrorListProbationScoreComp: computed(
+                () => isErrorListProbationScoreComp.value
+            ),
         },
     };
 };

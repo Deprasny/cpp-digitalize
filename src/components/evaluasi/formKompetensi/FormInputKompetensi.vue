@@ -26,7 +26,11 @@
                 'border-red-500': errors.length > 0,
             }"
         >
-            <input class="w-full h-full" type="number" v-model="item.score" />
+            <!-- <input class="w-full h-full" type="number" v-model="item.score" /> -->
+            <Dropdown
+                :dropdown-options="scoreListValues"
+                v-model="item.score"
+            />
         </div>
 
         <div class="absolute -right-9 h-full pt-3 flex-col gap-1 flex">
@@ -54,12 +58,15 @@ import { computed, reactive, ref } from "vue";
 import IconPlus from "../../icons/IconPlus.vue";
 import IconMinus from "../../icons/IconMinus.vue";
 import { watchDebounced } from "@vueuse/core";
+import Dropdown from "../../Dropdown.vue";
 
 const props = defineProps([
     "values",
     "onGetValues",
     "numberOfValues",
     "errors",
+    "scoreListValues",
+    "fetchingScoreListValues",
 ]);
 
 const valueOfTable = {
@@ -80,6 +87,7 @@ watchDebounced(
             const transformValues = newVal.map((item) => ({
                 ...item,
                 notes: item?.notes.map((note) => note.val),
+                score: Number(item?.score),
             }));
 
             props.onGetValues(transformValues);

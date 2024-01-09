@@ -91,6 +91,16 @@ const getContractTime = async () => {
     }
 };
 
+const getListProbationScoreComp = async () => {
+    try {
+        const response = await apiServices.fetchData("/probation_score_comp");
+
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export {
     getListResultProbation,
     createProbations,
@@ -100,4 +110,5 @@ export {
     getDetailEvaluasi,
     getListEvaluasiApproval,
     putProbations,
+    getListProbationScoreComp,
 };
