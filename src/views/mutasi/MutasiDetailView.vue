@@ -166,7 +166,7 @@
               :formType="isODStatuses || isEdit ? 'edit' : 'detail'"
               :isShowTunjangan="isCOMBENStatuses"
               :is-show-jabatan="formType === 'Kolektif' ? false : true"
-              :is-group="formType === 'Kolektif' ? false : true"
+              :is-group="formType === 'Kolektif' ? true : false"
             />
           </div>
 

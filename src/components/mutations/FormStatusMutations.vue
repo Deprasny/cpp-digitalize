@@ -440,8 +440,6 @@ watchEffect(() => {
       : values?.value?.mutd_to_position,
   };
 
-  // console.log(props.statusLamaData?.posisi);
-
   if (props?.detailData?.allowance.length > 0) {
     statusLamaTunjangan.value = props.detailData.allowance.filter((item) => {
       return item.muta_type === "PAST";
