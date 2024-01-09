@@ -55,8 +55,20 @@
               </LabelForm>
 
               <LabelForm label="Alasan Mutasi" class="items-center">
-                <div class="flex flex-col w-full gap-2">
-                  {{ data.mut_reason }}
+                <div>
+                  <div
+                    class="flex flex-col w-full"
+                    v-if="isODStatuses || isEdit"
+                  >
+                    <FormInputBasic
+                      type="textarea"
+                      id="mut_reason"
+                      v-model="values.mut_reason"
+                    />
+                  </div>
+                  <div class="flex flex-col w-full" v-else>
+                    {{ data.mut_reason }}
+                  </div>
                 </div>
               </LabelForm>
             </FormDetailLabelContainer>
