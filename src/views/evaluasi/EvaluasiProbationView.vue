@@ -1,16 +1,13 @@
 <template>
-    <div
-        class="w-full py-10 flex justify-center items-center"
-        v-if="isFetching"
-    >
-        <UILoader />
-    </div>
-    <Table
-        @onCellClick="handleDetail"
-        :columns="columns"
-        :data="data?.data"
-        v-if="!isFetching && data?.data?.length > 0"
-    />
+  <div class="w-full py-10 flex justify-center items-center" v-if="isFetching">
+    <UILoader />
+  </div>
+  <Table
+    @onCellClick="handleDetail"
+    :columns="columns"
+    :data="data?.data"
+    v-if="!isFetching && data?.data?.length > 0"
+  />
 </template>
 
 <script setup>
@@ -27,41 +24,45 @@ import UILoader from "../../components/ui/UILoader.vue";
 
 const router = useRouter();
 
-const { data, errorMessage, isError, isFetching } = useGetListEvaluasi();
+const { data, errorMessage, isError, isFetching } = useGetListEvaluasi({
+  params: {
+    jenis: "probation",
+  },
+});
 
 const columnHelper = createColumnHelper();
 const columns = [
-    columnHelper.accessor((row) => row.prob_req_no, {
-        id: "prob_req_no",
-        cell: (info) => info.getValue(),
-        header: () => "No Evaluasi",
-    }),
-    columnHelper.accessor((row) => row.nama_karyawan, {
-        id: "nama_karyawan",
-        cell: (info) => info.getValue(),
-        header: () => "Nama Karyawan",
-    }),
-    columnHelper.accessor((row) => row.prob_date, {
-        id: "prob_date",
-        cell: (info) => info.getValue(),
-        header: () => "Tanggal Pengajuan",
-    }),
-    columnHelper.accessor((row) => row.status, {
-        id: "status",
-        cell: (info) => info.getValue(),
-        header: () => "Status",
-    }),
-    columnHelper.accessor((row) => row.due_date, {
-        id: "due_date",
-        cell: (info) => info.getValue(),
-        header: () => "Due Date",
-    }),
+  columnHelper.accessor((row) => row.prob_req_no, {
+    id: "prob_req_no",
+    cell: (info) => info.getValue(),
+    header: () => "No Evaluasi",
+  }),
+  columnHelper.accessor((row) => row.nama_karyawan, {
+    id: "nama_karyawan",
+    cell: (info) => info.getValue(),
+    header: () => "Nama Karyawan",
+  }),
+  columnHelper.accessor((row) => row.prob_date, {
+    id: "prob_date",
+    cell: (info) => info.getValue(),
+    header: () => "Tanggal Pengajuan",
+  }),
+  columnHelper.accessor((row) => row.status, {
+    id: "status",
+    cell: (info) => info.getValue(),
+    header: () => "Status",
+  }),
+  columnHelper.accessor((row) => row.due_date, {
+    id: "due_date",
+    cell: (info) => info.getValue(),
+    header: () => "Due Date",
+  }),
 ];
 
 const handleDetail = (cell) => {
-    router.push({
-        name: "evaluasi-detail",
-        params: { id: cell?.row?.original?.id },
-    });
+  router.push({
+    name: "evaluasi-detail",
+    params: { id: cell?.row?.original?.id },
+  });
 };
 </script>
