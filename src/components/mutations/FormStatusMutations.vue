@@ -200,7 +200,7 @@
                         {{ detailData?.positionTo }}
                     </FormStatusLamaItem>
 
-                    <FormStatusLamaItem v-if="isShowJabatan">
+                    <FormStatusLamaItem v-if="isShowJabatan" bv>
                         {{ detailData?.levelTo }}
                     </FormStatusLamaItem>
 
@@ -251,7 +251,7 @@
                         />
                     </FormStatusBaruItem>
                     <FormStatusBaruItem v-if="isShowJabatan">
-                        <div class="px-4 h-full py-2 flex items-center">
+                        <div class="px-4 h-full py-2 pl-10 flex items-center">
                             {{ statusLamaData?.level || detailData?.levelFr }}
                         </div>
                     </FormStatusBaruItem>
@@ -481,8 +481,8 @@ const allowance_now = ref([]);
 watchEffect(() => {
     props.values.value = {
         ...values.value,
-        mutd_to_division: values.value.mutd_to_division?.label
-            ? values.value.mutd_to_division?.label
+        mutd_to_division: values.value?.mutd_to_division?.label
+            ? values.value?.mutd_to_division?.label
             : values.value.mutd_to_division,
         mutd_to_direct_spv: values.value.mutd_to_direct_spv?.value
             ? values.value.mutd_to_direct_spv?.value
@@ -490,9 +490,10 @@ watchEffect(() => {
         mutd_to_immed_mgr: values.value.mutd_to_immed_mgr?.value
             ? values.value.mutd_to_immed_mgr?.value
             : values.value.mutd_to_immed_mgr,
-        mutd_to_position: props.isGroup
-            ? props.statusLamaData?.posisi
-            : values?.value?.mutd_to_position,
+        mutd_to_position:
+            props.isGroup && props?.statusLamaData?.posisi
+                ? props.statusLamaData?.posisi
+                : values?.value?.mutd_to_position,
     };
 
     // console.log(props.statusLamaData?.posisi);
@@ -594,6 +595,8 @@ watch(
     () => values.value.mutd_to_division,
     async (newValue) => {
         if (newValue) {
+            console.log(newValue);
+
             await fetchAutoFillFormParams(newValue?.value);
         }
     },

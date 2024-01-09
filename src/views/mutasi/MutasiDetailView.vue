@@ -466,8 +466,6 @@ onMounted(() => {
     handleFetch();
 });
 
-console.log(docsUrl?.value);
-
 const onApprove = async (id) => {
     const getValues = () => {
         const getMutId = data?.value?.employee?.[0]?.id || "";
