@@ -423,8 +423,8 @@ const allowance_now = ref([]);
 watchEffect(() => {
   props.values.value = {
     ...values.value,
-    mutd_to_division: values.value.mutd_to_division?.label
-      ? values.value.mutd_to_division?.label
+    mutd_to_division: values.value?.mutd_to_division?.label
+      ? values.value?.mutd_to_division?.label
       : values.value.mutd_to_division,
     mutd_to_direct_spv: values.value.mutd_to_direct_spv?.value
       ? values.value.mutd_to_direct_spv?.value
@@ -435,9 +435,10 @@ watchEffect(() => {
     mutd_to_work_location: values.value.mutd_to_work_location?.value
       ? values.value.mutd_to_work_location?.value
       : values.value.mutd_to_work_location,
-    mutd_to_position: props.isGroup
-      ? props.statusLamaData?.posisi
-      : values?.value?.mutd_to_position,
+    mutd_to_position:
+      props.isGroup && props?.statusLamaData?.posisi
+        ? props.statusLamaData?.posisi
+        : values?.value?.mutd_to_position,
   };
 
   if (props?.detailData?.allowance.length > 0) {
