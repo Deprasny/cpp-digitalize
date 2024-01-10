@@ -167,7 +167,7 @@
               :isShowTunjangan="isCOMBENStatuses"
               :is-show-jabatan="formType === 'Kolektif' ? false : true"
               :is-group="formType === 'Kolektif' ? true : false"
-              is-detail="true"
+              :is-detail="true"
             />
           </div>
 
