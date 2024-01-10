@@ -72,16 +72,18 @@ watchDebounced(
   { debounce: 1000 }
 );
 
-console.log(props.isDetail);
-
 watchDebounced(
   () => props.values && data?.value?.val?.length > 0 && props.isDetail,
   (newVal) => {
+    console.log(newVal);
+
     if (newVal) {
       const selected = data?.value?.val?.find(
         (item) => item?.label === props?.values
       );
       updateModelValue(selected);
+
+      input.value = props.values;
     }
   },
   { debounce: 1000, immediate: true }
