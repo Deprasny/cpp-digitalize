@@ -15,7 +15,7 @@
 export default {
   mounted() {
     // Change the page title when the component is mounted
-    document.title = "HR FORM";
+    document.title = "HR Docs - Dokumen Digital HR";
   },
 };
 </script>

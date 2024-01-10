@@ -7,8 +7,8 @@
       >
         <div class="flex items-start justify-between">
           <div class="text-accent-1">
-            <h3 class="text-xl font-bold">HR</h3>
-            <p>Digitalize Document</p>
+            <h3 class="text-xl font-bold">HR Docs</h3>
+            <p>Dokumen Digital HR</p>
           </div>
           <button @click="store.toggleSidebar">X</button>
         </div>
