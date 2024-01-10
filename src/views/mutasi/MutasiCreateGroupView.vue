@@ -64,7 +64,7 @@
             :statusLamaData="selectedValue.details"
             :values="formStatusValues"
             isGroup="true"
-            is-detail="false"
+            :isDetail="false"
           />
 
           <UIDivider />

@@ -72,6 +72,8 @@ watchDebounced(
   { debounce: 1000 }
 );
 
+console.log(props.isDetail);
+
 watchDebounced(
   () => props.values && data?.value?.val?.length > 0 && props.isDetail,
   (newVal) => {
