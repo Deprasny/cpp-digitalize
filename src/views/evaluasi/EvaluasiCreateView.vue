@@ -307,7 +307,7 @@ const { mutate, isLoading, errorMessage } = useCreateProbations({
       store.toggleModal();
       showSuccessModal.value = true;
       setTimeout(() => {
-        router.push({ name: "evaluasi" });
+        router.push({ name: "evaluasi-kontrak" });
       }, 1000);
     },
 
@@ -350,8 +350,6 @@ watchDebounced(
 );
 
 watchEffect(() => {
-  console.log(listProbationScoreComp?.value);
-
   if (payload.value.prob_score_comp && payload.value.prob_score_kpi) {
     payload.value.prob_score_final =
       payload.value.prob_score_comp + payload.value.prob_score_kpi;
