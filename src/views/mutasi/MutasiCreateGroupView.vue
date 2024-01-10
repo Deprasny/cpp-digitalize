@@ -271,9 +271,9 @@ watchEffect(() => {
     const transformArrayValues = enteredNames.value.map((item) => {
       return {
         nik: item?.details?.nik,
-        mutd_family_move: "YES",
-        mutd_house_allowance: "Monthly",
-        mutd_transportation: "Tunai",
+        mutd_family_move: "",
+        mutd_house_allowance: "",
+        mutd_transportation: "",
         mutd_leave_bal: "0",
         mutd_medical_bal: "0",
         mutd_debit_amount: "0",
