@@ -46,7 +46,7 @@ const useGetFormProbationVal = ({ payload }) => {
   });
 
   watchEffect(() => {
-    if (payload?.result?.value === "20") {
+    if (payload?.result === "20") {
       fetchContractTIme();
     }
   });
@@ -58,7 +58,7 @@ const useGetFormProbationVal = ({ payload }) => {
 
   const getContractTimeValues = () => {
     return (
-      contractTimeData?.value?.data?.map((item) => ({
+      contractTimeData?.value?.data?.data?.map((item) => ({
         label: item.num1,
         value: item.num1,
       })) || []

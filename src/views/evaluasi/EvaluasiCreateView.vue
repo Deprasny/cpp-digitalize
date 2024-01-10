@@ -135,25 +135,26 @@
                     {{ payload.prob_score_final }}
                   </div>
                 </FormEvaluasiItemWrapper>
-                <FormEvaluasiItemWrapper class="md:items-center">
-                  <p class="max-w-[420px] min-w-full">
+                <FormEvaluasiItemWrapper class="md:items-center w-full">
+                  <p class="w-max-full w-min-[250px]">
                     Berdasarkan penilaian diatas perkenankan kami mengajukan
                     karyawan tersebut untuk
                   </p>
 
-                  <FormDropdown
-                    v-if="!loadingDropdownProbationData"
-                    :dropdownOptions="dropdownProbationData"
-                    :selectedOptionText="payload.result?.label"
-                    @update:selectedOptionText="payload.result = $event"
-                  />
+                  <div v-if="!loadingDropdownProbationData" class="w-[250px]">
+                    <Dropdown
+                      class="border border-black rounded-md"
+                      v-model="payload.result"
+                      :dropdown-options="dropdownProbationData"
+                    />
+                  </div>
 
                   <UILoader v-else />
                 </FormEvaluasiItemWrapper>
 
                 <div
                   class="flex flex-col gap-1 w-full"
-                  v-if="payload.result.value === '20'"
+                  v-if="payload.result === '20'"
                 >
                   <FormEvaluasiItemWrapper class="w-[300px] py-6">
                     <div class="w-full flex gap-2 items-center">
@@ -301,7 +302,7 @@ const validations = getEvaluasiValidations({
   maxScoreState: maxScoreState,
 });
 
-const { mutate, isLoading, errorMessage } = useCreateProbations({
+const { mutate, isLoading } = useCreateProbations({
   callback: {
     onSuccess: () => {
       store.toggleModal();
@@ -311,8 +312,9 @@ const { mutate, isLoading, errorMessage } = useCreateProbations({
       }, 1000);
     },
 
-    onError: () => {
+    onError: (error) => {
       store.toggleModal();
+      errorMessage.value = error;
       showErrorModal.value = true;
     },
   },
@@ -320,6 +322,7 @@ const { mutate, isLoading, errorMessage } = useCreateProbations({
 
 const showErrorModal = ref(false);
 const showSuccessModal = ref(false);
+const errorMessage = ref("");
 
 const getKPIValues = (newVal) => {
   payload.value.kpi = newVal;
@@ -361,6 +364,12 @@ const handleSubmit = async ({ isDraft }) => {
 
   if (!isValid) {
     scrollTo(0, 0);
+  } else if (
+    (payload.value.result === "10" || payload.value.result === "20") &&
+    payload.value.prob_score_final < 70
+  ) {
+    errorMessage.value = "Nilai Anda belum mencapai 70";
+    showErrorModal.value = true;
   } else {
     payload.value.draft = isDraft;
     store.toggleModal();
@@ -370,7 +379,7 @@ const handleSubmit = async ({ isDraft }) => {
 const onMutate = () => {
   const transformValues = {
     ...payload.value,
-    result: payload.value.result?.value,
+    result: payload.value.result,
   };
 
   mutate({
