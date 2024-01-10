@@ -67,9 +67,17 @@ const handleChangesValue = (event) => {
 watchDebounced(
   () => input.value,
   (newVal) => {
-    fetchData(newVal);
+    if (newVal && !props.values) fetchData(newVal);
   },
   { debounce: 1000 }
+);
+
+watchDebounced(
+  () => props.values,
+  (newVal) => {
+    fetchData(newVal);
+  },
+  { immediate: true, deep: true }
 );
 
 watchDebounced(
