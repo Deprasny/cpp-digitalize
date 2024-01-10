@@ -198,6 +198,7 @@
             <FormAutoCompleteBussunits
               v-model="values.mutd_to_division"
               :values="values.mutd_to_division"
+              :is-detail="isDetail"
             />
           </FormStatusBaruItem>
 
@@ -348,6 +349,7 @@ const props = defineProps([
   "selectedNik",
   "isShowTunjanganDetail",
   "isGroup",
+  "isDetail",
 ]);
 
 const headerTunjangan = ref(tunjanganLabelTitle);
