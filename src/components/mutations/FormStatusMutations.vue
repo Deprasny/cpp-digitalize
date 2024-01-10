@@ -205,7 +205,7 @@
             <FormAutoCompletePosition v-model="values.mutd_to_position" />
           </FormStatusBaruItem>
           <FormStatusBaruItem v-if="isShowJabatan">
-            <div class="px-4 h-full py-2 flex items-center">
+            <div class="px-4 h-full py-2 flex items-center pl-12">
               {{ statusLamaData?.level || detailData?.levelFr }}
             </div>
           </FormStatusBaruItem>
