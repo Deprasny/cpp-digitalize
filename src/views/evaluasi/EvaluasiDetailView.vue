@@ -15,10 +15,20 @@
         <DetailWrapper>
           <div class="flex w-full">
             <LabelForm label="Nama & NIK">
-              <p class="w-full">
-                {{ data?.prob_name }} - {{ data?.prob_nik }}
-              </p></LabelForm
-            >
+              <div class="flex gap-4">
+                <p class="w-auto">
+                  {{ data?.prob_name }} - {{ data?.prob_nik }}
+                </p>
+
+                <DownloadFiles
+                  label="Download SK"
+                  v-if="data?.prob_sk_no"
+                  :options="getUrlBody(data?.prob_file_sk)"
+                  :services="getFile"
+                  :fileName="`${data?.prob_sk_no}-sk`"
+                />
+              </div>
+            </LabelForm>
           </div>
           <div class="flex w-full">
             <LabelForm label="Usia"
@@ -148,6 +158,8 @@ import { RouterView, useRouter } from "vue-router";
 import UILoader from "../../components/ui/UILoader.vue";
 import Modal from "../../components/Modal.vue";
 import FormKompetensiDetail from "../../components/evaluasi/formKompetensi/FormKompetensiDetail.vue";
+import DownloadFiles from "../../components/DownloadFiles.vue";
+import { getFile } from "../../services/common.services";
 
 const router = useRouter();
 
@@ -157,6 +169,13 @@ const { data, isFetching, progressData, isError } = useGetDetailEvaluasi({
   id: id,
 });
 
+const getUrlBody = (url) => {
+  return {
+    body: {
+      url: url,
+    },
+  };
+};
 watchEffect(() => {
   console.log(data?.value);
 });
