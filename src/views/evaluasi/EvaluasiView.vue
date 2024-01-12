@@ -7,9 +7,19 @@
         :variant="'secondary'"
         >Evaluasi
       </UIButton>
-      <router-link to="/evaluasi/create">
-        <UIButton :icon="IconPlus">Buat form evaluasi baru </UIButton>
-      </router-link>
+
+      <UIButton
+        :icon="IconPlus"
+        @click="
+          $router.push({
+            name: 'evaluasi-create',
+            query: {
+              name: currentQuery,
+            },
+          })
+        "
+        >Buat form evaluasi baru
+      </UIButton>
     </div>
     <div
       class="flex justify-start w-full md:-mb-6 gap-x-4 text-[#0A70A9] text-xl ml-0 md:ml-10"
@@ -17,7 +27,14 @@
       <UIButton
         :variant="tab.path === currentPath ? 'tab-active' : 'tab'"
         v-for="tab in tabs"
-        @click="$router.push({ name: tab.path })"
+        @click="
+          $router.push({
+            name: tab.path,
+            query: {
+              name: tab.name,
+            },
+          })
+        "
       >
         <div class="flex gap-2 text-sm md:gap-x-16 md:text-base">
           <span>{{ tab.label }}</span>
@@ -40,6 +57,7 @@ import { ref, watch, watchEffect, computed } from "vue";
 const router = useRouter();
 
 const currentPath = computed(() => router.currentRoute.value.name);
+const currentQuery = computed(() => router.currentRoute.value.query.name);
 
 const tabs = ref([
   {

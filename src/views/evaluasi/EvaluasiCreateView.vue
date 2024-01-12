@@ -23,7 +23,11 @@
             <div class="w-full mb-10">
               <FormNIKAutocomplete
                 v-model="selectedNIKValues"
-                :custom-service="getEmployyeeByProb"
+                :custom-service="
+                  currentQueryName === 'probation'
+                    ? getEmployeeByEvalProb
+                    : getEmployeByEvalContract
+                "
               />
 
               <FormEvaluasiItemWrapper>
@@ -245,7 +249,10 @@ import FormTableKompetensi from "../../components/evaluasi/formKompetensi/FormTa
 import ToolTip from "../../components/ToolTip.vue";
 import FormTablePencapaian from "../../components/evaluasi/formPencapaian/FormTablePencapaian.vue";
 import FormEvaluasiItemWrapper from "../../components/evaluasi/wrapper/FormEvaluasiItemWrapper.vue";
-import { getEmployyeeByProb } from "../../services/form.services";
+import {
+  getEmployeeByEvalProb,
+  getEmployeByEvalContract,
+} from "../../services/form.services";
 
 import useGetResultProbation from "../../hooks/evaluasi/useGetResultProbation";
 import UILoader from "../../components/ui/UILoader.vue";
@@ -269,6 +276,7 @@ const listInfoForm = [
 ];
 
 const router = useRouter();
+const currentQueryName = computed(() => router.currentRoute.value.query.name);
 
 const payload = ref({
   kpi: [],
