@@ -38,7 +38,7 @@
               <FormInputBasic
                 id="education"
                 label="Pendidikan"
-                :modelValue="selectedValue.details?.education"
+                :modelValue="selectedValue?.details?.education"
                 disabled
                 placeholder="-"
               />
