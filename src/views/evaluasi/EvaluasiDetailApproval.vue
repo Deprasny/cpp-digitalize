@@ -70,7 +70,9 @@ const { mutate, errorMessage, isFetching } = usePutProbations({
   onSuccess: (res) => {
     store.toggleModal();
     showSuccessModal.value = true;
-    console.log("hai");
+    setTimeout(() => {
+      router.push({ name: "approval-evaluasi" });
+    }, 1000);
   },
 
   onError: () => {
